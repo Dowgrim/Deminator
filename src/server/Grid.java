@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Grid {
 
-    private ServerSocket server;
+
 
     private Box[][] boxs;
 
@@ -17,25 +17,18 @@ public class Grid {
 
     private int bombesRestante;
 
-    private ArrayList<Player> players;
+
 
     public Grid(int s, int b){
-        try {
-            server = new ServerSocket();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         size = s;
         bombesRestante = b;
         boxs = new Box[size][size];
         randomGrid();
-        waitingPlayer();
-    }
-
-    private void waitingPlayer() {
-
 
     }
+
+
 
     public void randomGrid(){
         int bplace = 0;

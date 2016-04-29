@@ -83,6 +83,11 @@ public class Yolo extends JFrame {
             }
         });
         setVisible(true);
+        try {
+            Thread.sleep(333333333);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 /**

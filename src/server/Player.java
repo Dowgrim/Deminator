@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.*;
 import java.net.Socket;
 
 /**
@@ -7,7 +8,9 @@ import java.net.Socket;
  */
 public class Player {
 
-    private int ID;
+    private String name;
+
+    private Color color;
 
     private int points;
 
@@ -15,8 +18,8 @@ public class Player {
 
     private Socket socket;
 
-    public Player(){
-
+    public Player(Socket s){
+        socket = s;
     }
 
 
