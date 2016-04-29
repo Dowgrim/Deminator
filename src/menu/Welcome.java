@@ -1,14 +1,13 @@
 package menu;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Created by Michael on 29/04/2016.
  */
-public class Accueil extends JFrame{
+public class Welcome extends JFrame{
 
-    public Accueil(){
+    public Welcome(){
         super("Deminator!!");
         setSize(400, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -18,7 +17,7 @@ public class Accueil extends JFrame{
     }
 
     public static void main(String[] args) {
-        new Accueil();
+        new Welcome();
     }
 
 }
