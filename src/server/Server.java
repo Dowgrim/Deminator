@@ -8,6 +8,7 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Michael on 29/04/2016.
@@ -20,7 +21,7 @@ public class Server {
 
     private Grid grid;
 
-    private ArrayList<Player> players;
+    private HashMap<String, Player> players;
 
     public Server(){
         setF = new SettingFrame(true);
@@ -38,7 +39,7 @@ public class Server {
     private void waitingPlayer() {
         for(int i = 0; i < 10; i++) {
             try {
-                players.add(new Player(server.accept()));
+                players.put(i+"", new Player(this, server.accept()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
