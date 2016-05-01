@@ -9,12 +9,8 @@ import java.util.ArrayList;
  */
 public class Grid {
 
-
-
     private Box[][] boxs;
-
     private int size;
-
     private int bombesRestante;
 
 

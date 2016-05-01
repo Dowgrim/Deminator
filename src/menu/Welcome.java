@@ -12,7 +12,7 @@ public class Welcome extends JFrame{
         setSize(400, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
-        add(new Buttonator("images\\Demineurs.jpg"));
+        add(new Buttonator("images/Demineurs.jpg"));
         setVisible(true);
     }
 

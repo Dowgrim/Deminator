@@ -9,12 +9,9 @@ import java.util.ArrayList;
 /**
  */
 public class Yolo extends JFrame {
-
-    private static String BLUE = "images\\Blue.png";
-
-    private static String GREEN = "images\\Green.png";
-
-    private static String EXPLO = "images\\Explosion.png";
+    private static String BLUE = "images/Blue.png";
+    private static String GREEN = "images/Green.png";
+    private static String EXPLO = "images/Explosion.png";
 
     private JPanel contentPane;
 
