@@ -28,4 +28,13 @@ public class Box {
     public void setValue(int value) {
         this.value = value;
     }
+
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public boolean isNull() {
+        return value == 0;
+    }
 }

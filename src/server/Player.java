@@ -14,9 +14,11 @@ import java.util.StringTokenizer;
  */
 public class Player extends Thread{
 
+    private int posX, posY;
+
     private Server server;
 
-    private String name;
+    private String nick;
 
     private Color color;
 
@@ -26,7 +28,7 @@ public class Player extends Thread{
 
     private boolean ready = false;
 
-    private Object stun;
+    private Stun stun;
 
     private Socket socket;
 
@@ -59,6 +61,69 @@ public class Player extends Thread{
         }
     }
 
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public void setColor(String color) {
+        this.color = new Color(Integer.parseInt(color));
+    }
+
+    public boolean isOn(int x, int y) {
+        return (x == posX && y == posY);
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+
+
+
+
+
+    private void move(String dir) {
+        if(ready) {
+            int x = 0, y = 0;
+            switch (dir) {
+                case "N": {
+                    y = 1;
+                    break;
+                }
+                case "E": {
+                    x = 1;
+                    break;
+                }
+                case "S": {
+                    y = -1;
+                    break;
+                }
+                case "W": {
+                    x = -1;
+                    break;
+                }
+            }
+            server.movable(nick, x, y);
+        }
+    }
+
+
+    public void sendStun(String nick, int i) {
+        output.write("STU " + nick + " " + i);
+    }
+
+    public void sendMove(String nick, int x, int y) {
+        output.write("MOV " + nick + " " + x + " " + y);
+    }
+
+    public void sendDisco(int x, int y) {
+        output.write("DIS " + x + " " + y);
+    }
+
     private class Analyser extends Thread{
 
         private String msg;
@@ -85,15 +150,11 @@ public class Player extends Thread{
                 case "NEW":{
                     tokens[1] = tokenizer.nextToken();
                     tokens[2] = tokenizer.nextToken();
-                    server.modPlayer(name, tokens[1], tokens[2]);
+                    server.modPlayer(nick, tokens[1], tokens[2]);
                     break;
                 }
                 case "OK!":{
 
-                    break;
-                }
-                case"MOD":{
-                    //Yolo osef pour le moment
                     break;
                 }
                 case"DEP":{
@@ -102,29 +163,9 @@ public class Player extends Thread{
                     break;
                 }
                 case"EXP":{
+                    server.explosion(nick, posX, posY);
                     break;
                 }
-            }
-        }
-    }
-
-    private void move(String dir) {
-        switch(dir){
-            case "N":{
-
-                break;
-            }
-            case "E":{
-
-                break;
-            }
-            case "S":{
-
-                break;
-            }
-            case "W":{
-
-                break;
             }
         }
     }
