@@ -25,12 +25,12 @@ public class Deminator extends JFrame {
 	    {
 		    jpMain.setLayout(new BoxLayout(jpMain, BoxLayout.Y_AXIS));
 
-		    JPanel jpInfos = new JPanel();
+		    JPanel jpPseudo = new JPanel();
 		    {
 			    jtfPseudo = new JTextField();
-			    jpInfos.setLayout(new BoxLayout(jpInfos, BoxLayout.X_AXIS));
-			    jpInfos.add(new JLabel("Pseudo:"));
-			    jpInfos.add(jtfPseudo);
+			    jpPseudo.setLayout(new BoxLayout(jpPseudo, BoxLayout.X_AXIS));
+			    jpPseudo.add(new JLabel("Pseudo:"));
+			    jpPseudo.add(jtfPseudo);
 		    }
 
 		    JPanel jpHaut = new JPanel();
@@ -72,7 +72,7 @@ public class Deminator extends JFrame {
 			    jpBas.add(jlStatus);
 		    }
 
-		    jpMain.add(jpInfos);
+		    jpMain.add(jpPseudo);
 		    jpMain.add(jpHaut);
 		    jpMain.add(jpMid);
 		    jpMain.add(jpBas);
@@ -88,6 +88,8 @@ public class Deminator extends JFrame {
 		jlStatus.setText("Trying to connect...");
 		jtfIp.setEnabled(false);
 		jtfPort.setEnabled(false);
+		jtfPseudo.setEnabled(false);
+
 		jbConnect.setVisible(false);
 		jbCancel.setVisible(true);
 
@@ -100,6 +102,7 @@ public class Deminator extends JFrame {
 		jlStatus.setText("Cancelling connect try...");
 		jtfIp.setEnabled(true);
 		jtfPort.setEnabled(true);
+		jtfPseudo.setEnabled(true);
 
 		// Some cancelling network stuff
 
