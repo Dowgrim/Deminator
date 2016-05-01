@@ -34,16 +34,23 @@ public class Server {
     }
 
     private void closeServeur() {
+        try {
+            server.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void waitingPlayer() {
         for(int i = 0; i < 10; i++) {
             try {
-                players.put(i+"", new Player(this, server.accept()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                players.put(i + "", new Player(this, server.accept()));
+            }catch (IOException e){/*Yolo*/}
         }
+    }
 
+
+    public void laucher(/*setting from the settingFrame*/){
+        grid = new Grid(/*setting from the settingFrame*/4, 4);
     }
 }
