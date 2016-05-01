@@ -3,6 +3,7 @@ package menu;
 import server.Server;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -11,14 +12,99 @@ import java.awt.event.WindowListener;
  */
 public class SettingFrame extends JFrame {
 
-    private boolean isServ;
+	private final JButton jbNotReady;
+	private final JButton jbGo;
+	private final JButton jbReady;
+	private boolean isServ;
 
     private Server server = null;
 
     public SettingFrame(Server serv) {
-        super();
+        super("Salon");
         server = serv;
-        final JFrame jF = this;
+
+	    JPanel jpMain = new JPanel();
+	    {
+		    JScrollPane jspPlayers = new JScrollPane();
+		    {
+			    JPanel viewport = new JPanel();
+				jspPlayers.setViewportView(viewport);
+			    viewport.setBackground(Color.WHITE);
+			    viewport.setLayout(new GridLayout(2, 0, 2, 2));
+
+			    for(int i=0; i<15; i++)
+				    viewport.add(new JPPlayer("PlayerName"+(1<<i),
+						    new Color((int)(Math.random()*256),
+								    (int)(Math.random()*256),
+								    (int)(Math.random()*256))));
+			    jspPlayers.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			    jspPlayers.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		    }
+
+		    JScrollPane jspSettings = new JScrollPane();
+		    {
+			    JPanel viewport = new JPanel();
+			    jspSettings.setViewportView(viewport);
+				viewport.setLayout(new BoxLayout(viewport, BoxLayout.Y_AXIS));
+
+			    JPanel jpMapDim = new JPanel();
+			    {
+				    JTextField jtfX = new JTextField("10", 3);
+				    {
+					    jtfX.setMaximumSize(new Dimension(30, jtfX.getPreferredSize().height));
+				    }
+				    JTextField jtfY = new JTextField("10", 3);
+				    {
+					    jtfY.setMaximumSize(new Dimension(30, jtfY.getPreferredSize().height));
+				    }
+
+				    jpMapDim.setAlignmentX( Component.LEFT_ALIGNMENT );
+				    jpMapDim.setLayout(new BoxLayout(jpMapDim, BoxLayout.X_AXIS));
+				    jpMapDim.add(new JLabel("Taille de la carte: x:"));
+
+				    jpMapDim.add(jtfX);
+				    jpMapDim.add(new JLabel(" y:"));
+
+				    jpMapDim.add(jtfY);
+				}
+
+			    viewport.add(jpMapDim);
+		    }
+
+		    JPanel jpButtons = new JPanel();
+		    {
+			    jbReady = new JButton("Ready !");
+			    {
+				    jbReady.addActionListener(al -> clicGetReady(true));
+			    }
+			    jbNotReady = new JButton("Plus Ready");
+			    {
+				    jbNotReady.addActionListener(al -> clicGetReady(false));
+				    jbNotReady.setVisible(false);
+			    }
+			    jbGo = new JButton("Everyone Ready, GO !");
+			    {
+				    jbGo.addActionListener(al -> clicGo());
+			    }
+
+			    jpButtons.add(jbReady);
+			    jpButtons.add(jbNotReady);
+			    jpButtons.add(jbGo);
+		    }
+
+			jpMain.setLayout(new BorderLayout());
+		    jpMain.add(jspPlayers, BorderLayout.NORTH);
+		    jpMain.add(jspSettings, BorderLayout.CENTER);
+		    jpMain.add(jpButtons, BorderLayout.SOUTH);
+
+	    }// JPMain
+
+	    setContentPane(jpMain);
+
+	    setDefaultCloseOperation(EXIT_ON_CLOSE);
+	    setVisible(true);
+	    this.pack();
+
         addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -28,14 +114,14 @@ public class SettingFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 int n = JOptionPane.showConfirmDialog(
-                        jF,
+                        SettingFrame.this,
                         "Do you really want to close the server?",
                         "Close?",
                         JOptionPane.YES_NO_OPTION);
                 if(n == JOptionPane.YES_OPTION){
                     Object[] options = {"OSEF",
                             "YOLO"};
-                    n = JOptionPane.showOptionDialog(jF,
+                    n = JOptionPane.showOptionDialog(SettingFrame.this,
                             "Nooo!!Don't do that otherwise this is what will happen: The time and space wil break.",
                             "Don't do that!",
                             JOptionPane.YES_NO_OPTION,
@@ -73,62 +159,21 @@ public class SettingFrame extends JFrame {
         });
     }
 
-    public SettingFrame(){
-        super();
-        final JFrame jF = this;
-        addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
+	private void clicGo() {
+		// TODO
+	}
 
-            }
+	private void clicGetReady(boolean isReady) {
+		// TODO
+	}
 
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int n = JOptionPane.showConfirmDialog(
-                        jF,
-                        "Do you really want to close the server?",
-                        "Close?",
-                        JOptionPane.YES_NO_OPTION);
-                if(n == JOptionPane.YES_OPTION){
-                    Object[] options = {"OSEF",
-                            "YOLO"};
-                    n = JOptionPane.showOptionDialog(jF,
-                            "Nooo!!Don't do that otherwise this is what will happen: The time and space wil break.",
-                            "Don't do that!",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null, options, options[0]);
-                    //TODO
-                }
-
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-
-            }
-        });
+	public SettingFrame(){
+        this(null);
     }
+
+	public static void main(String[] args) {
+		new SettingFrame();
+	}
 
 
 }
