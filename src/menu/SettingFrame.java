@@ -32,46 +32,18 @@ public class SettingFrame extends JFrame {
 			    JPanel viewport = new JPanel();
 				jspPlayers.setViewportView(viewport);
 			    viewport.setBackground(Color.WHITE);
-			    viewport.setLayout(new GridLayout(2, 0, 2, 2));
+			    viewport.setLayout(new GridLayout(0, 1, 2, 2));
 
-			    for(int i=0; i<15; i++)
-				    viewport.add(new JPPlayer("PlayerName"+(1<<i),
+			    for(int i=0; i<21; i++)
+				    viewport.add(new JPPlayer("PlayerName"+(2<<i),
 						    new Color((int)(Math.random()*256),
 								    (int)(Math.random()*256),
 								    (int)(Math.random()*256))));
-			    jspPlayers.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-			    jspPlayers.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			    jspPlayers.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			    jspPlayers.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		    }
 
-		    JScrollPane jspSettings = new JScrollPane();
-		    {
-			    JPanel viewport = new JPanel();
-			    jspSettings.setViewportView(viewport);
-				viewport.setLayout(new BoxLayout(viewport, BoxLayout.Y_AXIS));
-
-			    JPanel jpMapDim = new JPanel();
-			    {
-				    JTextField jtfX = new JTextField("10", 3);
-				    {
-					    jtfX.setMaximumSize(new Dimension(30, jtfX.getPreferredSize().height));
-				    }
-				    JTextField jtfY = new JTextField("10", 3);
-				    {
-					    jtfY.setMaximumSize(new Dimension(30, jtfY.getPreferredSize().height));
-				    }
-
-				    jpMapDim.setAlignmentX( Component.LEFT_ALIGNMENT );
-				    jpMapDim.setLayout(new BoxLayout(jpMapDim, BoxLayout.X_AXIS));
-				    jpMapDim.add(new JLabel("Taille de la carte: x:"));
-
-				    jpMapDim.add(jtfX);
-				    jpMapDim.add(new JLabel(" y:"));
-
-				    jpMapDim.add(jtfY);
-				}
-
-			    viewport.add(jpMapDim);
-		    }
+		    JComponent jspSettings = initSettingsPanel();
 
 		    JPanel jpButtons = new JPanel();
 		    {
@@ -95,7 +67,7 @@ public class SettingFrame extends JFrame {
 		    }
 
 			jpMain.setLayout(new BorderLayout());
-		    jpMain.add(jspPlayers, BorderLayout.NORTH);
+		    jpMain.add(jspPlayers, BorderLayout.EAST);
 		    jpMain.add(jspSettings, BorderLayout.CENTER);
 		    jpMain.add(jpButtons, BorderLayout.SOUTH);
 
@@ -161,6 +133,55 @@ public class SettingFrame extends JFrame {
         });
     }
 
+	private JComponent initSettingsPanel() {
+		JScrollPane jspSettings = new JScrollPane();
+		{
+			JPanel viewport = new JPanel();
+			jspSettings.setViewportView(viewport);
+			viewport.setLayout(new BoxLayout(viewport, BoxLayout.Y_AXIS));
+
+			JPanel jpMapDim = new JPanel();
+			{
+				JTextField jtfX = new JTextField("10", 3);
+				{
+					jtfX.setMaximumSize(new Dimension(30, jtfX.getPreferredSize().height));
+				}
+				JTextField jtfY = new JTextField("10", 3);
+				{
+					jtfY.setMaximumSize(new Dimension(30, jtfY.getPreferredSize().height));
+				}
+
+				jpMapDim.setAlignmentX( Component.LEFT_ALIGNMENT );
+				jpMapDim.setLayout(new BoxLayout(jpMapDim, BoxLayout.X_AXIS));
+				jpMapDim.add(new JLabel("Taille de la carte: x:"));
+
+				jpMapDim.add(jtfX);
+				jpMapDim.add(new JLabel(" y:"));
+
+				jpMapDim.add(jtfY);
+			}
+
+			JPanel jpNbMines = new JPanel();
+			{
+				JTextField jtfMines = new JTextField("42", 3);
+				{
+					jtfMines.setMaximumSize(new Dimension(50, jtfMines.getPreferredSize().height));
+				}
+
+				jpNbMines.setAlignmentX( Component.LEFT_ALIGNMENT );
+				jpNbMines.add(new JLabel("Nombre de mines: "));
+				jpNbMines.add(jtfMines);
+			}
+
+			/////////////////////////////////////////////// HERE to add your own new parameter types
+
+			viewport.add(jpMapDim);
+			viewport.add(jpNbMines);
+		}
+
+		return jspSettings;
+	}
+
 	private void clicGo() {
 		// TODO
 	}
@@ -176,7 +197,7 @@ public class SettingFrame extends JFrame {
 	public static void main(String[] args) {
 		new SettingFrame();
 	}
-	
+
     public void reloadPlayer(HashMap<String, Player> players) {
     }
 }
