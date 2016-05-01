@@ -17,7 +17,6 @@ public class SettingFrame extends JFrame {
 	private final JButton jbNotReady;
 	private final JButton jbGo;
 	private final JButton jbReady;
-	private boolean isServ;
 
     private Server server = null;
 
@@ -96,7 +95,7 @@ public class SettingFrame extends JFrame {
                     Object[] options = {"OSEF",
                             "YOLO"};
                     n = JOptionPane.showOptionDialog(SettingFrame.this,
-                            "Nooo!!Don't do that otherwise this is what will happen: The time and space wil break.",
+                            "Nooo!!Don't do that otherwise this is what will happen: The time and space will break.",
                             "Don't do that!",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE,

@@ -120,8 +120,17 @@ public class Player extends Thread{
         output.write("MOV " + nick + " " + x + " " + y);
     }
 
-    public void sendDisco(int x, int y) {
-        output.write("DIS " + x + " " + y);
+    public void sendDisco(int x, int y, int val) {
+        output.write("DIS " + x + " " + y + " " + val);
+    }
+
+    public void stun() {
+        stun.interrupt();
+        stun = new Stun(server, this);
+    }
+
+    public void sendExplo(int x, int y) {
+        output.write("EXP " + x + " " + y);
     }
 
     private class Analyser extends Thread{

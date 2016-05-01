@@ -88,13 +88,22 @@ public class Server {
         grid.discover(x, y, this);
 
         if(grid.isBomb(x, y)){
-
+            for(Player p : players.values()){
+                for(int i = -1; i <= 1; i++){
+                    for(int j = -1; j <= 1; j++){
+                        if(p.isOn((x+i)%grid.getSize(), (y+j)%grid.getSize())){
+                            p.stun();
+                        }
+                    }
+                }
+                p.sendExplo(x, y);
+            }
         }
     }
 
     public void discover(int x, int y){
         for(Player p : players.values()){
-            p.sendDisco(x, y);
+            p.sendDisco(x, y, grid.get(x, y));
         }
     }
 }

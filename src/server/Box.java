@@ -37,4 +37,8 @@ public class Box {
     public boolean isNull() {
         return value == 0;
     }
+
+    public int getValue() {
+        return value;
+    }
 }

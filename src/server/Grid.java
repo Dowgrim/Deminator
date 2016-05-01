@@ -87,4 +87,12 @@ public class Grid {
         }
         serv.discover(x, y);
     }
+
+    public int get(int x, int y) {
+        return boxs[x][y].getValue();
+    }
+
+    public int getSize() {
+        return size;
+    }
 }
