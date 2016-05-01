@@ -24,6 +24,8 @@ public class Player extends Thread{
 
     private int shield;
 
+    private boolean ready = false;
+
     private Object stun;
 
     private Socket socket;
@@ -80,6 +82,12 @@ public class Player extends Thread{
 
             tokens[0] = tokenizer.nextToken();
             switch(tokens[0]){
+                case "NEW":{
+                    tokens[1] = tokenizer.nextToken();
+                    tokens[2] = tokenizer.nextToken();
+                    server.modPlayer(name, tokens[1], tokens[2]);
+                    break;
+                }
                 case "OK!":{
 
                     break;

@@ -11,7 +11,7 @@ import java.util.Random;
 public class Grid {
 
     private Box[][] boxs;
-    
+
     private int size;
 
     private int remainingBomb;
@@ -67,9 +67,5 @@ public class Grid {
             }
         }
         return tempValue;
-    }
-
-    public void init(){
-
     }
 }

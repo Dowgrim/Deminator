@@ -24,7 +24,7 @@ public class Server {
     private HashMap<String, Player> players;
 
     public Server(){
-        setF = new SettingFrame(true);
+        setF = new SettingFrame(this);
         try {
             server = new ServerSocket();
         } catch (IOException e) {
@@ -33,7 +33,7 @@ public class Server {
         waitingPlayer();
     }
 
-    private void closeServeur() {
+    private void closeSocketServeur() {
         try {
             server.close();
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class Server {
     private void waitingPlayer() {
         for(int i = 0; i < 10; i++) {
             try {
-                players.put(i + "", new Player(this, server.accept()));
+                players.put(i+"", new Player(this, server.accept()));
             }catch (IOException e){/*Yolo*/}
         }
     }
@@ -52,5 +52,11 @@ public class Server {
 
     public void laucher(/*setting from the settingFrame*/){
         grid = new Grid(/*setting from the settingFrame*/4, 4);
+    }
+
+    public void modPlayer(String preNick, String nick, String col) {
+        Player p = players.get(preNick);
+        p.setName(nick);
+        players.put(nick, p);
     }
 }
