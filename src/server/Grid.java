@@ -68,4 +68,23 @@ public class Grid {
         }
         return tempValue;
     }
+
+    public boolean isBomb(int x, int y) {
+        return boxs[x][y].isBomb();
+    }
+
+    public boolean isDiscov(int x, int y) {
+        return boxs[x][y].isVisible();
+    }
+
+    public void discover(int x, int y, Server serv) {
+        if(boxs[x][y].isNull()){
+            for(int i = -1; i <= 1; i++){
+                for(int j = -1; j <= 1; j++){
+                    discover((x+i)%size, (y+j)%size, serv);
+                }
+            }
+        }
+        serv.discover(x, y);
+    }
 }

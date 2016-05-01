@@ -23,6 +23,8 @@ public class Server {
 
     private HashMap<String, Player> players;
 
+    private Object syncGrid;
+
     public Server(){
         setF = new SettingFrame(this);
         try {
@@ -56,7 +58,43 @@ public class Server {
 
     public void modPlayer(String preNick, String nick, String col) {
         Player p = players.get(preNick);
-        p.setName(nick);
+        p.setNick(nick);
+        p.setColor(col);
         players.put(nick, p);
+        setF.reloadPlayer(players);
+    }
+
+
+    public void movable(String nick, int x, int y) {
+        synchronized (syncGrid){
+            for(Player p : players.values()){
+                if(p.isOn(x, y)){
+                    return;
+                }
+            }
+            for(Player p : players.values()){
+                p.sendMove(nick, x, y);
+            }
+        }
+    }
+
+    public void stunBroadcast(String nick, int i) {
+        for(Player p : players.values()){
+            p.sendStun(nick, i);
+        }
+    }
+
+    public void explosion(String nick, int x, int y) {
+        grid.discover(x, y, this);
+
+        if(grid.isBomb(x, y)){
+
+        }
+    }
+
+    public void discover(int x, int y){
+        for(Player p : players.values()){
+            p.sendDisco(x, y);
+        }
     }
 }

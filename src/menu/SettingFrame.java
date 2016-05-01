@@ -1,11 +1,13 @@
 package menu;
 
+import server.Player;
 import server.Server;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.HashMap;
 
 /**
  * Created by Michael on 29/04/2016.
@@ -174,6 +176,7 @@ public class SettingFrame extends JFrame {
 	public static void main(String[] args) {
 		new SettingFrame();
 	}
-
-
+	
+    public void reloadPlayer(HashMap<String, Player> players) {
+    }
 }
