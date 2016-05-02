@@ -1,5 +1,6 @@
 package menu;
 
+import client.JSPPlayersList;
 import server.Player;
 import server.Server;
 
@@ -26,21 +27,7 @@ public class SettingFrame extends JFrame {
 
 	    JPanel jpMain = new JPanel();
 	    {
-		    JScrollPane jspPlayers = new JScrollPane();
-		    {
-			    JPanel viewport = new JPanel();
-				jspPlayers.setViewportView(viewport);
-			    viewport.setBackground(Color.WHITE);
-			    viewport.setLayout(new GridLayout(0, 1, 2, 2));
-
-			    for(int i=0; i<21; i++)
-				    viewport.add(new JPPlayer("PlayerName"+(2<<i),
-						    new Color((int)(Math.random()*256),
-								    (int)(Math.random()*256),
-								    (int)(Math.random()*256))));
-			    jspPlayers.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			    jspPlayers.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		    }
+		    JScrollPane jspPlayers = new JSPPlayersList();
 
 		    JComponent jspSettings = initSettingsPanel();
 

@@ -8,7 +8,7 @@ import javax.swing.*;
 public class Welcome extends JFrame{
 
     public Welcome(){
-        super("Deminator!!");
+        super("JPClientConnect!!");
         setSize(400, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getContentPane().setLayout(null);

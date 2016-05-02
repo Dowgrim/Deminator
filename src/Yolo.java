@@ -1,4 +1,4 @@
-import client.JPImage;
+import util.JPImage;
 
 import javax.swing.*;
 import java.awt.*;
