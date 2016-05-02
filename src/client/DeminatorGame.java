@@ -44,6 +44,12 @@ public class DeminatorGame extends JFrame {
 		jpContent.add(jc);
 	}
 
+	public void setPlayerToList(String playerName, Color playerColor) {
+		jpRight.putPlayerToList(playerName, playerColor);
+	}
+	public void removePlayerFromList(String playerName) {
+		jpRight.removePlayerFromList(playerName);
+	}
 
 	// CLIENT MAIN
 	public static void main(String[] args) {
