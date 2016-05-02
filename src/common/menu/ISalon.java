@@ -1,4 +1,4 @@
-package menu;
+package common.menu;
 
 /**
  * Created by Nathaël N on 01/05/16.

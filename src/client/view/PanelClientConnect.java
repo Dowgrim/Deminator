@@ -1,12 +1,12 @@
 package client.view;
 
 import common.DeminatorFrame;
-import menu.PanelSettings;
+import common.menu.PanelSettings;
 import server.Server;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.*;
+import java.net.Socket;
 
 /**
  * Created by Nathaël N on 30/04/2016.
@@ -20,7 +20,6 @@ public class PanelClientConnect extends JPanel {
 	private final JButton jbCancel;
 	private final JLabel jlStatus;
 	private final JTextField jtfPseudo;
-	private Socket socket;
 
 	public PanelClientConnect(DeminatorFrame papa){
 		this.papa = papa;

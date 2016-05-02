@@ -1,7 +1,5 @@
 package server;
 
-import menu.PanelSettings;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -10,19 +8,12 @@ import java.util.HashMap;
  * Created by Michael on 29/04/2016.
  */
 public class Server {
-
-    private PanelSettings setF;
-
     private ServerSocket server;
-
     private Grid grid;
-
     private HashMap<String, Player> players;
-
     private Object syncGrid;
 
     public Server(){
-        setF = new PanelSettings(null, this);
         try {
             server = new ServerSocket();
         } catch (IOException e) {
@@ -57,7 +48,6 @@ public class Server {
         p.setNick(nick);
         p.setColor(col);
         players.put(nick, p);
-        setF.reloadPlayer(players);
     }
 
 

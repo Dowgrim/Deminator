@@ -1,13 +1,9 @@
 package client.view;
 
 import common.DeminatorFrame;
-import common.JSPPlayersList;
-import menu.PanelSettings;
+import common.menu.PanelSettings;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 /**
  * Created by Nathaël N on 01/05/16.
@@ -21,10 +17,10 @@ public class DeminatorGame extends DeminatorFrame {
 		setDefaultView();
 	}
 
-	public void setDefaultView() {
-		setView(new PanelClientConnect(this));
-	}
-	public void setViewToSettings() { setView(new PanelSettings(this)); }
+	public void setDefaultView() { setViewToConnection(); }
+	public void setViewToConnection() { setView(new PanelClientConnect(this)); }
+	public void setViewToSalon() { setView(new PanelSettings(this)); }
+	public void setViewToGame() { /* TODO setView(new PanelGame(this)); */ }
 
 	// CLIENT MAIN
 	public static void main(String[] args) {

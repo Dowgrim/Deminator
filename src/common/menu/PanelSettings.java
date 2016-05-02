@@ -1,6 +1,5 @@
-package menu;
+package common.menu;
 
-import client.view.DeminatorGame;
 import common.DeminatorFrame;
 import common.JSPPlayersList;
 import server.Player;
