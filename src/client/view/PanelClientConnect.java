@@ -1,13 +1,19 @@
-package client;
+package client.view;
+
+import common.DeminatorFrame;
+import menu.PanelSettings;
+import server.Server;
 
 import javax.swing.*;
+import java.awt.*;
 import java.net.*;
 
 /**
  * Created by Nathaël N on 30/04/2016.
  */
-public class JPClientConnect extends JPanel {
+public class PanelClientConnect extends JPanel {
 
+	private final DeminatorFrame papa;
 	private final JTextField jtfIp;
 	private final JTextField jtfPort;
 	private final JButton jbConnect;
@@ -16,12 +22,14 @@ public class JPClientConnect extends JPanel {
 	private final JTextField jtfPseudo;
 	private Socket socket;
 
-	public JPClientConnect(){
+	public PanelClientConnect(DeminatorFrame papa){
+		this.papa = papa;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JPanel jpPseudo = new JPanel();
 		{
 			jtfPseudo = new JTextField();
+			jtfPseudo.setMaximumSize(new Dimension(150, (int)jtfPseudo.getMinimumSize().getHeight()));
 			jpPseudo.setLayout(new BoxLayout(jpPseudo, BoxLayout.X_AXIS));
 			jpPseudo.add(new JLabel("Pseudo:"));
 			jpPseudo.add(jtfPseudo);
@@ -83,6 +91,10 @@ public class JPClientConnect extends JPanel {
 
 		//TODO Some network stuff //////////////////////////////////////////////////////////////
 
+		//TODO Following: Network Stub
+		papa.setView(new PanelSettings(papa, new Server()));
+		//TODO ^^^^^^^^^^^^^^^^^^^^^^^
+
 		jlStatus.setText("Waiting to push button");
 	}
 
@@ -97,10 +109,5 @@ public class JPClientConnect extends JPanel {
 		jlStatus.setText("Waiting to push button");
 		jbConnect.setVisible(true);
 		jbCancel.setVisible(false);
-	}
-
-
-	public static void main(String[] args) {
-		new JPClientConnect();
 	}
 }

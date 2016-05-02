@@ -1,13 +1,9 @@
 package server;
 
-import menu.SettingFrame;
+import menu.PanelSettings;
 
-import javax.swing.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -15,7 +11,7 @@ import java.util.HashMap;
  */
 public class Server {
 
-    private SettingFrame setF;
+    private PanelSettings setF;
 
     private ServerSocket server;
 
@@ -26,7 +22,7 @@ public class Server {
     private Object syncGrid;
 
     public Server(){
-        setF = new SettingFrame(this);
+        setF = new PanelSettings(null, this);
         try {
             server = new ServerSocket();
         } catch (IOException e) {
