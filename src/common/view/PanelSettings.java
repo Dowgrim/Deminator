@@ -1,7 +1,7 @@
-package common.menu;
+package common.view;
 
-import common.DeminatorFrame;
-import common.JSPPlayersList;
+import common.view.DeminatorFrame;
+import common.view.JSPPlayersList;
 import server.Player;
 import server.Server;
 
@@ -22,15 +22,9 @@ public class PanelSettings extends JPanel {
 
 	private Server server = null;
 
-	public PanelSettings(DeminatorFrame papa){
-		this(papa, null);
-	}
-	public PanelSettings(DeminatorFrame papa, Server serv) {
-		super();
-		server = serv;
+	public PanelSettings(DeminatorFrame papa)
+	{
 		this.papa = papa;
-		JScrollPane jspPlayers = new JSPPlayersList();
-
 		JComponent jspSettings = initSettingsPanel();
 
 		JPanel jpButtons = new JPanel();
@@ -60,9 +54,12 @@ public class PanelSettings extends JPanel {
 		}
 
 		setLayout(new BorderLayout());
-		add(jspPlayers, BorderLayout.EAST);
 		add(jspSettings, BorderLayout.CENTER);
 		add(jpButtons, BorderLayout.SOUTH);
+	}
+	public PanelSettings(DeminatorFrame papa, Server serv) {
+		this(papa);
+		this.server = serv;
 	}
 
 	private JComponent initSettingsPanel() {

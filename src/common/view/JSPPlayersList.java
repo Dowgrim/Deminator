@@ -1,4 +1,4 @@
-package common;
+package common.view;
 
 import javax.swing.*;
 import java.awt.*;

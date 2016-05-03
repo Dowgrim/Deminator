@@ -1,4 +1,4 @@
-package common.menu;
+package common.view;
 
 import util.JPImage;
 

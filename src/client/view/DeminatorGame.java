@@ -1,7 +1,7 @@
 package client.view;
 
-import common.DeminatorFrame;
-import common.menu.PanelSettings;
+import common.view.DeminatorFrame;
+import common.view.PanelSettings;
 
 import java.awt.*;
 
@@ -18,7 +18,7 @@ public class DeminatorGame extends DeminatorFrame {
 	}
 
 	public void setDefaultView() { setViewToConnection(); }
-	public void setViewToConnection() { setView(new PanelClientConnect(this)); }
+	public void setViewToConnection() { setView(new PanelStart(this)); }
 	public void setViewToSalon() { setView(new PanelSettings(this)); }
 	public void setViewToGame() { /* TODO setView(new PanelGame(this)); */ }
 

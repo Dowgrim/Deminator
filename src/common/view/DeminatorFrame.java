@@ -1,7 +1,9 @@
-package common;
+package common.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -25,8 +27,8 @@ public abstract class DeminatorFrame extends JFrame {
 		jpMain.add(jpCenter, BorderLayout.CENTER);
 
 		jpContent = new JPanel();
+		jpContent.setBackground(Color.GRAY);
 		jpCenter.setViewportView(jpContent);
-		jpContent.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
 		jpRight = new JSPPlayersList();
 		jpMain.add(jpRight, BorderLayout.EAST);
@@ -34,7 +36,7 @@ public abstract class DeminatorFrame extends JFrame {
 		// This frame
 		setContentPane(jpMain);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(600, 400);
+		setSize(800, 600);
 		setVisible(true);
 		addWindowListener(new WindowListener() {
 			@Override
