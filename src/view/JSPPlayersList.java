@@ -1,4 +1,4 @@
-package common.view;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +11,12 @@ public class JSPPlayersList extends JScrollPane {
 	private JPanel viewport;
 
 	public JSPPlayersList() {
+		JPanel jp = new JPanel();
+		jp.setLayout(new BorderLayout());
 		viewport = new JPanel();
-		setViewportView(viewport);
+		jp.add(viewport, BorderLayout.NORTH);
+		setViewportView(jp);
 
-		viewport.setBackground(Color.WHITE);
 		viewport.setLayout(new GridLayout(0, 1, 2, 2));
 
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

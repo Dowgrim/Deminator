@@ -1,5 +1,7 @@
 package server;
 
+import util.Controler;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -7,7 +9,7 @@ import java.util.HashMap;
 /**
  * Created by Michael on 29/04/2016.
  */
-public class Server {
+public class Server implements Controler {
     private ServerSocket server;
     private Grid grid;
     private HashMap<String, Player> players;
@@ -91,5 +93,10 @@ public class Server {
         for(Player p : players.values()){
             p.sendDisco(x, y, grid.get(x, y));
         }
+    }
+
+    @Override
+    public void disconnect() {
+
     }
 }

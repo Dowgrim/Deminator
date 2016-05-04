@@ -1,36 +1,29 @@
-package client.view;
+package view;
 
-import common.view.DeminatorFrame;
-import common.view.PanelSettings;
 import server.Server;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 /**
  * Created by Nathaël N on 30/04/2016.
  */
 public class PanelStart extends JPanel {
 
-	private final DeminatorFrame papa;
+	private final DeminatorGame papa;
 	private final JTextField jtfIpC, jtfPortC, jtfPortS;
 	private final JComboBox jtfIpS;
 	private final JButton jbConnect, jbCancel, jbLaunchServ;
 	private final JLabel jlStatus;
 	private final JTextField jtfPseudo;
 
-	public PanelStart(DeminatorFrame papa){
+	public PanelStart(DeminatorGame papa){
 		this.papa = papa;
 		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 
 		jtfPseudo = new JTextField();
 		jtfIpC =  new JTextField("128.0.0.1", 15);

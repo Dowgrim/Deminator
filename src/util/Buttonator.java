@@ -1,4 +1,4 @@
-package common.view;
+package util;
 
 import util.JPImage;
 
