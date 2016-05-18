@@ -1,5 +1,7 @@
 package server;
 
+import net.Server;
+
 /**
  * Created by Michael on 01/05/2016.
  */

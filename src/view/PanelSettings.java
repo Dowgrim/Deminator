@@ -1,8 +1,8 @@
 package view;
 
 import server.Player;
-import server.Server;
-import util.Controler;
+import net.Server;
+import util.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class PanelSettings extends JPanel {
 	public enum Rank { CLIENT, SERVER }
 
-	private final Controler control;
+	private final Controller control;
 	private final JButton jbNotReady;
 	private final JButton jbGo;
 	private final JButton jbReady;
@@ -22,7 +22,7 @@ public class PanelSettings extends JPanel {
 
 	private Server server = null;
 
-	public PanelSettings(Rank r, Controler control)
+	public PanelSettings(Controller control)
 	{
 		this.control = control;
 		JPanel jspSettings = new JPanel();
@@ -106,7 +106,7 @@ public class PanelSettings extends JPanel {
 	}
 
 	private void clicDisconnect() {
-		control.disconnect();
+		//control.disconnect();
 	}
 
 

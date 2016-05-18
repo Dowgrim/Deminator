@@ -1,5 +1,7 @@
 package server;
 
+import net.Server;
+
 import java.util.Random;
 
 /**

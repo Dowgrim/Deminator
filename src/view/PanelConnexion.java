@@ -1,6 +1,6 @@
 package view;
 
-import server.Server;
+import util.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,29 +12,31 @@ import java.util.Enumeration;
 /**
  * Created by Nathaël N on 30/04/2016.
  */
-public class PanelStart extends JPanel {
+public class PanelConnexion extends JPanel {
 
-	private final DeminatorGame papa;
+	private final Controller control;
 	private final JTextField jtfIpC, jtfPortC, jtfPortS;
-	private final JComboBox jtfIpS;
-	private final JButton jbConnect, jbCancel, jbLaunchServ;
+	private final JComboBox jcbIpS;
+	private final JButton jbLaunchClient, jbCancelClient, jbCancelServ, jbLaunchServ;
 	private final JLabel jlStatus;
 	private final JTextField jtfPseudo;
 
-	public PanelStart(DeminatorGame papa){
-		this.papa = papa;
+	public PanelConnexion(Controller control){
+		this.control = control;
 		setLayout(new BorderLayout());
 
 		jtfPseudo = new JTextField();
 		jtfIpC =  new JTextField("128.0.0.1", 15);
-		jtfIpS = new JComboBox();
+		jcbIpS = new JComboBox();
 
 		jtfPortC = new JTextField("4224", 5);
 		jtfPortS = new JTextField("4224", 5);
-		jbConnect = new JButton("Connect");
-		jbCancel = new JButton("Cancel");
+		jbLaunchClient = new JButton("Connect");
+		jbCancelClient = new JButton("Cancel");
+		jbCancelServ = new JButton("Cancel");
 		jbLaunchServ = new JButton("Be a server");
 		jlStatus = new JLabel("Waiting to push button");
+		jlStatus.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 
 		JPanel jpLeft = generateLeft();
 		JPanel jpRight = generateRight();
@@ -42,11 +44,7 @@ public class PanelStart extends JPanel {
 		{
 			jpBas.setLayout(new BoxLayout(jpBas, BoxLayout.Y_AXIS));
 			jpBas.add(new JSeparator());
-
-			JPanel jpp = new JPanel();
-			jpp.add(new JLabel("Status: "));
-			jpp.add(jlStatus);
-			jpBas.add(jpp);
+			jpBas.add(jlStatus);
 		}
 
 		add(jpLeft, BorderLayout.WEST);
@@ -79,14 +77,14 @@ public class PanelStart extends JPanel {
 
 		JPanel jpMid = new JPanel();
 		{
-				jbConnect.addActionListener(al -> clicTryConnect());
-				jbCancel.addActionListener(al -> clicCancel());
-				jbCancel.setVisible(false);
+				jbLaunchClient.addActionListener(al -> clicTryConnect());
+				jbCancelClient.addActionListener(al -> clicCancel());
+				jbCancelClient.setVisible(false);
 
 
 			jpMid.setLayout(new BoxLayout(jpMid, BoxLayout.X_AXIS));
-			jpMid.add(jbConnect);
-			jpMid.add(jbCancel);
+			jpMid.add(jbLaunchClient);
+			jpMid.add(jbCancelClient);
 		}
 
 		jpLeft.add(jpPseudo);
@@ -112,21 +110,24 @@ public class PanelStart extends JPanel {
 				while (a.hasMoreElements()) {
 					String addr = a.nextElement().getHostAddress();
 					if(addr.contains("."))
-						jtfIpS.addItem(e.getDisplayName()+" ("+addr+")");
+						jcbIpS.addItem(e.getDisplayName()+" ("+addr+")");
 				}
 			}
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
 
-		jpHaut.add(jtfIpS);
+		jpHaut.add(jcbIpS);
 		jpHaut.add(new JLabel(":"));
 		jpHaut.add(jtfPortS);
 
 
 		JPanel jpBas = new JPanel();
 		jbLaunchServ.addActionListener(al -> clicLaunchServ());
+		jbCancelServ.addActionListener(al -> clicCancelServ());
+		jbCancelServ.setVisible(false);
 		jpBas.add(jbLaunchServ);
+		jpBas.add(jbCancelServ);
 
 		jpRight.add(jpHaut);
 		jpRight.add(jpBas);
@@ -135,37 +136,68 @@ public class PanelStart extends JPanel {
 	}
 
 	private void clicLaunchServ() {
-		papa.setView(new PanelSettings(papa));
-	}
+		jlStatus.setText("Trying to create server...");
+		int port;
+		try {
+			port = Integer.parseUnsignedInt(jtfPortS.getText());
+			setEnabledAll(false);
 
+			jbLaunchServ.setVisible(false);
+			jbCancelServ.setVisible(true);
+			control.beAServer(port);
+		}catch(NumberFormatException e) {
+			jlStatus.setText("Error: Server's Port should be an unsigned integer.");
+		}
+
+	}
 	private void clicTryConnect() {
 		jlStatus.setText("Trying to connect...");
-		jtfIpC.setEnabled(false);
-		jtfPortC.setEnabled(false);
-		jtfPseudo.setEnabled(false);
 
-		jbConnect.setVisible(false);
-		jbCancel.setVisible(true);
+		int port;
+		try {
+			port = Integer.parseUnsignedInt(jtfPortC.getText());
+			setEnabledAll(false);
 
-		//TODO Some network stuff //////////////////////////////////////////////////////////////
+			jbLaunchClient.setVisible(false);
+			jbCancelClient.setVisible(true);
+			control.tryToBeAClient(jtfPseudo.getText(), jtfIpC.getText(), port);
+		}catch(NumberFormatException e) {
+			jlStatus.setText("Error: Client's port should be an unsigned integer.");
+		}
+	}
+	private void clicCancel() {
+		jlStatus.setText("Cancelling...");
+		jbCancelClient.setEnabled(false);
+		control.cancelBeAClient();
+	}
+	private void clicCancelServ() {
+		jlStatus.setText("Cancelling...");
+		jbCancelServ.setEnabled(false);
+		control.cancelBeAServ();
+	}
+	private void setEnabledAll(boolean tf) {
+		jtfIpC.setEnabled(tf);
+		jtfPortC.setEnabled(tf);
+		jtfPseudo.setEnabled(tf);
+		jcbIpS.setEnabled(tf);
+		jtfPortS.setEnabled(tf);
 
-		//TODO Following: Network Stub
-		papa.setView(new PanelSettings(papa, new Server()));
-		//TODO ^^^^^^^^^^^^^^^^^^^^^^^
+		jbLaunchClient.setEnabled(tf);
+		jbLaunchServ.setEnabled(tf);
+	}
 
+	public void reset() {
+		setEnabledAll(true);
+		jbLaunchClient.setVisible(true);
+		jbLaunchServ.setVisible(true);
+		jbCancelClient.setVisible(false);
+		jbCancelClient.setEnabled(true);
+		jbCancelServ.setVisible(false);
+		jbCancelServ.setEnabled(true);
 		jlStatus.setText("Waiting to push button");
 	}
 
-	private void clicCancel() {
-		jlStatus.setText("Cancelling connect try...");
-		jtfIpC.setEnabled(true);
-		jtfPortC.setEnabled(true);
-		jtfPseudo.setEnabled(true);
-
-		//TODO Some cancelling network stuff //////////////////////////////////////////////////
-
-		jlStatus.setText("Waiting to push button");
-		jbConnect.setVisible(true);
-		jbCancel.setVisible(false);
+	public void showMessage(String message) {
+		jlStatus.setText("Controller: " + message);
 	}
 }

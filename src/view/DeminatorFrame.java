@@ -1,5 +1,7 @@
 package view;
 
+import util.Controller;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
@@ -9,12 +11,14 @@ import java.awt.event.WindowListener;
 /**
  * Created by Nathaël N on 02/05/16.
  */
-public class DeminatorGame extends JFrame {
+public class DeminatorFrame extends JFrame {
+	private final Controller control;
 	private JPanel jpContent;
 	private JSPPlayersList jpRight;
 
-	private DeminatorGame() {
+	public DeminatorFrame(Controller control) {
 		super("Deminator !!");
+		this.control = control;
 
 		// CONTENT
 		JPanel jpMain = new JPanel();
@@ -38,21 +42,20 @@ public class DeminatorGame extends JFrame {
 		// This frame
 		setContentPane(jpMain);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setViewToConnection();
 		setSize(800, 600);
 		setVisible(true);
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				int n = JOptionPane.showConfirmDialog(
-						DeminatorGame.this,
+						DeminatorFrame.this,
 						"Do you really want to close the server?",
 						"Close?",
 						JOptionPane.YES_NO_OPTION);
 				if(n == JOptionPane.YES_OPTION){
 					Object[] options = {"OSEF",
 							"YOLO"};
-					n = JOptionPane.showOptionDialog(DeminatorGame.this,
+					n = JOptionPane.showOptionDialog(DeminatorFrame.this,
 							"Nooo!!Don't do that otherwise this is what will happen: The time and space will break.",
 							"Don't do that!",
 							JOptionPane.YES_NO_OPTION,
@@ -85,39 +88,4 @@ public class DeminatorGame extends JFrame {
 	public void removePlayerFromList(String playerName) {
 		jpRight.removePlayerFromList(playerName);
 	}
-
-	public void setViewToConnection() { setView(new PanelStart(this)); }
-	public void setViewToSalon() { setView(new PanelSettings(this)); }
-	public void setViewToGame() { /* TODO setView(new PanelGame(this)); */ }
-
-	// CLIENT MAIN
-	public static void main(String[] args) {
-		DeminatorGame dg = new DeminatorGame();
-
-		// NEXT IS FOR TESTS ONLY ///////////////////////////////////////
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					int i=1000;
-					while(--i > 0) {
-						Thread.sleep((int)(Math.random()*1900+100));
-						switch((int)(Math.random()*2)) {
-							case 0:
-								dg.removePlayerFromList("Player"+i%32);
-								break;
-							case 1:
-								dg.putPlayerToList("Player"+(i%32),
-										new Color((int) (Math.random() * 256),
-												(int) (Math.random() * 256),
-												(int) (Math.random() * 256)));
-						}
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}.run();
-	}
-
 }

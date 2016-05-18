@@ -1,27 +1,27 @@
-package server;
+package net;
 
-import util.Controler;
+import server.Grid;
+import server.Player;
+import util.Controller;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Michael on 29/04/2016.
  */
-public class Server implements Controler {
+public class Server {
+    private final Controller control;
     private ServerSocket server;
     private Grid grid;
     private HashMap<String, Player> players;
     private Object syncGrid;
 
-    public Server(){
-        try {
-            server = new ServerSocket();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        waitingPlayer();
+    public Server(Controller control){
+        this.control = control;
     }
 
     private void closeSocketServeur() {
@@ -95,8 +95,10 @@ public class Server implements Controler {
         }
     }
 
-    @Override
-    public void disconnect() {
+	public boolean start(int port) throws Exception {
+		server = new ServerSocket(port);
 
-    }
+		//waitingPlayer();
+		return true;
+	}
 }
