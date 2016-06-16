@@ -2,12 +2,10 @@ package util;
 
 import net.Client;
 import net.Server;
-import view.DeminatorFrame;
-import view.PanelSettings;
-import view.PanelConnexion;
+import view.menu.DeminatorFrame;
+import view.menu.PanelSettings;
+import view.menu.PanelConnexion;
 
-import java.io.IOException;
-import java.net.BindException;
 import java.util.Calendar;
 
 /**
