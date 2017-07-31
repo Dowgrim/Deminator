@@ -1,35 +1,59 @@
 package view.game;
 
-import util.Controller;
 import util.JPImage;
 
-import javax.swing.*;
+import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+
+import javax.swing.*;
+
+import net.ClientDem;
 
 /**
  * Created by Michael on 16/06/2016.
  */
 public class Deminator extends JFrame{
+	
+    private static String BLUE = "images/Blue.png";
+    private static String GREEN = "images/Green.png";
+    private static String EXPLO = "images/Explosion.png";
 
-    private Controller controller;
+    private ClientDem cli;
+    
+    private final JPanel contentPane;
 
     private JPImage[][] boxs;
 
-    public Deminator(Controller c, int sizeX, int sizeY){
-        controller = c;
+    public Deminator(ClientDem c, int sizeX, int sizeY){
+    	cli = c;
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //TODO en fonction de la taille de l'ecran
         setSize(sizeX*30, sizeY*30);
 
         boxs = new JPImage[sizeX][sizeY];
+        contentPane = new JPanel();
+        setContentPane(contentPane);
 
+        contentPane.setLayout(new GridLayout(sizeX, sizeY));
+        JPImage p;
         for(int i = 0; i < sizeX; i++){
-            for(int j = 0; j < sizeY; j++){
-                boxs[i][j] = new JPImage("Yolo, trouver des images cool");
-            }
+        	for(int j = 0; j < sizeY; j++){
+	            p = new JPImage();
+	            boxs[i][j] = p;
+	            contentPane.add(p);
+        	}
         }
-
-        addKeyListener(new PlayerListerner());
+        boxs[0][0].addImage(BLUE);
+        
+        
+        try {
+            Thread.sleep(333333333);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        addKeyListener(new PlayerListener(cli));
 
         setVisible(true);
     }

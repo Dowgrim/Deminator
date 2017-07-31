@@ -1,7 +1,7 @@
 package view.menu;
 
 import server.Player;
-import net.Server;
+import net.ClientDem;
 import util.Controller;
 
 import javax.swing.*;
@@ -14,17 +14,15 @@ import java.util.HashMap;
 public class PanelSettings extends JPanel {
 	public enum Rank { CLIENT, SERVER }
 
-	private final Controller control;
+	private ClientDem cli;
 	private final JButton jbNotReady;
 	private final JButton jbGo;
 	private final JButton jbReady;
 	private final JButton jbDisconnect;
 
-	private Server server = null;
 
-	public PanelSettings(Controller control)
+	public PanelSettings()
 	{
-		this.control = control;
 		JPanel jspSettings = new JPanel();
 		jspSettings.setLayout(new BoxLayout(jspSettings, BoxLayout.Y_AXIS));
 

@@ -1,6 +1,5 @@
 package server;
 
-import net.Server;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -10,6 +9,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import net.ServerDem;
+
 /**
  * Created by Michael on 29/04/2016.
  */
@@ -17,7 +18,7 @@ public class Player extends Thread{
 
     private int posX, posY;
 
-    private Server server;
+    private ServerDem server;
 
     private String nick;
 

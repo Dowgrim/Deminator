@@ -16,8 +16,6 @@ public class Controller {
 	//private final PanelGrid pg;
 	private final PanelSettings ps;
 	private final DeminatorFrame dg;
-	private final Client c;
-	private final Server s;
 
 	public Controller() {
 		pc = new PanelConnexion(this);
@@ -26,8 +24,6 @@ public class Controller {
 		dg = new DeminatorFrame(this);
 		dg.setView(pc);
 
-		c = new Client(this);
-		s = new Server(this);
 	}
 
 	// // // // //↓ PanelConnexion ↓// // // // //

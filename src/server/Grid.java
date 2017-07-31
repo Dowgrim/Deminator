@@ -1,7 +1,7 @@
 package server;
 
-import net.Server;
-
+import java.net.Socket;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -14,11 +14,14 @@ public class Grid {
     private int size;
 
     private int remainingBomb;
+    
+    private Socket sock;
 
-    public Grid(int s, int b){
+    public Grid(int s, int b, Socket sock){
         size = s;
         remainingBomb = b;
         boxs = new Box[size][size];
+        this.sock = sock;
         randomGrid();
     }
 
@@ -76,7 +79,7 @@ public class Grid {
         return boxs[x][y].isVisible();
     }
 
-    public void discover(int x, int y, Server serv) {
+    public List<String> discover(int x, int y) {
         if(boxs[x][y].isNull()){
             for(int i = -1; i <= 1; i++){
                 for(int j = -1; j <= 1; j++){
@@ -84,7 +87,7 @@ public class Grid {
                 }
             }
         }
-        serv.discover(x, y);
+        sock.discover(x, y);
     }
 
     public int get(int x, int y) {

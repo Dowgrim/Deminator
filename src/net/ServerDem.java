@@ -13,24 +13,13 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by Michael on 29/04/2016.
  */
-public class Server {
-    private final Controller control;
+public class ServerDem {
     private ServerSocket server;
     private Grid grid;
     private HashMap<String, Player> players;
     private Object syncGrid;
 
-    public Server(Controller control){
-        this.control = control;
-    }
 
-    private void closeSocketServeur() {
-        try {
-            server.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void waitingPlayer() {
         for(int i = 0; i < 10; i++) {
@@ -40,7 +29,14 @@ public class Server {
         }
     }
 
-
+    private void closeSocketServeur() {
+        try {
+            server.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void laucher(/*setting from the settingFrame*/){
         grid = new Grid(/*setting from the settingFrame*/4, 4);
     }
@@ -51,7 +47,6 @@ public class Server {
         p.setColor(col);
         players.put(nick, p);
     }
-
 
     public void movable(String nick, int x, int y) {
         synchronized (syncGrid){
