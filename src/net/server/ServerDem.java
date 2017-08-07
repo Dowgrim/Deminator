@@ -1,4 +1,4 @@
-package net;
+package net.server;
 
 import server.Grid;
 import server.Player;

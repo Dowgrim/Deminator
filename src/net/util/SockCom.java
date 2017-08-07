@@ -1,4 +1,6 @@
-package net;
+package net.util;
+
+import net.util.Receiver;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -3,7 +3,7 @@ package view.game;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import net.ClientDem;
+import net.client.ClientDem;
 
 /**
  * Created by Michael on 16/06/2016.

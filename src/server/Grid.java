@@ -1,8 +1,7 @@
 package server;
 
-import net.ServerDem;
+import net.server.ServerDem;
 
-import java.net.Socket;
 import java.util.List;
 import java.util.Random;
 

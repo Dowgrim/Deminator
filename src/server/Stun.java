@@ -1,6 +1,6 @@
 package server;
 
-import net.ServerDem;
+import net.server.ServerDem;
 
 /**
  * Created by Michael on 01/05/2016.
