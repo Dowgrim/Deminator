@@ -1,5 +1,6 @@
-package dem.net.client.actions;
+package dem.net.client.actions.receiveOnly;
 
+import dem.net.util.actions.Emitter;
 import dem.net.util.actions.Receiver;
 import dem.view.game.Deminator;
 
@@ -12,6 +13,9 @@ public class CommandQuit extends Receiver {
 
 	@Override
 	public void receive(List<String> params) {
+		// QUIT playerName
+		String playerName = params.remove(0);
 
+		// TODO
 	}
 }
