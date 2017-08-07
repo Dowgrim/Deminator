@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
-import net.ServerDem;
+import net.server.ServerDem;
 
 /**
  * Created by Michael on 29/04/2016.

@@ -3,13 +3,10 @@ package view.game;
 import util.JPImage;
 
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import javax.swing.*;
 
-import net.ClientDem;
+import net.client.ClientDem;
 
 /**
  * Created by Michael on 16/06/2016.

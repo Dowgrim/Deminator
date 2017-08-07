@@ -1,7 +1,7 @@
 package view.menu;
 
 import server.Player;
-import net.ClientDem;
+import net.client.ClientDem;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,14 +1,11 @@
 package view.menu;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 
-import net.ClientDem;
+import net.client.ClientDem;
 
 public class ClientFrame extends JFrame {
 	

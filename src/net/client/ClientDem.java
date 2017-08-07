@@ -1,14 +1,17 @@
-package net;
+package net.client;
 
 import java.awt.Color;
 import java.io.IOException;
 
+import net.util.Receiver;
+import net.util.SockCom;
 import view.game.Deminator;
 
 /**
  * Created by Nathaël N on 04/05/16.
  */
-public class ClientDem implements Receiver{
+public class ClientDem implements Receiver {
+
 	private String pseudo;
 	private Color color;
 	private SockCom sock = null;

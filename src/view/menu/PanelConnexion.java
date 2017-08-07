@@ -4,13 +4,9 @@ package view.menu;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import net.ClientDem;
+import net.client.ClientDem;
 
 import java.awt.*;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 
 /**
  * Created by Nathaël N on 30/04/2016.
