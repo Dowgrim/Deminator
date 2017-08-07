@@ -26,8 +26,9 @@ public class SockCom extends Socket implements Runnable {
 		 super(host, port);
 		 br = new BufferedReader(new InputStreamReader(getInputStream()));
 		 pw = new PrintWriter(getOutputStream(), true);
-		 
-		 receive();
+
+		 Thread t = new Thread(this);
+		 t.start();
 	 }
 
 	 public void setCommunicator(Communicator comm) {
@@ -37,7 +38,7 @@ public class SockCom extends Socket implements Runnable {
 	 public void send(String msg) {
 		 comm.send(msg);
 	 }
-	 
+
 	 public void receive() {
 		 isListening = true;
 		 String str;

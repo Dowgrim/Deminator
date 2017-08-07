@@ -8,6 +8,7 @@ import java.awt.*;
 public class PanelInfos extends JPanel {
 
     private ClientDem cli;
+    private JLabel pingInfo;
 
     public PanelInfos(ClientDem c){
         cli = c;
@@ -20,11 +21,17 @@ public class PanelInfos extends JPanel {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new Button("Ping"));
+        pingInfo = new JLabel("Ping inconnu");
+        add(pingInfo);
         JPanel size = new JPanel();
         size.setLayout(new FlowLayout());
         size.add(new JLabel("x:10"));
         size.add(new JLabel("y:10"));
         add(size);
 
+    }
+
+    public void setPing(long ping) {
+        pingInfo.setText("Ping:"+ping);
     }
 }

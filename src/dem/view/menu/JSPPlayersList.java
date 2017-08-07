@@ -57,7 +57,7 @@ public class JSPPlayersList extends JScrollPane {
 		this.repaint();
 	}
 
-	private class JPPlayer extends JPanel {
+    private class JPPlayer extends JPanel {
 		private String playerName;
 		private JPPlayer(String name) {
 			this(name, Color.BLACK);

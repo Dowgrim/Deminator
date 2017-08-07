@@ -30,7 +30,7 @@ public class CommandPing implements Emitter {
 		public void receive(List<String> params) {
 			long ms = System.currentTimeMillis() - p.pingDate;
 
-			// faire la magie avec ms
+			dem.displayPing(ms);
 		}
 	}
 }

@@ -2,7 +2,9 @@ package dem.net.server;
 
 import dem.model.Grid;
 import dem.model.Player;
+import dem.view.menu.JSPPlayersList;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -10,25 +12,34 @@ import java.util.HashMap;
 /**
  * Created by Michael on 29/04/2016.
  */
-public class ServerDem {
-    private ServerSocket server;
+public class ServerDem extends ServerSocket implements  Runnable{
     private Grid grid;
     private HashMap<String, Player> players;
     private Object syncGrid;
+    private JSPPlayersList jspPL;
 
+    public ServerDem(int port, JSPPlayersList jsp) throws IOException {
+        super(port);
+        jspPL = jsp;
+        syncGrid = new Object();
+        players = new HashMap<>();
+        Thread t = new Thread(this);
+        t.start();
+    }
 
-
-    private void waitingPlayer() {
+    @Override
+    public void run() {
         for(int i = 0; i < 10; i++) {
             try {
-                players.put(i+"", new Player(this, server.accept()));
+                players.put(i+"", new Player(this, this.accept()));
+                jspPL.putPlayerToList(i+"", Color.BLACK);
             }catch (IOException e){/*dem.MainClient*/}
         }
     }
 
     private void closeSocketServeur() {
         try {
-            server.close();
+            this.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,10 +98,6 @@ public class ServerDem {
         }
     }
 
-	public boolean start(int port) throws Exception {
-		server = new ServerSocket(port);
 
-		//waitingPlayer();
-		return true;
-	}
+
 }

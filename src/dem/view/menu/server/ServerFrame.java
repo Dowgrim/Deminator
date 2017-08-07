@@ -22,7 +22,7 @@ public class ServerFrame extends JFrame {
 
 	private final PanelSettings ps;
 
-	private final JSPPlayersList sppl;
+	private final JSPPlayersList jsppl;
 
 	/**
 	 *
@@ -31,7 +31,7 @@ public class ServerFrame extends JFrame {
 
 
 	public ServerFrame() {
-		super("Deminator !!(Client)");
+		super("Deminator !!(Serveur)");
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
@@ -40,18 +40,18 @@ public class ServerFrame extends JFrame {
 		pCenter = new JPanel();
 		pCenter.setLayout(new BoxLayout(pCenter, BoxLayout.Y_AXIS));
 
-		ServerDem ser = new ServerDem();
-		pc = new PanelServer(ser);
 
 		ps = new PanelSettings();
 
-		sppl = new JSPPlayersList();
+		jsppl = new JSPPlayersList();
+
+		pc = new PanelServer(jsppl);
 
 		pCenter.add(pc);
 		pCenter.add(ps);
 
 		mainPanel.add(pCenter);
-		mainPanel.add(sppl);
+		mainPanel.add(jsppl);
 
 		pcInitialisation();
 		psInitialisation();
@@ -72,7 +72,7 @@ public class ServerFrame extends JFrame {
 	}
 
 	private void spplInitialisation() {
-		sppl.setBounds(mainPanel.getWidth() - 300, 0, 300, mainPanel.getHeight());
+		jsppl.setBounds(mainPanel.getWidth() - 300, 0, 300, mainPanel.getHeight());
 	}
 
 

@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import dem.net.client.ClientDem;
+import dem.view.menu.JSPPlayersList;
 
 import java.awt.*;
 
@@ -20,12 +21,14 @@ public class PanelConnexion extends JPanel {
 	private final JLabel jlStatus;
 	private final JTextField jtfPseudo;
 
-	public PanelConnexion(ClientDem cli){
-		this.cli = cli;
+	private final JSPPlayersList jspl;
+
+	public PanelConnexion(JSPPlayersList jspl){
+		this.jspl = jspl;
 		setLayout(new BorderLayout());
 
 		jtfPseudo = new JTextField();
-		jtfIpC =  new JTextField("128.0.0.1", 15);
+		jtfIpC =  new JTextField("127.0.0.1", 15);
 		jcbIpS = new JComboBox();
 
 		jtfPortC = new JTextField("4224", 5);
@@ -97,7 +100,7 @@ public class PanelConnexion extends JPanel {
 
 			jbLaunchClient.setVisible(false);
 			jbCancelClient.setVisible(true);
-			cli.start(jtfIpC.getText(), Integer.parseInt(jtfPortC.getText()), jtfPseudo.getText());
+			cli = new ClientDem(jtfIpC.getText(), Integer.parseInt(jtfPortC.getText()), jtfPseudo.getText());
 		}catch(NumberFormatException e) {
 			jlStatus.setText("Error: Client's port should be an unsigned integer.");
 		}

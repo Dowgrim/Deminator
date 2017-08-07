@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 import dem.net.client.ClientDem;
 import dem.view.menu.JSPPlayersList;
 import dem.view.menu.PanelSettings;
+import dem.view.menu.server.ServerFrame;
 
 public class ClientFrame extends JFrame {
 	
@@ -30,8 +31,7 @@ public class ClientFrame extends JFrame {
 	
 	
 	public ClientFrame() {
-		super("Deminator !!(Client)"); 
-		cli = new ClientDem();
+		super("Deminator !!(Client)");
 		mainPanel = new JPanel(); 
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		setContentPane(mainPanel);
@@ -39,12 +39,13 @@ public class ClientFrame extends JFrame {
 		pCenter = new JPanel();	
 		pCenter.setLayout(new BoxLayout(pCenter, BoxLayout.Y_AXIS));
 
-		pc = new PanelConnexion(cli);
 		
 		ps = new PanelSettings();
 		
 		sppl = new JSPPlayersList();
-			
+
+        pc = new PanelConnexion(sppl);
+
 		pCenter.add(pc);
 		pCenter.add(ps);
 		

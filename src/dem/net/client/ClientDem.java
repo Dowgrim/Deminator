@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import dem.net.util.SockCom;
 import dem.view.game.Deminator;
+import dem.view.menu.JSPPlayersList;
 
 /**
  * Created by Nathaël N on 04/05/16.
@@ -16,17 +17,17 @@ public class ClientDem {
 	private boolean gameInProgres;
 	private Deminator view;
 
-	public ClientDem() {}
+	private JSPPlayersList jspPL;
 
-	public void start(String host, int port, String pseudo) {
+	public ClientDem(String host, int port, String jtfPseudoText) {
 		this.pseudo = pseudo;
 		try {
 			sock = new SockCom(host, port);
 			sock.setCommunicator(new ComPing(view)); // just for example (useless line since comPing is default value)
+			jspPL.putPlayerToList(pseudo, color);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		view = new Deminator(this, 4, 4);
 	}
 
 	public void setPseudoAndColor(String pseudo, Color color) {

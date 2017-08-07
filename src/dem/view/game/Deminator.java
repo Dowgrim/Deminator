@@ -61,8 +61,7 @@ public class Deminator extends JFrame{
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        System.out.println("yolo");
-        new Deminator(new ClientDem(), 10, 10);
+    public void displayPing(long ms) {
+        infosPane.setPing(ms);
     }
 }
