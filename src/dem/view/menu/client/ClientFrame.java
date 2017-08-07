@@ -32,7 +32,7 @@ public class ClientFrame extends JFrame {
 	
 	public ClientFrame() {
 		super("Deminator !!(Client)"); 
-		cli = new ClientDem(new ComPing());
+		cli = new ClientDem();
 		mainPanel = new JPanel(); 
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		setContentPane(mainPanel);

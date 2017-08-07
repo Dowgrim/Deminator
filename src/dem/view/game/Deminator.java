@@ -64,6 +64,6 @@ public class Deminator extends JFrame{
 
     public static void main(String[] args) {
         System.out.println("yolo");
-        new Deminator(new ClientDem(new ComPing()), 10, 10);
+        new Deminator(new ClientDem(), 10, 10);
     }
 }

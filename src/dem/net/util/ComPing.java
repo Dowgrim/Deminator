@@ -1,12 +1,12 @@
 package dem.net.util;
 
-import dem.net.client.actions.Ping;
+import dem.net.client.actions.CommandPing;
 
 public class ComPing extends Communicator {
 	public ComPing() {
-		Ping ping = new Ping();
+		CommandPing ping = new CommandPing();
 		this.newSendAction("PING", ping);
-		this.newReceiveAction("PONG", new Ping.Pong(ping));
+		this.newReceiveAction("PONG", new CommandPing.Pong(ping));
 		this.newReceiveAction("PING", ping);
 	}
 }

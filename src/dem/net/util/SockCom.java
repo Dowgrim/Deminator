@@ -18,15 +18,19 @@ public class SockCom extends Socket implements Runnable {
 	 private final BufferedReader br;
 	 private final PrintWriter pw;
 	 private boolean isListening = false;
-	 private Communicator comm;
+	 private Communicator comm = new ComPing();
 	 
-	 public SockCom(String host, int port, Communicator comm) throws IOException {
+	 public SockCom(String host, int port) throws IOException {
 		 super(host, port);
 		 this.comm = comm;
 		 br = new BufferedReader(new InputStreamReader(getInputStream()));
 		 pw = new PrintWriter(getOutputStream(), true);
 		 
 		 receive();
+	 }
+
+	 public void setCommunicator(Communicator comm) {
+	 	this.comm = comm;
 	 }
 
 	 public void send(String msg) {
