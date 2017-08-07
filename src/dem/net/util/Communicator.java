@@ -1,7 +1,7 @@
 package dem.net.util;
 
-import dem.net.client.actions.Emitter;
-import dem.net.client.actions.Receiver;
+import dem.net.util.actions.Emitter;
+import dem.net.util.actions.Receiver;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +11,14 @@ public abstract class Communicator {
 	private Map<String, Emitter> emits = new HashMap<>();
 	private Map<String, Receiver> receives = new HashMap<>();
 
-	void newSendAction(String command, Emitter emitter) {
+	protected void newSendAction(String command, Emitter emitter) {
 		if(emits.containsKey(command))
 			throw new RuntimeException("Already contains emit command: "+command);
 
 		emits.put(command, emitter);
 	}
 
-	void newReceiveAction(String command, Receiver receiver) {
+	protected void newReceiveAction(String command, Receiver receiver) {
 		if(receives.containsKey(command))
 			throw new RuntimeException("Already contains receive command: "+command);
 

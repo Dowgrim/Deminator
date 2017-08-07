@@ -1,4 +1,4 @@
-package dem.net.client.actions;
+package dem.net.util.actions;
 
 public interface Emitter {
 	void send();

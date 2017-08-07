@@ -1,4 +1,4 @@
-package dem.server;
+package dem.model;
 
 /**
  * Created by Michael on 29/04/2016.

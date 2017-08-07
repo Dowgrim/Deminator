@@ -1,7 +1,7 @@
 package dem.net.server;
 
-import dem.server.Grid;
-import dem.server.Player;
+import dem.model.Grid;
+import dem.model.Player;
 
 import java.io.IOException;
 import java.net.ServerSocket;

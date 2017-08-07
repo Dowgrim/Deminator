@@ -1,6 +1,5 @@
 package dem.view.game;
 
-import dem.net.util.ComPing;
 import dem.util.JPImage;
 
 import java.awt.GridLayout;

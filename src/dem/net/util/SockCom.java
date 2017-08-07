@@ -1,5 +1,7 @@
 package dem.net.util;
 
+import dem.net.client.ComPing;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,11 +20,10 @@ public class SockCom extends Socket implements Runnable {
 	 private final BufferedReader br;
 	 private final PrintWriter pw;
 	 private boolean isListening = false;
-	 private Communicator comm = new ComPing();
+	 private Communicator comm;
 	 
 	 public SockCom(String host, int port) throws IOException {
 		 super(host, port);
-		 this.comm = comm;
 		 br = new BufferedReader(new InputStreamReader(getInputStream()));
 		 pw = new PrintWriter(getOutputStream(), true);
 		 

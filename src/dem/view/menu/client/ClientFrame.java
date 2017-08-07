@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import dem.net.client.ClientDem;
-import dem.net.util.ComPing;
 import dem.view.menu.JSPPlayersList;
 import dem.view.menu.PanelSettings;
 

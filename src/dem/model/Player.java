@@ -1,4 +1,4 @@
-package dem.server;
+package dem.model;
 
 
 import java.awt.*;

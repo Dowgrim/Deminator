@@ -3,7 +3,6 @@ package dem.net.client;
 import java.awt.Color;
 import java.io.IOException;
 
-import dem.net.util.ComPing;
 import dem.net.util.SockCom;
 import dem.view.game.Deminator;
 
@@ -23,7 +22,7 @@ public class ClientDem {
 		this.pseudo = pseudo;
 		try {
 			sock = new SockCom(host, port);
-			sock.setCommunicator(new ComPing()); // just for example (useless line since comPing is default value)
+			sock.setCommunicator(new ComPing(view)); // just for example (useless line since comPing is default value)
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

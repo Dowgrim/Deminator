@@ -1,6 +1,6 @@
 package dem.view.menu;
 
-import dem.server.Player;
+import dem.model.Player;
 import dem.net.client.ClientDem;
 
 import javax.swing.*;

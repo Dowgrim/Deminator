@@ -28,7 +28,7 @@ public class PanelServer extends JPanel {
 		jtfPortS = new JTextField("4224", 5);
 		jtfPortS.setMaximumSize(new Dimension(50, 200));
 		jbCancelServ = new JButton("Cancel");
-		jbLaunchServ = new JButton("Launch server");
+		jbLaunchServ = new JButton("Launch model");
 		jlStatus = new JLabel("Waiting to push button");
 		jlStatus.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 
@@ -77,7 +77,7 @@ public class PanelServer extends JPanel {
 	}
 
 	private void clicLaunchServ() {
-		jlStatus.setText("Trying to create server...");
+		jlStatus.setText("Trying to create model...");
 		int port;
 		try {
 			port = Integer.parseUnsignedInt(jtfPortS.getText());

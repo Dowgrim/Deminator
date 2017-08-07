@@ -1,9 +1,14 @@
 package dem.net.client.actions;
 
+import dem.net.util.actions.Emitter;
+import dem.net.util.actions.Receiver;
+import dem.view.game.Deminator;
+
 import java.util.List;
 
-public class CommandPing implements Emitter, Receiver {
+public class CommandPing implements Emitter {
 	private long pingDate = -1;
+
 
 	@Override
 	public void send() {
@@ -13,15 +18,11 @@ public class CommandPing implements Emitter, Receiver {
 		// réseau.envoie('ping')
 	}
 
-	@Override
-	public void receive(List<String> params) {
-		// réseau.envoie('pong')
-	}
-
-	public static class Pong implements Receiver {
+	public static class CommandPong extends Receiver {
 		CommandPing p;
 
-		public Pong(CommandPing p) {
+		public CommandPong(Deminator d, CommandPing p) {
+			super(d);
 			this.p = p;
 		}
 
