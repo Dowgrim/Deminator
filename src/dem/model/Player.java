@@ -123,7 +123,7 @@ public class Player extends Thread{
     }
 
     public void sendDisco(int x, int y, int val) {
-        output.write("CommandDIS " + x + " " + y + " " + val);
+        output.write("CommandDiscover " + x + " " + y + " " + val);
     }
 
     public void stun() {
@@ -132,7 +132,7 @@ public class Player extends Thread{
     }
 
     public void sendExplo(int x, int y) {
-        output.write("CommandExp " + x + " " + y);
+        output.write("CommandExplose " + x + " " + y);
     }
 
     private class Analyser extends Thread{
@@ -168,12 +168,12 @@ public class Player extends Thread{
 
                     break;
                 }
-                case"CommandDEP":{
+                case"CommandMove":{
                     tokens[1] = tokenizer.nextToken();
                     move(tokens[1]);
                     break;
                 }
-                case"CommandExp":{
+                case"CommandExplose":{
                     server.explosion(nick, posX, posY);
                     break;
                 }
