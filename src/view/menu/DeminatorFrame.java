@@ -40,34 +40,6 @@ public class DeminatorFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 		setVisible(true);
-		addWindowListener(new WindowListener() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				int n = JOptionPane.showConfirmDialog(
-						DeminatorFrame.this,
-						"Do you really want to close the server?",
-						"Close?",
-						JOptionPane.YES_NO_OPTION);
-				if(n == JOptionPane.YES_OPTION){
-					Object[] options = {"OSEF",
-							"YOLO"};
-					n = JOptionPane.showOptionDialog(DeminatorFrame.this,
-							"Nooo!!Don't do that otherwise this is what will happen: The time and space will break.",
-							"Don't do that!",
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE,
-							null, options, options[0]);
-					//TODO
-				}
-			}
-
-			@Override public void windowOpened(WindowEvent e) {}
-			@Override public void windowClosed(WindowEvent e) {}
-			@Override public void windowIconified(WindowEvent e) {}
-			@Override public void windowDeiconified(WindowEvent e) {}
-			@Override public void windowActivated(WindowEvent e) {}
-			@Override public void windowDeactivated(WindowEvent e) {}
-		});
 	}
 
 	public void setView(JComponent jc) {
@@ -83,5 +55,9 @@ public class DeminatorFrame extends JFrame {
 	}
 	public void removePlayerFromList(String playerName) {
 		jpRight.removePlayerFromList(playerName);
+	}
+
+	public static void main(String[] args) {
+		new DeminatorFrame();
 	}
 }
