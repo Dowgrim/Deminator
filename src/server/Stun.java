@@ -1,17 +1,17 @@
 package server;
 
-import net.Server;
+import net.ServerDem;
 
 /**
  * Created by Michael on 01/05/2016.
  */
 public class Stun extends Thread{
 
-    private Server server;
+    private ServerDem server;
 
     private Player player;
 
-    public Stun(Server serv, Player p){
+    public Stun(ServerDem serv, Player p){
         server = serv;
         player = p;
         player.setReady(false);

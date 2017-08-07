@@ -2,13 +2,10 @@ package net;
 
 import server.Grid;
 import server.Player;
-import util.Controller;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Michael on 29/04/2016.
@@ -37,8 +34,8 @@ public class ServerDem {
         }
     }
     
-    public void laucher(/*setting from the settingFrame*/){
-        grid = new Grid(/*setting from the settingFrame*/4, 4);
+    public void laucher(){
+        grid = new Grid(4, 4, this);
     }
 
     public void modPlayer(String preNick, String nick, String col) {
@@ -68,7 +65,7 @@ public class ServerDem {
     }
 
     public void explosion(String nick, int x, int y) {
-        grid.discover(x, y, this);
+        grid.discover(x, y);
 
         if(grid.isBomb(x, y)){
             for(Player p : players.values()){

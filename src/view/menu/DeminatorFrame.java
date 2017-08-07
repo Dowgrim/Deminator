@@ -1,7 +1,5 @@
 package view.menu;
 
-import util.Controller;
-
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
@@ -12,13 +10,11 @@ import java.awt.event.WindowListener;
  * Created by Nathaël N on 02/05/16.
  */
 public class DeminatorFrame extends JFrame {
-	private final Controller control;
 	private JPanel jpContent;
 	private JSPPlayersList jpRight;
 
-	public DeminatorFrame(Controller control) {
+	public DeminatorFrame() {
 		super("Deminator !!");
-		this.control = control;
 
 		// CONTENT
 		JPanel jpMain = new JPanel();

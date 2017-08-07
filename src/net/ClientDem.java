@@ -2,9 +2,7 @@ package net;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.net.Socket;
 
-import util.Controller;
 import view.game.Deminator;
 
 /**
@@ -89,4 +87,7 @@ public class ClientDem implements Receiver{
 			}
 		}
 	}
+
+    public void action(int keyCode) {
+    }
 }

@@ -1,5 +1,7 @@
 package server;
 
+import net.ServerDem;
+
 import java.net.Socket;
 import java.util.List;
 import java.util.Random;
@@ -9,19 +11,19 @@ import java.util.Random;
  */
 public class Grid {
 
+    private ServerDem serveur;
+
     private Box[][] boxs;
 
     private int size;
 
     private int remainingBomb;
-    
-    private Socket sock;
 
-    public Grid(int s, int b, Socket sock){
+    public Grid(int s, int b, ServerDem ser){
         size = s;
         remainingBomb = b;
         boxs = new Box[size][size];
-        this.sock = sock;
+        this.serveur = ser;
         randomGrid();
     }
 
@@ -83,11 +85,13 @@ public class Grid {
         if(boxs[x][y].isNull()){
             for(int i = -1; i <= 1; i++){
                 for(int j = -1; j <= 1; j++){
-                    discover((x+i)%size, (y+j)%size, serv);
+                    discover((x+i)%size, (y+j)%size);
+
+                    serveur.discover(x, y);
                 }
             }
         }
-        sock.discover(x, y);
+        return null;
     }
 
     public int get(int x, int y) {

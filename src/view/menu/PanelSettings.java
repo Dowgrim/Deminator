@@ -2,7 +2,6 @@ package view.menu;
 
 import server.Player;
 import net.ClientDem;
-import util.Controller;
 
 import javax.swing.*;
 import java.awt.*;

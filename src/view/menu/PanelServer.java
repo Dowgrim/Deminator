@@ -1,10 +1,6 @@
 package view.menu;
 
-import util.Controller;
-
 import javax.swing.*;
-
-import net.Server;
 
 import java.awt.*;
 import java.net.InetAddress;
@@ -17,7 +13,6 @@ import java.util.Enumeration;
  */
 public class PanelServer extends JPanel {
 
-	Private finale Server server;
 	private final JTextField jtfIpC, jtfPortS;
 	private final JComboBox jcbIpS;
 	private final JButton jbCancelServ, jbLaunchServ;
@@ -71,24 +66,10 @@ public class PanelServer extends JPanel {
 			jpHaut.add(new JLabel("Server:"));
 			jpHaut.add(jtfIpC);
 			jpHaut.add(new JLabel(":"));
-			jpHaut.add(jtfPortC);
-		}
-
-		JPanel jpMid = new JPanel();
-		{
-				jbLaunchClient.addActionListener(al -> clicTryConnect());
-				jbCancelClient.addActionListener(al -> clicCancel());
-				jbCancelClient.setVisible(false);
-
-
-			jpMid.setLayout(new BoxLayout(jpMid, BoxLayout.X_AXIS));
-			jpMid.add(jbLaunchClient);
-			jpMid.add(jbCancelClient);
 		}
 
 		jpLeft.add(jpPseudo);
 		jpLeft.add(jpHaut);
-		jpLeft.add(jpMid);
 
 		return jpLeft;
 	}
@@ -143,7 +124,6 @@ public class PanelServer extends JPanel {
 
 			jbLaunchServ.setVisible(false);
 			jbCancelServ.setVisible(true);
-			control.beAServer(port);
 		}catch(NumberFormatException e) {
 			jlStatus.setText("Error: Server's Port should be an unsigned integer.");
 		}
@@ -153,7 +133,6 @@ public class PanelServer extends JPanel {
 	private void clicCancelServ() {
 		jlStatus.setText("Cancelling...");
 		jbCancelServ.setEnabled(false);
-		server.cancelBeAServ();
 	}
 	private void setEnabledAll(boolean tf) {
 		jtfIpC.setEnabled(tf);

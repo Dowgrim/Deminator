@@ -38,7 +38,7 @@ public class Player extends Thread{
 
     private PrintWriter output;
 
-    public Player(Server serv , Socket s){
+    public Player(ServerDem serv , Socket s){
         server = serv;
         socket = s;
         try {
