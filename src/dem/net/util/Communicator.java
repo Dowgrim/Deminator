@@ -1,7 +1,7 @@
 package dem.net.util;
 
-import dem.net.actions.Emitter;
-import dem.net.actions.Receiver;
+import dem.net.client.actions.Emitter;
+import dem.net.client.actions.Receiver;
 
 import java.util.HashMap;
 import java.util.List;

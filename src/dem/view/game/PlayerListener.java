@@ -23,7 +23,7 @@ public class PlayerListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-    	cli.action(e.getKeyCode());
+    	// TODO
     }
 
     @Override

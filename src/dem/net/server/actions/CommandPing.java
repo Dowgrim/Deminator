@@ -1,8 +1,11 @@
-package dem.net.actions;
+package dem.net.server.actions;
+
+import dem.net.client.actions.Emitter;
+import dem.net.client.actions.Receiver;
 
 import java.util.List;
 
-public class Ping implements Emitter, Receiver {
+public class CommandPing implements Emitter, Receiver {
 	private long pingDate = -1;
 
 	@Override
@@ -19,9 +22,9 @@ public class Ping implements Emitter, Receiver {
 	}
 
 	public static class Pong implements Receiver {
-		Ping p;
+		CommandPing p;
 
-		public Pong(Ping p) {
+		public Pong(CommandPing p) {
 			this.p = p;
 		}
 

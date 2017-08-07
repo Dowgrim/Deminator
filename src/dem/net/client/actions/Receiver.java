@@ -1,4 +1,4 @@
-package dem.net.actions;
+package dem.net.client.actions;
 
 import java.util.List;
 
