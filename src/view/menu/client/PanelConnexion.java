@@ -1,4 +1,4 @@
-package view.menu;
+package view.menu.client;
 
 
 import javax.swing.*;
@@ -42,7 +42,7 @@ public class PanelConnexion extends JPanel {
 			jpBas.add(jlStatus);
 		}
 
-		add(jpLeft, BorderLayout.WEST);
+		add(jpLeft, BorderLayout.CENTER);
 		add(jpBas, BorderLayout.SOUTH);
 		jpBas.setBorder(new EmptyBorder(10, 10, 10, 10));
 	}

@@ -21,40 +21,48 @@ public class Deminator extends JFrame{
     
     private final JPanel contentPane;
 
+    private final JPanel gridPane;
+    private final PanelInfos infosPane;
+
     private JPImage[][] boxs;
 
     public Deminator(ClientDem c, int sizeX, int sizeY){
     	cli = c;
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //TODO en fonction de la taille de l'ecran
-        setSize(sizeX*30, sizeY*30);
+        setSize((sizeX*50)+150, sizeY*50);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         boxs = new JPImage[sizeX][sizeY];
         contentPane = new JPanel();
         setContentPane(contentPane);
+        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
-        contentPane.setLayout(new GridLayout(sizeX, sizeY));
+        gridPane = new JPanel();
+        infosPane = new PanelInfos();
+
+        contentPane.add(gridPane);
+        contentPane.add(infosPane);
+
+        gridPane.setLayout(new GridLayout(sizeX, sizeY));
         JPImage p;
         for(int i = 0; i < sizeX; i++){
         	for(int j = 0; j < sizeY; j++){
 	            p = new JPImage();
 	            boxs[i][j] = p;
-	            contentPane.add(p);
+	            gridPane.add(p);
         	}
         }
         boxs[0][0].addImage(BLUE);
         
-        
-        try {
-            Thread.sleep(333333333);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         addKeyListener(new PlayerListener(cli));
 
         setVisible(true);
     }
 
-
-
+    public static void main(String[] args) {
+        System.out.println("yolo");
+        new Deminator(new ClientDem(), 10, 10);
+    }
 }
