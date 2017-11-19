@@ -1,5 +1,8 @@
 package dem.net.util.actions;
 
+import java.util.List;
+
 public interface Emitter {
-	void send();
+    public String command = "EMITTER";
+	String send();
 }

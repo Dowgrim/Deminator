@@ -36,7 +36,8 @@ public class SockCom extends Socket implements Runnable {
 	 }
 
 	 public void send(String msg) {
-		 comm.send(msg);
+
+	 	comm.send(msg);
 	 }
 
 	 public void receive() {

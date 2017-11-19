@@ -57,6 +57,7 @@ public class ClientFrame extends JFrame {
 		spplInitialisation();
 		
 		setSize(600, 600);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 	

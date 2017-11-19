@@ -3,19 +3,17 @@ package dem.net.util;
 import dem.net.util.actions.Emitter;
 import dem.net.util.actions.Receiver;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Communicator {
-	private Map<String, Emitter> emits = new HashMap<>();
+	private Set<String> emits = new HashSet<>();
 	private Map<String, Receiver> receives = new HashMap<>();
 
-	protected void newSendAction(String command, Emitter emitter) {
-		if(emits.containsKey(command))
-			throw new RuntimeException("Already contains emit command: "+command);
+	protected void newSendAction(Emitter emitter) {
+		if(emits.contains(emitter.command))
+			throw new RuntimeException("Already contains emit command: "+emitter.command);
 
-		emits.put(command, emitter);
+		emits.add(emitter.command);
 	}
 
 	protected void newReceiveAction(String command, Receiver receiver) {
@@ -25,12 +23,12 @@ public abstract class Communicator {
 		receives.put(command, receiver);
 	}
 
-	public void send(String command) {
-		if(!emits.containsKey(command)) {
-			throw new RuntimeException("Command not found: "+command);
+	public void send(Emitter emitter) {
+		if(!emits.contains(emitter.command)) {
+			throw new RuntimeException("Command not found: " + emitter.command);
 		}
 
-		emits.get(command).send();
+		emitter.send();
 	}
 
 	public void receive(String command, List<String> params) {

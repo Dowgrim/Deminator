@@ -92,7 +92,6 @@ public class PanelConnexion extends JPanel {
 
 	private void clicTryConnect() {
 		jlStatus.setText("Trying to connect...");
-
 		int port;
 		try {
 			port = Integer.parseUnsignedInt(jtfPortC.getText());
@@ -100,7 +99,7 @@ public class PanelConnexion extends JPanel {
 
 			jbLaunchClient.setVisible(false);
 			jbCancelClient.setVisible(true);
-			cli = new ClientDem(jtfIpC.getText(), Integer.parseInt(jtfPortC.getText()), jtfPseudo.getText());
+			cli = new ClientDem(jtfIpC.getText(), Integer.parseInt(jtfPortC.getText()), jtfPseudo.getText(), new Color(1, 1, 1), jspl);
 		}catch(NumberFormatException e) {
 			jlStatus.setText("Error: Client's port should be an unsigned integer.");
 		}

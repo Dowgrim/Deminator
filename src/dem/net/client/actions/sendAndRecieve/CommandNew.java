@@ -23,8 +23,7 @@ public class CommandNew extends Receiver implements Emitter {
 	}
 
 	@Override
-	public void send() {
-		// NEW name rrr ggg bbb
-		// TODO
+	public void send(List<String> params) {
+
 	}
 }

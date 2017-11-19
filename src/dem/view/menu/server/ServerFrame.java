@@ -57,6 +57,7 @@ public class ServerFrame extends JFrame {
 		psInitialisation();
 		spplInitialisation();
 
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(600, 600);
 		setVisible(true);
 	}

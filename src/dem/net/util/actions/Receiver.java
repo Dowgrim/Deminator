@@ -6,7 +6,9 @@ import java.util.List;
 
 public abstract class Receiver {
 
-	protected Deminator dem;
+    public String command = "RECEIVER";
+
+    protected Deminator dem;
 
 	public Receiver(Deminator d){
 		dem = d;
