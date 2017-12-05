@@ -22,9 +22,7 @@ public class CommandMove extends Receiver implements Emitter {
 	}
 
 	@Override
-	public void send() {
-		// MOV direction
-		//YOLO
-		// TODO
+	public String send() {
+		return null;
 	}
 }

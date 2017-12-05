@@ -17,7 +17,7 @@ public class ServerDem extends ServerSocket implements  Runnable{
     private HashMap<String, Player> players;
     private Object syncGrid;
     private JSPPlayersList jspPL;
-z
+
     public ServerDem(int port, JSPPlayersList jsp) throws IOException {
         super(port);
         jspPL = jsp;

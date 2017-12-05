@@ -20,9 +20,7 @@ public class CommandMove extends Receiver implements Emitter {
 	}
 
 	@Override
-	public void send() {
-		// MOV playerName x y
-
-		// TODO
+	public String send() {
+		return null;
 	}
 }

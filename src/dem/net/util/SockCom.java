@@ -16,53 +16,38 @@ import java.util.List;
  * @author MEUS
  *
  */
-public class SockCom extends Socket implements Runnable {
+public class SockCom extends Socket {
 	 private final BufferedReader br;
 	 private final PrintWriter pw;
-	 private boolean isListening = false;
-	 private Communicator comm;
-	 
+
+	 private static String SEPARATEUR = " ";
+
 	 public SockCom(String host, int port) throws IOException {
 		 super(host, port);
 		 br = new BufferedReader(new InputStreamReader(getInputStream()));
 		 pw = new PrintWriter(getOutputStream(), true);
 
-		 Thread t = new Thread(this);
-		 t.start();
-	 }
-
-	 public void setCommunicator(Communicator comm) {
-	 	this.comm = comm;
 	 }
 
 	 public void send(String msg) {
 
-	 	comm.send(msg);
+	 	pw.write(msg);
 	 }
 
-	 public void receive() {
-		 isListening = true;
+	 public List<String> receive() {
 		 String str;
-		 while(isListening) {
-			 try {
-				if((str = br.readLine()) != null) {
-					String[] spl = str.split(" ");
-					List<String> params = Arrays.asList(spl);
-					comm.receive(params.remove(0), params);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		 List<String> params;
+		 try {
+			 if((str = br.readLine()) != null) {
+			 	params = Arrays.asList(str.split(SEPARATEUR));
+				return params;
+			 }
+		 } catch (IOException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
 		 }
+		 return null;
 	 }
 
-	 public void disconnect() {
-	 	isListening = false;
-	 }
 
-	@Override
-	public void run() {
-		receive();
-	}
 }

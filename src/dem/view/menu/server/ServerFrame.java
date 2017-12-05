@@ -13,7 +13,6 @@ import java.awt.*;
 
 public class ServerFrame extends JFrame {
 
-
 	private final JPanel mainPanel;
 
 	private final JPanel pCenter;

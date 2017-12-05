@@ -15,19 +15,19 @@ import dem.view.menu.JSPPlayersList;
 public class ClientDem {
 	private String pseudo;
 	private Color color;
-	private SockCom sock = null;
+	private Communicator com = null;
 	private boolean gameInProgres;
 	private Deminator view;
 
 	private JSPPlayersList jspPL;
 
-	public ClientDem(String host, int port, String jtfPseudoText, Color c, JSPPlayersList jspPL, Communicator com) {
+	public ClientDem(String host, int port, String jtfPseudoText, Color c, JSPPlayersList jspPL) {
 		this.pseudo = jtfPseudoText;
 		this.jspPL = jspPL;
 		color = c;
 		try {
-			sock = new SockCom(host, port);
-			sock.setCommunicator(com);
+			com = new Communicator(host, port);
+			com.set
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
