@@ -4,9 +4,10 @@ import dem.net.util.actions.Emitter;
 
 public class CommandOption implements Emitter {
 	@Override
-	public void send() {
+	public String send() {
 		// OPT option value
 
 		// TODO
+		return "";
 	}
 }

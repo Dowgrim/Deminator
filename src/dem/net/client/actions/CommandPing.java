@@ -11,11 +11,11 @@ public class CommandPing implements Emitter {
 
 
 	@Override
-	public void send() {
+	public String send() {
 		// prépare listener Pong
 		pingDate = System.currentTimeMillis();
 
-		// réseau.envoie('ping')
+		return "PING " + pingDate;
 	}
 
 	public static class CommandPong extends Receiver {

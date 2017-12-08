@@ -11,17 +11,16 @@ import dem.net.util.actions.Receiver;
 import dem.view.game.Deminator;
 
 public abstract class ComBefore extends ComStatus {
-	public void setStatus(Communicator c) {
-
+	public void ComBefore(Deminator d) {
 		CommandNew cmdNew = new CommandNew(d);
 		CommandReady cmdRdy = new CommandReady(d);
-		c.newReceiveAction("NEW", cmdNew);
-		c.newReceiveAction("QUIT", new CommandQuit(d));
-		c.newReceiveAction("RDY", cmdRdy);
-		c.newReceiveAction("OPT", new CommandOption(d));
-		c.newReceiveAction("LDD", new CommandLaunch(d));
+		newReceiveAction(cmdNew);
+		newReceiveAction(new CommandQuit(d));
+		newReceiveAction(cmdRdy);
+		newReceiveAction(new CommandOption(d));
+		newReceiveAction(new CommandLaunch(d));
 
-		c.newSendAction(cmdNew);
-		c.newSendAction(cmdRdy);
+		newSendAction(cmdNew);
+		newSendAction(cmdRdy);
 	}
 }

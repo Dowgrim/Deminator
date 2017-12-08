@@ -15,18 +15,21 @@ public class CommandPing extends Receiver {
 		this.p = p;
 	}
 
-
 	@Override
 	public void receive(List<String> params) {
-		// réseau.envoie('pong')
+        long ms = System.currentTimeMillis() - p.pongDate;
+
+        dem.displayPing(ms);
 	}
 
 	public static class CommandPong implements Emitter {
-
+        long pongDate;
 
 		@Override
-		public void send() {
+		public String send() {
+			long pongDate = System.currentTimeMillis();
 
+			return "PONG " + pongDate;
 		}
 	}
 }

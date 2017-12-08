@@ -2,20 +2,21 @@ package dem.net.server.actions;
 
 import dem.net.server.actions.sendOnly.*;
 import dem.net.server.actions.sendAndRecieve.*;
+import dem.net.util.ComStatus;
 import dem.net.util.Communicator;
 import dem.view.game.Deminator;
 
-public class ComGame extends Communicator {
+public class ComGame extends ComStatus {
 	public ComGame(Deminator d) {
 		CommandMove cm = new CommandMove(d);
 
-		super.newReceiveAction("MOV", cm);
+		super.newReceiveAction(cm);
 
-		super.newSendAction("MOV", cm);
-		super.newSendAction("EXP", new CommandExplose());
-		super.newSendAction("DIS", new CommandDiscover());
-		super.newSendAction("STUN", new CommandStun());
-		super.newSendAction("PTS", new CommandPoints());
-		super.newSendAction("END", new CommandEnd());
+		super.newSendAction(cm);
+		super.newSendAction(new CommandExplose());
+		super.newSendAction(new CommandDiscover());
+		super.newSendAction(new CommandStun());
+		super.newSendAction(new CommandPoints());
+		super.newSendAction(new CommandEnd());
 	}
 }

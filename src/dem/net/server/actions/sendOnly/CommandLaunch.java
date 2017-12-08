@@ -4,9 +4,10 @@ import dem.net.util.actions.Emitter;
 
 public class CommandLaunch implements Emitter {
 	@Override
-	public void send() {
+	public String send() {
 		// LDD name x y shields
 
 		// TODO
+		return "";
 	}
 }

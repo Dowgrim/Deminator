@@ -4,9 +4,10 @@ import dem.net.util.actions.Emitter;
 
 public class CommandExplose implements Emitter {
 	@Override
-	public void send() {
+	public String send() {
 		// EXP x y
 
 		// TODO
+		return "";
 	}
 }

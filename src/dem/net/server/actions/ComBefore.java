@@ -5,21 +5,22 @@ import dem.net.server.actions.sendAndRecieve.CommandReady;
 import dem.net.server.actions.sendOnly.CommandLaunch;
 import dem.net.server.actions.sendOnly.CommandOption;
 import dem.net.server.actions.sendOnly.CommandQuit;
+import dem.net.util.ComStatus;
 import dem.net.util.Communicator;
 import dem.view.game.Deminator;
 
-public class ComBefore extends Communicator {
+public class ComBefore extends ComStatus {
 	public ComBefore(Deminator d) {
 
 		CommandNew cmdNew = new CommandNew(d);
 		CommandReady cmdRdy = new CommandReady(d);
-		super.newReceiveAction("NEW", cmdNew);
-		super.newReceiveAction("RDY", cmdRdy);
+		super.newReceiveAction(cmdNew);
+		super.newReceiveAction(cmdRdy);
 
-		super.newSendAction("NEW", cmdNew);
-		super.newSendAction("RDY", cmdRdy);
-		super.newSendAction("QUIT", new CommandQuit());
-		super.newSendAction("OPT", new CommandOption());
-		super.newSendAction("LDD", new CommandLaunch());
+		super.newSendAction(cmdNew);
+		super.newSendAction(cmdRdy);
+		super.newSendAction(new CommandQuit());
+		super.newSendAction(new CommandOption());
+		super.newSendAction(new CommandLaunch());
 	}
 }

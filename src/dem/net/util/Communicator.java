@@ -1,5 +1,6 @@
 package dem.net.util;
 
+import dem.net.client.ComPing;
 import dem.net.util.actions.Emitter;
 import dem.net.util.actions.Receiver;
 
@@ -7,35 +8,27 @@ import java.io.IOException;
 import java.util.*;
 
 public class Communicator extends SockCom implements Runnable{
-	private Set<String> emits = new HashSet<>();
-	private Map<String, Receiver> receives = new HashMap<>();
+	private ComStatus comStatus;
+	//private int state = 0;
 	private boolean isListening = true;
 
 	private Thread t;
 
-	public Communicator(String host, int port) throws IOException {
+	public Communicator(String host, int port, ComStatus comStatus) throws IOException {
 		super(host, port);
+
+		this.comStatus = comStatus;
 
 		t = new Thread(this);
 		t.start();
 	}
 
-	public void setCommunicationStatus(Emitter emitter) {
-		if(emits.contains(emitter.command))
-			throw new RuntimeException("Already contains emit command: "+emitter.command);
-
-		emits.add(emitter.command);
-	}
-
-	public void newReceiveAction(String command, Receiver receiver) {
-		if(receives.containsKey(command))
-			throw new RuntimeException("Already contains receive command: "+command);
-
-		receives.put(command, receiver);
-	}
+	public void setComStatus(ComStatus newComStatus){
+	    comStatus = newComStatus;
+    }
 
 	public void send(Emitter emitter) {
-		if(!emits.contains(emitter.command)) {
+		if(!comStatus.emits.contains(emitter.command)) {
 			throw new RuntimeException("Command not found: " + emitter.command);
 		}
 
@@ -43,10 +36,10 @@ public class Communicator extends SockCom implements Runnable{
 	}
 
 	public void receive(String command, List<String> params) {
-		if(!receives.containsKey(command)) {
+		if(!comStatus.receivers.containsKey(command)) {
 			throw new RuntimeException("Command not found: "+command);
 		}
-		receives.get(command).receive(params);
+		comStatus.receivers.get(command).receive(params);
 	}
 
 	public void stop() {

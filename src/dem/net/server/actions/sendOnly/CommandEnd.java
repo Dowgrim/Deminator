@@ -4,7 +4,7 @@ import dem.net.util.actions.Emitter;
 
 public class CommandEnd implements Emitter {
 	@Override
-	public void send() {
-
+	public String send() {
+		return "";
 	}
 }

@@ -4,7 +4,8 @@ import dem.net.util.actions.Emitter;
 
 public class CommandQuit implements Emitter {
 	@Override
-	public void send() {
+	public String send() {
 		// QUIT playerName
+		return "";
 	}
 }

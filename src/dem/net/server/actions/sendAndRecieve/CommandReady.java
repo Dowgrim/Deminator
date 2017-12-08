@@ -21,9 +21,10 @@ public class CommandReady extends Receiver implements Emitter {
 	}
 
 	@Override
-	public void send() {
+	public String send() {
 		// RDY playerName true/false
 
 		// TODO
+		return "";
 	}
 }
