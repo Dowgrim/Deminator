@@ -1,4 +1,4 @@
-package dem.net.server.actions;
+package dem.net.server.status;
 
 import dem.net.server.actions.sendOnly.*;
 import dem.net.server.actions.sendAndRecieve.*;

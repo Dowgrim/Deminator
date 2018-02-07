@@ -1,10 +1,10 @@
 package dem.net.util;
 
-import dem.net.client.ComPing;
 import dem.net.util.actions.Emitter;
 import dem.net.util.actions.Receiver;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.*;
 
 public class Communicator extends SockCom implements Runnable{
@@ -16,12 +16,21 @@ public class Communicator extends SockCom implements Runnable{
 
 	public Communicator(String host, int port, ComStatus comStatus) throws IOException {
 		super(host, port);
+		init(comStatus);
+}
 
-		this.comStatus = comStatus;
-
-		t = new Thread(this);
-		t.start();
+	public Communicator(Socket s, ComStatus comStatus) throws IOException {
+		super(s);
+		init(comStatus);
 	}
+
+	private void init(ComStatus comStatus){
+        System.out.println("init");
+        this.comStatus = comStatus;
+
+        t = new Thread(this);
+        t.start();
+    }
 
 	public void setComStatus(ComStatus newComStatus){
 	    comStatus = newComStatus;
@@ -31,8 +40,8 @@ public class Communicator extends SockCom implements Runnable{
 		if(!comStatus.emits.contains(emitter.command)) {
 			throw new RuntimeException("Command not found: " + emitter.command);
 		}
-
-		emitter.send();
+        System.out.println("In Send");
+		this.send(emitter.send());
 	}
 
 	public void receive(String command, List<String> params) {
@@ -48,7 +57,7 @@ public class Communicator extends SockCom implements Runnable{
 
 	public void restar() {
 	    isListening = true;
-
+	    t.start();
     }
 
 	@Override
@@ -56,7 +65,9 @@ public class Communicator extends SockCom implements Runnable{
 		List<String> params;
 		String command;
 		while(isListening) {
+            System.out.println("Listen");
 			if((params = super.receive()) != null){
+                System.out.println("RECEIVE!!!");
 				command = params.remove(0);
 				this.receive(command, params);
 			}

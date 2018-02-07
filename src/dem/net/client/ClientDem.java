@@ -3,10 +3,9 @@ package dem.net.client;
 import java.awt.Color;
 import java.io.IOException;
 
-import dem.net.client.actions.CommandPing;
-import dem.net.client.actions.sendAndRecieve.CommandNew;
+import dem.net.client.actions.sendAndRecieve.CommandPing;
+import dem.net.client.status.ComPing;
 import dem.net.util.Communicator;
-import dem.net.util.SockCom;
 import dem.view.game.Deminator;
 import dem.view.menu.JSPPlayersList;
 
@@ -27,11 +26,10 @@ public class ClientDem {
 		this.jspPL = jspPL;
 		color = c;
 		try {
-			com = new Communicator(host, port, new ComPing(view));
+			com = new Communicator(host, port, new ComPing());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		com.send(new CommandPing());
 	}
 
 	public void setPseudoAndColor(String pseudo, Color color) {

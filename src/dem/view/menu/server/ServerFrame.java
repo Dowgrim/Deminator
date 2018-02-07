@@ -49,6 +49,7 @@ public class ServerFrame extends JFrame {
 		pCenter.add(pc);
 		pCenter.add(ps);
 
+
 		mainPanel.add(pCenter);
 		mainPanel.add(jsppl);
 

@@ -1,4 +1,4 @@
-package dem.net.client;
+package dem.net.client.status;
 
 import dem.net.client.actions.sendAndRecieve.CommandNew;
 import dem.net.client.actions.sendAndRecieve.CommandReady;

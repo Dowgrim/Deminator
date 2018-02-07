@@ -1,5 +1,6 @@
-package dem.net.server.actions;
+package dem.net.server.actions.sendAndRecieve;
 
+import dem.model.Player;
 import dem.net.util.actions.Emitter;
 import dem.net.util.actions.Receiver;
 import dem.view.game.Deminator;
@@ -8,18 +9,16 @@ import java.util.List;
 
 public class CommandPing extends Receiver {
 	private long pingDate = -1;
-	CommandPong p;
+	Player p;
 
-	public CommandPing(Deminator d, CommandPong p) {
-		super(d);
+	public CommandPing(Player p) {
+		super(null);
 		this.p = p;
 	}
 
 	@Override
 	public void receive(List<String> params) {
-        long ms = System.currentTimeMillis() - p.pongDate;
-
-        dem.displayPing(ms);
+        p.send(new CommandPong());
 	}
 
 	public static class CommandPong implements Emitter {

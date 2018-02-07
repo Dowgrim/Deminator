@@ -9,58 +9,41 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import dem.net.server.status.ComPing;
 import dem.net.server.ServerDem;
+import dem.net.util.Communicator;
+import dem.net.util.actions.Emitter;
 
 /**
  * Created by Michael on 29/04/2016.
  */
-public class Player extends Thread{
-
-    private int posX, posY;
+public class Player {
 
     private ServerDem server;
 
-    private String nick;
+    private boolean ready = false;
 
+    private int posX, posY;
+
+    private String nick;
     private Color color;
 
     private int points;
 
     private int shield;
 
-    private boolean ready = false;
-
-    private Stun stun;
-
-    private Socket socket;
-
-    private BufferedReader input;
-
-    private PrintWriter output;
+    private Communicator com;
 
     public Player(ServerDem serv , Socket s){
+        System.out.println("Création du joueur");
         server = serv;
-        socket = s;
         try {
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(socket.getOutputStream());
+            System.out.println("Ah");
+            com = new Communicator(s, new ComPing(this));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        start();
-    }
-
-    @Override
-    public void run(){
-        String msg = null;
-        try {
-            while ((msg = input.readLine()) != null) {
-                if (msg.equals("")) continue;
-                new Analyser(msg).start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Bh");
     }
 
     public void setNick(String nick) {
@@ -83,10 +66,9 @@ public class Player extends Thread{
         this.ready = ready;
     }
 
-
-
-
-
+    public void sendMove(String nick, int x, int y){
+        // TODO Commande!!
+    }
 
     private void move(String dir) {
         if(ready) {
@@ -113,72 +95,15 @@ public class Player extends Thread{
         }
     }
 
-
-    public void sendStun(String nick, int i) {
-        output.write("STU " + nick + " " + i);
-    }
-
-    public void sendMove(String nick, int x, int y) {
-        output.write("MOV " + nick + " " + x + " " + y);
-    }
-
-    public void sendDisco(int x, int y, int val) {
-        output.write("CommandDiscover " + x + " " + y + " " + val);
-    }
-
-    public void stun() {
-        stun.interrupt();
-        stun = new Stun(server, this);
-    }
-
     public void sendExplo(int x, int y) {
-        output.write("CommandExplose " + x + " " + y);
+        //TODO
     }
 
-    private class Analyser extends Thread{
-
-        private String msg;
-
-        public Analyser(String m) {
-            msg = m;
-        }
-
-
-        @Override
-        public void run(){
-            analyse();
-        }
-
-
-        private void analyse() {
-            StringTokenizer tokenizer;
-            String[] tokens = new String[10];
-
-            tokenizer = new StringTokenizer(msg);
-
-            tokens[0] = tokenizer.nextToken();
-            switch(tokens[0]){
-                case "CommandNew":{
-                    tokens[1] = tokenizer.nextToken();
-                    tokens[2] = tokenizer.nextToken();
-                    server.modPlayer(nick, tokens[1], tokens[2]);
-                    break;
-                }
-                case "OK!":{
-
-                    break;
-                }
-                case"CommandMove":{
-                    tokens[1] = tokenizer.nextToken();
-                    move(tokens[1]);
-                    break;
-                }
-                case"CommandExplose":{
-                    server.explosion(nick, posX, posY);
-                    break;
-                }
-            }
-        }
+    public void sendDisco(int x, int y, int i) {
+        // TODO
     }
 
+    public void send(Emitter e){
+        com.send(e);
+    }
 }

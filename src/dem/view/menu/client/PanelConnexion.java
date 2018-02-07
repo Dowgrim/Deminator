@@ -18,6 +18,7 @@ public class PanelConnexion extends JPanel {
 	private final JTextField jtfIpC, jtfPortC;
 	private final JComboBox jcbIpS;
 	private final JButton jbLaunchClient, jbCancelClient;
+	private final JButton jbPingServeur;
 	private final JLabel jlStatus;
 	private final JTextField jtfPseudo;
 
@@ -34,6 +35,7 @@ public class PanelConnexion extends JPanel {
 		jtfPortC = new JTextField("4224", 5);
 		jbLaunchClient = new JButton("Connect");
 		jbCancelClient = new JButton("Cancel");
+		jbPingServeur = new JButton("Ping");
 		jlStatus = new JLabel("Waiting to push button");
 		jlStatus.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 
@@ -81,6 +83,7 @@ public class PanelConnexion extends JPanel {
 			jpMid.setLayout(new BoxLayout(jpMid, BoxLayout.X_AXIS));
 			jpMid.add(jbLaunchClient);
 			jpMid.add(jbCancelClient);
+
 		}
 
 		jpLeft.add(jpPseudo);

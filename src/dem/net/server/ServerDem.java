@@ -32,7 +32,6 @@ public class ServerDem extends ServerSocket implements  Runnable{
         for(int i = 0; i < 10; i++) {
             try {
                 players.put(i+"", new Player(this, this.accept()));
-                jspPL.putPlayerToList(i+"", Color.BLACK);
             }catch (IOException e){/*dem.MainClient*/}
         }
     }
@@ -69,12 +68,6 @@ public class ServerDem extends ServerSocket implements  Runnable{
         }
     }
 
-    public void stunBroadcast(String nick, int i) {
-        for(Player p : players.values()){
-            p.sendStun(nick, i);
-        }
-    }
-
     public void explosion(String nick, int x, int y) {
         grid.discover(x, y);
 
@@ -83,7 +76,7 @@ public class ServerDem extends ServerSocket implements  Runnable{
                 for(int i = -1; i <= 1; i++){
                     for(int j = -1; j <= 1; j++){
                         if(p.isOn((x+i)%grid.getSize(), (y+j)%grid.getSize())){
-                            p.stun();
+                            //TODO
                         }
                     }
                 }
@@ -97,6 +90,8 @@ public class ServerDem extends ServerSocket implements  Runnable{
             p.sendDisco(x, y, grid.get(x, y));
         }
     }
+
+
 
 
 

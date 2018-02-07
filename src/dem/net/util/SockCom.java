@@ -1,11 +1,6 @@
 package dem.net.util;
 
-import dem.net.client.ComPing;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
@@ -16,38 +11,57 @@ import java.util.List;
  * @author MEUS
  *
  */
-public class SockCom extends Socket {
-	 private final BufferedReader br;
-	 private final PrintWriter pw;
+public class SockCom{
 
-	 private static String SEPARATEUR = " ";
+	private Socket s;
 
-	 public SockCom(String host, int port) throws IOException {
-		 super(host, port);
-		 br = new BufferedReader(new InputStreamReader(getInputStream()));
-		 pw = new PrintWriter(getOutputStream(), true);
+	private BufferedReader br;
+	private OutputStreamWriter osw;
 
-	 }
+	private static String SEPARATEUR = " ";
 
-	 public void send(String msg) {
+	// Client
+	public SockCom(String host, int port) throws IOException {
+		s = new Socket(host, port);
+		streamInit();
+	}
 
-	 	pw.write(msg);
-	 }
+	// Server
+	public SockCom(Socket socket) throws IOException {
+		s = socket;
+		streamInit();
+	}
 
-	 public List<String> receive() {
-		 String str;
-		 List<String> params;
-		 try {
-			 if((str = br.readLine()) != null) {
-			 	params = Arrays.asList(str.split(SEPARATEUR));
+	private void streamInit() throws IOException {
+		br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		osw = new OutputStreamWriter(s.getOutputStream());
+	}
+
+	public void send(String msg) {
+        try {
+            osw.write(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+
+
+
+	public List<String> receive() {
+		String str;
+		List<String> params;
+		try {
+			if((str = br.readLine()) != null) {
+				System.out.println("YOLO");
+				params = Arrays.asList(str.split(SEPARATEUR));
 				return params;
-			 }
-		 } catch (IOException e) {
-			 // TODO Auto-generated catch block
-			 e.printStackTrace();
-		 }
-		 return null;
-	 }
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 
 }
