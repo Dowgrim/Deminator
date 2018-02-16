@@ -17,18 +17,18 @@ import java.util.HashMap;
  */
 public class PanelServer extends JPanel {
 
-    private ServerDem server;
-    private HashMap<String, Player> players;
+	private ServerDem server;
+	private HashMap<String, Player> players;
 	private final JTextField jtfPortS;
 	private final JButton jbCancelServ, jbLaunchServ;
 	private final JLabel jlStatus;
 
-    private final JSPPlayersList sppl;
+	private final JSPPlayersList sppl;
 
-	public PanelServer(JSPPlayersList sppl){
+	public PanelServer(JSPPlayersList sppl) {
 		setLayout(new BorderLayout());
 
-        this.sppl = sppl;
+		this.sppl = sppl;
 		jtfPortS = new JTextField("4224", 5);
 		jtfPortS.setMaximumSize(new Dimension(50, 200));
 		jbCancelServ = new JButton("Cancel");
@@ -60,16 +60,16 @@ public class PanelServer extends JPanel {
 		InetAddress a = null;
 		try {
 			a = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
+		} catch(UnknownHostException e) {
 			e.printStackTrace();
 		}
-        jpHaut.add(new JLabel(a.getHostAddress()));
+		jpHaut.add(new JLabel(a.getHostAddress()));
 		jpHaut.add(new JLabel(":"));
 		jpHaut.add(jtfPortS);
 
 		JPanel jpBas = new JPanel();
-		jbLaunchServ.addActionListener(al -> clicLaunchServ());
-		jbCancelServ.addActionListener(al -> clicCancelServ());
+		jbLaunchServ.addActionListener(al->clicLaunchServ());
+		jbCancelServ.addActionListener(al->clicCancelServ());
 		jbCancelServ.setVisible(false);
 		jpBas.add(jbLaunchServ);
 		jpBas.add(jbCancelServ);
@@ -91,18 +91,19 @@ public class PanelServer extends JPanel {
 			jbCancelServ.setVisible(true);
 
 			//Start to accept client
-            server = new ServerDem(port,sppl);
-		}catch(NumberFormatException e) {
+			server = new ServerDem(port, sppl);
+		} catch(NumberFormatException e) {
 			jlStatus.setText("Error: Server's Port should be an unsigned integer.");
-		} catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void clicCancelServ() {
 		jlStatus.setText("Cancelling...");
 		jbCancelServ.setEnabled(false);
 	}
+
 	private void setEnabledAll(boolean tf) {
 		jtfPortS.setEnabled(tf);
 		jbLaunchServ.setEnabled(tf);

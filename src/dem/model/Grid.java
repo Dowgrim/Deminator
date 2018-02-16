@@ -6,98 +6,99 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Michael on 29/04/2016.
+ * @author Michael Eusebe, Nathaël Noguès
+ * @since 2016-04-29
  */
 public class Grid {
 
-    private ServerDem serveur;
+	private ServerDem server;
 
-    private Box[][] boxs;
+	private Box[][] boxs;
 
-    private int size;
+	private int size;
 
-    private int remainingBomb;
+	private int remainingBomb;
 
-    public Grid(int s, int b, ServerDem ser){
-        size = s;
-        remainingBomb = b;
-        boxs = new Box[size][size];
-        this.serveur = ser;
-        randomGrid();
-    }
-
-
-
-    public void randomGrid(){
-        Random r = new Random();
-        int bput = 0;
-        int powSize = size*size;
-        for(int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
-                if(bput < remainingBomb) {
-                    boxs[i][j] = new Box(r.nextInt(powSize) < remainingBomb);
-                    if (boxs[i][j].isBomb()) {
-                        bput++;
-                    }
-                }
-            }
-        }
-        while(bput < remainingBomb){
-            int x, y;
-            x = r.nextInt(size); y = r.nextInt(size);
-            boxs[x][y].setBomb();
-            if (boxs[x][y].isBomb()) {
-                bput++;
-            }
-        }
-
-        for(int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
-                boxs[i][j].setValue(getValue(i, j));
-            }
-        }
+	public Grid(int s, int b, ServerDem ser) {
+		size = s;
+		remainingBomb = b;
+		boxs = new Box[size][size];
+		this.server = ser;
+		randomGrid();
+	}
 
 
-    }
+	private void randomGrid() {
+		Random r = new Random();
+		int bput = 0;
+		int powSize = size * size;
+		doubleLoop1:
 
-    private int getValue(int i, int j) {
-        int tempValue = 0;
-        for(int k = -1; k <= 1; k++){
-            for(int l = -1; l <= 1; l++){
-                if(boxs[(i+k)%size][(j+l)%size].isBomb()){
-                    tempValue++;
-                }
-            }
-        }
-        return tempValue;
-    }
+		for(int x = size - 1; x >= 0; x--) {
+			for(int y = size - 1; y >= 0; y--) {
+				boxs[x][y] = new Box(r.nextInt(powSize) < remainingBomb);
+				if(boxs[x][y].isBomb()) {
+					bput++;
+					if(bput >= remainingBomb) {
+						break doubleLoop1;
+					}
+				}
+			}
+		}
 
-    public boolean isBomb(int x, int y) {
-        return boxs[x][y].isBomb();
-    }
+		int maxTries = 10000; // Avoid infinite loop
+		while(bput < remainingBomb && (maxTries--) > 0) {
+			Box randomCell = boxs[r.nextInt(size)][r.nextInt(size)];
+			if(!randomCell.isBomb()) {
+				randomCell.setBomb();
+				bput++;
+			}
+		}
 
-    public boolean isDiscov(int x, int y) {
-        return boxs[x][y].isVisible();
-    }
+		for(int x = size - 1; x >= 0; x--) {
+			for(int y = size - 1; y >= 0; y--) {
+				boxs[x][y].setValue(getValue(x, y));
+			}
+		}
+	}
 
-    public List<String> discover(int x, int y) {
-        if(boxs[x][y].isNull()){
-            for(int i = -1; i <= 1; i++){
-                for(int j = -1; j <= 1; j++){
-                    discover((x+i)%size, (y+j)%size);
+	private int getValue(int x, int y) {
+		int tempValue = 0;
+		for(int dX = -1; dX <= 1; dX++) {
+			for(int dY = -1; dY <= 1; dY++) {
+				if(boxs[(x + dX) % size][(y + dY) % size].isBomb()) {
+					tempValue++;
+				}
+			}
+		}
+		return tempValue;
+	}
 
-                    serveur.discover(x, y);
-                }
-            }
-        }
-        return null;
-    }
+	public boolean isBomb(int x, int y) {
+		return boxs[x][y].isBomb();
+	}
 
-    public int get(int x, int y) {
-        return boxs[x][y].getValue();
-    }
+	public boolean isDiscov(int x, int y) {
+		return boxs[x][y].isVisible();
+	}
 
-    public int getSize() {
-        return size;
-    }
+	public List<String> discover(int x, int y) {
+		if(boxs[x][y].isFree()) {
+			for(int dX = -1; dX <= 1; dX++) {
+				for(int dY = -1; dY <= 1; dY++) {
+					discover((x + dX) % size, (y + dY) % size);
+					server.discover(x, y);
+				}
+			}
+		}
+		return null;
+	}
+
+	public int get(int x, int y) {
+		return boxs[x][y].getValue();
+	}
+
+	public int size() {
+		return size;
+	}
 }

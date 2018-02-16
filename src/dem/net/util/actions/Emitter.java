@@ -1,8 +1,11 @@
 package dem.net.util.actions;
 
-import java.util.List;
-
+/**
+ * @author Michael Eusebe, Nathaël Noguès
+ * @since 2016-04-29
+ */
 public interface Emitter {
-    public String command = "EMITTER";
+	String command = "EMITTER";
+
 	String send();
 }

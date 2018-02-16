@@ -8,10 +8,11 @@ import java.awt.*;
 import java.util.HashMap;
 
 /**
- * Created by Michael on 29/04/2016.
+ * @author Michael Eusebe, Nathaël Noguès
+ * @since 2016-04-29
  */
 public class PanelSettings extends JPanel {
-	public enum Rank { CLIENT, SERVER }
+	public enum Rank {CLIENT, SERVER}
 
 	private ClientDem cli;
 	private final JButton jbNotReady;
@@ -20,8 +21,7 @@ public class PanelSettings extends JPanel {
 	private final JButton jbDisconnect;
 
 
-	public PanelSettings()
-	{
+	public PanelSettings() {
 		JPanel jspSettings = new JPanel();
 		jspSettings.setLayout(new BoxLayout(jspSettings, BoxLayout.Y_AXIS));
 
@@ -36,7 +36,7 @@ public class PanelSettings extends JPanel {
 				jtfY.setMaximumSize(new Dimension(30, jtfY.getPreferredSize().height));
 			}
 
-			jpMapDim.setAlignmentX( Component.LEFT_ALIGNMENT );
+			jpMapDim.setAlignmentX(Component.LEFT_ALIGNMENT);
 			jpMapDim.setLayout(new BoxLayout(jpMapDim, BoxLayout.X_AXIS));
 			jpMapDim.add(new JLabel("Taille de la carte: x:"));
 
@@ -53,7 +53,7 @@ public class PanelSettings extends JPanel {
 				jtfMines.setMaximumSize(new Dimension(50, jtfMines.getPreferredSize().height));
 			}
 
-			jpNbMines.setAlignmentX( Component.LEFT_ALIGNMENT );
+			jpNbMines.setAlignmentX(Component.LEFT_ALIGNMENT);
 			jpNbMines.add(new JLabel("Nombre de mines: "));
 			jpNbMines.add(jtfMines);
 		}
@@ -67,20 +67,20 @@ public class PanelSettings extends JPanel {
 		{
 			jbReady = new JButton("Ready !");
 			{
-				jbReady.addActionListener(al -> clicGetReady(true));
+				jbReady.addActionListener(al->clicGetReady(true));
 			}
 			jbNotReady = new JButton("Plus Ready");
 			{
-				jbNotReady.addActionListener(al -> clicGetReady(false));
+				jbNotReady.addActionListener(al->clicGetReady(false));
 				jbNotReady.setVisible(false);
 			}
 			jbGo = new JButton("Everyone Ready, GO !");
 			{
-				jbGo.addActionListener(al -> clicGo());
+				jbGo.addActionListener(al->clicGo());
 			}
 			jbDisconnect = new JButton("Disconnect");
 			{
-				jbDisconnect.addActionListener(al -> clicDisconnect());
+				jbDisconnect.addActionListener(al->clicDisconnect());
 			}
 
 			jpButtons.add(jbReady);

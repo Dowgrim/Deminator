@@ -7,18 +7,17 @@ import java.util.List;
 
 
 /**
- * 
- * @author MEUS
- *
+ * @author Michael Eusebe, Nathaël Noguès
+ * @since 2016-04-29
  */
-public class SockCom{
+public class SockCom {
 
 	private Socket s;
 
 	private BufferedReader br;
 	private OutputStreamWriter osw;
 
-	private static String SEPARATEUR = " ";
+	private static final String SEPARATEUR = " ";
 
 	// Client
 	public SockCom(String host, int port) throws IOException {
@@ -38,14 +37,12 @@ public class SockCom{
 	}
 
 	public void send(String msg) {
-        try {
-            osw.write(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		try {
+			osw.write(msg);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
-
-
 
 	public List<String> receive() {
 		String str;
@@ -56,12 +53,10 @@ public class SockCom{
 				params = Arrays.asList(str.split(SEPARATEUR));
 				return params;
 			}
-		} catch (IOException e) {
+		} catch(IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-
-
 }

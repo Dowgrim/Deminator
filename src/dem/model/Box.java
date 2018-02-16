@@ -1,44 +1,43 @@
 package dem.model;
 
 /**
- * Created by Michael on 29/04/2016.
+ * @author Michael Eusebe, Nathaël Noguès
+ * @since 2016-04-29
  */
 public class Box {
 
-    /**
-     * value -1 == Bombe
-     */
-    private int value;
+	private static int FREE = 0;
+	private static int BOMB = -1;
 
-    private boolean visible;
+	private int value;
+	private boolean visible;
 
-    public Box(boolean b){
-        visible = false;
-        value = b?-1:0;
-    }
+	public Box(boolean bomb) {
+		visible = false;
+		value = bomb ? BOMB : 0;
+	}
 
-    public boolean isBomb() {
-        return value == -1;
-    }
+	public void setBomb() {
+		value = BOMB;
+	}
 
-    public void setBomb() {
-        value = -1;
-    }
+	public void setValue(int value) {
+		this.value = value;
+	}
 
-    public void setValue(int value) {
-        this.value = value;
-    }
+	public int getValue() {
+		return value;
+	}
 
+	public boolean isVisible() {
+		return visible;
+	}
 
-    public boolean isVisible() {
-        return visible;
-    }
+	public boolean isFree() {
+		return value == FREE;
+	}
 
-    public boolean isNull() {
-        return value == 0;
-    }
-
-    public int getValue() {
-        return value;
-    }
+	public boolean isBomb() {
+		return value == BOMB;
+	}
 }

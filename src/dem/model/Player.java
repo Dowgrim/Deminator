@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import dem.net.server.status.ComPing;
@@ -15,95 +17,86 @@ import dem.net.util.Communicator;
 import dem.net.util.actions.Emitter;
 
 /**
- * Created by Michael on 29/04/2016.
+ * @author Michael Eusebe, Nathaël Noguès
+ * @since 2016-04-29
  */
 public class Player {
 
-    private ServerDem server;
+	static private final Map<String, int[]> mapDir = new HashMap<>();
 
-    private boolean ready = false;
+	static {
+		mapDir.put("N", new int[] {0, 1});
+		mapDir.put("S", new int[] {0, -1});
+		mapDir.put("E", new int[] {-1, 0});
+		mapDir.put("W", new int[] {1, 0});
+	}
 
-    private int posX, posY;
 
-    private String nick;
-    private Color color;
+	private ServerDem server;
 
-    private int points;
+	private boolean ready = false;
 
-    private int shield;
+	private int posX, posY;
 
-    private Communicator com;
+	private String nick;
+	private Color color;
 
-    public Player(ServerDem serv , Socket s){
-        System.out.println("Création du joueur");
-        server = serv;
-        try {
-            System.out.println("Ah");
-            com = new Communicator(s, new ComPing(this));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Bh");
-    }
+	private int points;
 
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
+	private int shield;
 
-    public void setColor(String color) {
-        this.color = new Color(Integer.parseInt(color));
-    }
+	private Communicator com;
 
-    public boolean isOn(int x, int y) {
-        return (x == posX && y == posY);
-    }
+	// TODO: sale le socket ici
+	public Player(ServerDem serv, Socket s) throws IOException {
+		server = serv;
+		com = new Communicator(s, new ComPing(this));
+	}
 
-    public String getNick() {
-        return nick;
-    }
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
+	public void setColor(int color) {
+		this.color = new Color(color);
+	}
 
-    public void sendMove(String nick, int x, int y){
-        // TODO Commande!!
-    }
+	public boolean isOn(int x, int y) {
+		return x == posX && y == posY;
+	}
 
-    private void move(String dir) {
-        if(ready) {
-            int x = 0, y = 0;
-            switch (dir) {
-                case "N": {
-                    y = 1;
-                    break;
-                }
-                case "E": {
-                    x = 1;
-                    break;
-                }
-                case "S": {
-                    y = -1;
-                    break;
-                }
-                case "W": {
-                    x = -1;
-                    break;
-                }
-            }
-            server.movable(nick, x, y);
-        }
-    }
+	public String getNick() {
+		return nick;
+	}
 
-    public void sendExplo(int x, int y) {
-        //TODO
-    }
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
 
-    public void sendDisco(int x, int y, int i) {
-        // TODO
-    }
+	public void sendMove(String nick, int x, int y) {
+		// TODO Commande!!
+	}
 
-    public void send(Emitter e){
-        com.send(e);
-    }
+	// TODO: Move String parsing outside Player
+	private void move(String dir) {
+		if(ready) {
+			int[] xy = mapDir.get(dir);
+			if(xy == null) {
+				throw new RuntimeException(dir + " is not a valid move");
+			}
+			server.movable(nick, xy[0], xy[1]);
+		}
+	}
+
+	public void sendExplo(int x, int y) {
+		//TODO
+	}
+
+	public void sendDisco(int x, int y, int i) {
+		// TODO
+	}
+
+	public void send(Emitter e) {
+		com.send(e);
+	}
 }

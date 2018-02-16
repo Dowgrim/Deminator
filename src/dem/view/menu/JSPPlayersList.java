@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by Nathaël N on 02/05/16.
+ * @author Nathaël Noguès
+ * @since 2016-05-02
  */
 public class JSPPlayersList extends JScrollPane {
 
@@ -28,7 +29,7 @@ public class JSPPlayersList extends JScrollPane {
 	public synchronized void putPlayerToList(String playerName, Color playerColor) {
 		JPPlayer jpp = new JPPlayer(playerName, playerColor);
 
-		for(int i=viewport.getComponentCount()-1; i>=0; i--) {
+		for(int i = viewport.getComponentCount() - 1; i >= 0; i--) {
 			Component c = viewport.getComponent(i);
 			if(!c.equals(jpp))
 				continue;
@@ -43,10 +44,11 @@ public class JSPPlayersList extends JScrollPane {
 		this.revalidate();
 		this.repaint();
 	}
+
 	public void removePlayerFromList(String playerName) {
 		JPPlayer jpp = new JPPlayer(playerName);
 
-		for(int i=viewport.getComponentCount()-1; i>=0; i--) {
+		for(int i = viewport.getComponentCount() - 1; i >= 0; i--) {
 			Component c = viewport.getComponent(i);
 			if(!c.equals(jpp))
 				continue;
@@ -57,11 +59,13 @@ public class JSPPlayersList extends JScrollPane {
 		this.repaint();
 	}
 
-    private class JPPlayer extends JPanel {
+	private class JPPlayer extends JPanel {
 		private String playerName;
+
 		private JPPlayer(String name) {
 			this(name, Color.BLACK);
 		}
+
 		private JPPlayer(String name, Color c) {
 			super();
 
@@ -71,9 +75,9 @@ public class JSPPlayersList extends JScrollPane {
 
 			double lum = 0.0722 * c.getBlue() + 0.7152 * c.getGreen() + 0.2126 * c.getRed();
 
-			int blue = c.getBlue(); blue = lum > 127 ?blue/2:(blue+256)/2;
-			int red = c.getRed(); red = lum > 127 ?red/2:(red+256)/2;
-			int green = c.getGreen(); green = lum > 127 ?green/2:(green+256)/2;
+			int blue = c.getBlue(); blue = lum > 127 ? blue << 1 : (blue + 256) << 1;
+			int red = c.getRed(); red = lum > 127 ? red << 1 : (red + 256) / 2;
+			int green = c.getGreen(); green = lum > 127 ? green << 1 : (green + 256) << 1;
 			jln.setForeground(new Color(red, green, blue));
 
 			add(jln);
@@ -82,12 +86,7 @@ public class JSPPlayersList extends JScrollPane {
 
 		@Override
 		public boolean equals(Object obj) {
-			if(obj instanceof JPPlayer){
-				JPPlayer jpp = (JPPlayer) obj;
-				return (jpp.playerName.equals(playerName));
-			}
-			else
-				return false;
+			return obj instanceof JPPlayer && ((JPPlayer)obj).playerName.equals(playerName);
 		}
 	}
 }

@@ -10,7 +10,8 @@ import dem.view.menu.JSPPlayersList;
 import java.awt.*;
 
 /**
- * Created by Nathaël N on 30/04/2016.
+ * @author Michael Eusebe, Nathaël Noguès
+ * @since 2016-04-30
  */
 public class PanelConnexion extends JPanel {
 
@@ -24,12 +25,12 @@ public class PanelConnexion extends JPanel {
 
 	private final JSPPlayersList jspl;
 
-	public PanelConnexion(JSPPlayersList jspl){
+	public PanelConnexion(JSPPlayersList jspl) {
 		this.jspl = jspl;
 		setLayout(new BorderLayout());
 
 		jtfPseudo = new JTextField();
-		jtfIpC =  new JTextField("127.0.0.1", 15);
+		jtfIpC = new JTextField("127.0.0.1", 15);
 		jcbIpS = new JComboBox();
 
 		jtfPortC = new JTextField("4224", 5);
@@ -58,7 +59,7 @@ public class PanelConnexion extends JPanel {
 
 		JPanel jpPseudo = new JPanel();
 		{
-			jtfPseudo.setMaximumSize(new Dimension(150, (int) jtfPseudo.getMinimumSize().getHeight()));
+			jtfPseudo.setMaximumSize(new Dimension(150, (int)jtfPseudo.getMinimumSize().getHeight()));
 			jpPseudo.setLayout(new BoxLayout(jpPseudo, BoxLayout.X_AXIS));
 			jpPseudo.add(new JLabel("Pseudo:"));
 			jpPseudo.add(jtfPseudo);
@@ -76,9 +77,8 @@ public class PanelConnexion extends JPanel {
 
 		JPanel jpMid = new JPanel();
 		{
-				jbLaunchClient.addActionListener(al -> clicTryConnect());
-				jbCancelClient.setVisible(false);
-
+			jbLaunchClient.addActionListener(al->clicTryConnect());
+			jbCancelClient.setVisible(false);
 
 			jpMid.setLayout(new BoxLayout(jpMid, BoxLayout.X_AXIS));
 			jpMid.add(jbLaunchClient);
@@ -95,15 +95,15 @@ public class PanelConnexion extends JPanel {
 
 	private void clicTryConnect() {
 		jlStatus.setText("Trying to connect...");
-		int port;
+
 		try {
-			port = Integer.parseUnsignedInt(jtfPortC.getText());
+			int port = Integer.parseUnsignedInt(jtfPortC.getText());
 			setEnabledAll(false);
 
 			jbLaunchClient.setVisible(false);
 			jbCancelClient.setVisible(true);
 			cli = new ClientDem(jtfIpC.getText(), Integer.parseInt(jtfPortC.getText()), jtfPseudo.getText(), new Color(1, 1, 1), jspl);
-		}catch(NumberFormatException e) {
+		} catch(NumberFormatException e) {
 			jlStatus.setText("Error: Client's port should be an unsigned integer.");
 		}
 	}
