@@ -10,12 +10,13 @@ import java.util.List;
  */
 public abstract class Receiver {
 
-	public String command = "RECEIVER";
+	public String command;
 
 	protected Deminator dem;
 
-	public Receiver(Deminator d) {
-		dem = d;
+	protected Receiver(Deminator dem, String command) {
+		this.dem = dem;
+		this.command = command;
 	}
 
 	public abstract void receive(List<String> params);

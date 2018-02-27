@@ -4,7 +4,6 @@ import dem.model.Grid;
 import dem.model.Player;
 import dem.view.menu.JSPPlayersList;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -32,7 +31,8 @@ public class ServerDem extends ServerSocket implements Runnable {
 	public void run() {
 		for(int i = 0; i < 10; i++) {
 			try {
-				players.put(i + "", new Player(this, this.accept()));
+				this.accept(); // TODO something with that
+				players.put(i + "", new Player(this));
 			} catch(IOException e) {/*dem.MainClient*/}
 		}
 	}
@@ -91,6 +91,4 @@ public class ServerDem extends ServerSocket implements Runnable {
 			p.sendDisco(x, y, grid.get(x, y));
 		}
 	}
-
-
 }

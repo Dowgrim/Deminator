@@ -1,11 +1,10 @@
 package dem.net.util;
 
 import dem.net.util.actions.Emitter;
-import dem.net.util.actions.Receiver;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.*;
+import java.util.List;
 
 /**
  * @author Michael Eusebe, Nathaël Noguès
@@ -18,19 +17,18 @@ public class Communicator extends SockCom implements Runnable {
 
 	private Thread t;
 
-	public Communicator(String host, int port, ComStatus comStatus) throws IOException {
+	public Communicator(String host, int port) throws IOException {
 		super(host, port);
-		init(comStatus);
+		init();
 	}
 
-	public Communicator(Socket s, ComStatus comStatus) throws IOException {
+	public Communicator(Socket s) throws IOException {
 		super(s);
-		init(comStatus);
+		init();
 	}
 
-	private void init(ComStatus comStatus) {
+	private void init() {
 		System.out.println("init");
-		this.comStatus = comStatus;
 
 		t = new Thread(this);
 		t.start();

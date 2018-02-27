@@ -14,8 +14,10 @@ Example: `PONG`
 
 ### RDY - Ready
 Inform the server that the player is (or not) ready to launch the game
-Template: `RDY isReady`
-Example: `RDY true`
+
+- Template: `RDY isReady`
+- Example: `RDY Y`
+- Example: `RDY N`
 
 - - - - - - - - - -
 

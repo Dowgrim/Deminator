@@ -1,13 +1,11 @@
 package dem.net.client;
 
-import java.awt.Color;
-import java.io.IOException;
-
-import dem.net.client.actions.sendAndRecieve.CommandPing;
-import dem.net.client.status.ComPing;
 import dem.net.util.Communicator;
 import dem.view.game.Deminator;
 import dem.view.menu.JSPPlayersList;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * Created by Nathaël N on 04/05/16.
@@ -26,7 +24,7 @@ public class ClientDem {
 		this.jspPL = jspPL;
 		color = c;
 		try {
-			com = new Communicator(host, port, new ComPing());
+			com = new Communicator(host, port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

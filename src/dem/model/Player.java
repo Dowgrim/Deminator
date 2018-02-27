@@ -1,20 +1,13 @@
 package dem.model;
 
 
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import dem.net.server.status.ComPing;
 import dem.net.server.ServerDem;
 import dem.net.util.Communicator;
 import dem.net.util.actions.Emitter;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Michael Eusebe, Nathaël Noguès
@@ -31,26 +24,22 @@ public class Player {
 		mapDir.put("W", new int[] {1, 0});
 	}
 
-
 	private ServerDem server;
+	private Communicator com;
 
 	private boolean ready = false;
-
-	private int posX, posY;
 
 	private String nick;
 	private Color color;
 
+	private int posX, posY;
 	private int points;
 
 	private int shield;
 
-	private Communicator com;
 
-	// TODO: sale le socket ici
-	public Player(ServerDem serv, Socket s) throws IOException {
+	public Player(ServerDem serv) {
 		server = serv;
-		com = new Communicator(s, new ComPing(this));
 	}
 
 	public void setNick(String nick) {
