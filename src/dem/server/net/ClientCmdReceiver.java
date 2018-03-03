@@ -4,10 +4,7 @@ import dem.common.net.CmdReceiver;
 import dem.common.net.CmdSender;
 import dem.server.ServerDem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -76,4 +73,12 @@ public class ClientCmdReceiver {
 		out.close();
 		try{socket.close();} catch(IOException ignored) {}
 	}
+
+	public int getId() {
+		return receiverId;
+	}
+
+    public Writer getOutput() {
+        return out;
+    }
 }

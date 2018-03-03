@@ -1,14 +1,17 @@
 package dem.server;
 
-import dem.common.net.CmdSender;
 import dem.server.model.Grid;
+import dem.server.model.Player;
 import dem.server.net.ClientCmdReceiver;
 import dem.server.net.action.ServerCmdSender;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class ServerDem {
 	private ServerSocket serverSocket = null;
@@ -27,6 +30,9 @@ public abstract class ServerDem {
 		this.maxClients = maxClients;
 	}
 
+	protected boolean isAcceptingClients() {
+	    return acceptingClients;
+    }
 	protected void acceptClients(boolean isAccepting) throws IOException {
 		if(isAccepting == acceptingClients) {
 			return;
@@ -41,6 +47,12 @@ public abstract class ServerDem {
 			serverSocket.close();
 		}
 	}
+
+	protected void pingAllClients() {
+	    for(ClientCmdReceiver ccr : clients) {
+            serverCmdSender.pingAll();
+        }
+    }
 
 	private void connectLoop() {
 		if(acceptingClients) {
@@ -81,4 +93,18 @@ public abstract class ServerDem {
 	public Grid getGrid() {
 		return grid;
 	}
+
+
+    public Set<Writer> getAllClientsOutputs() {
+	    Set<Writer> outs = new HashSet<>();
+	    for(ClientCmdReceiver ccr : clients) {
+	        outs.add(ccr.getOutput());
+        }
+        return outs;
+    }
+    public Writer getPlayerOutput(Player p) {
+        return null; // TODO
+    }
+
+    public abstract void log(String s);
 }

@@ -2,7 +2,6 @@ package dem.server.graphic.menu;
 
 import dem.common.graphic.JSPPlayersList;
 import dem.server.model.Player;
-import dem.server.net.OldServerDem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.util.HashMap;
  */
 public class PanelServer extends JPanel {
 
-	private OldServerDem server;
+	//private OldServerDem server;
 	private HashMap<String, Player> players;
 	private final JTextField jtfPortS;
 	private final JButton jbCancelServ, jbLaunchServ;
@@ -89,7 +88,7 @@ public class PanelServer extends JPanel {
 			jbCancelServ.setVisible(true);
 
 			//Start to accept client
-			server = new OldServerDem(port, sppl);
+			//server = new OldServerDem(port, sppl);
 		} catch(NumberFormatException e) {
 			jlStatus.setText("Error: Server's Port should be an unsigned integer.");
 		} catch(Exception e) {

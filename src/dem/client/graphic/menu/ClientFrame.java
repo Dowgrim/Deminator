@@ -1,6 +1,5 @@
 package dem.client.graphic.menu;
 
-import dem.client.net.OldClientDem;
 import dem.common.graphic.JSPPlayersList;
 import dem.common.graphic.PanelSettings;
 
@@ -9,8 +8,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class ClientFrame extends JFrame {
-
-	private OldClientDem cli;
 
 	private final JPanel mainPanel;
 
@@ -22,9 +19,6 @@ public class ClientFrame extends JFrame {
 
 	private final JSPPlayersList sppl;
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -5930605691302577354L;
 
 

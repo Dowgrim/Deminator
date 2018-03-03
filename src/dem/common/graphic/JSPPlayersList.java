@@ -9,7 +9,7 @@ import java.awt.*;
  * @author Nathaël Noguès
  * @since 2016-05-02
  */
-public class JSPPlayersList extends JScrollPane implements ServerDem {
+public class JSPPlayersList extends JScrollPane {
 
 	private JPanel viewport;
 

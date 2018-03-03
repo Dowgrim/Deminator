@@ -7,4 +7,9 @@ public class ServerGraphic extends ServerDem {
 	public static void main(String[] args) {
 		new ServerFrame();
 	}
+
+	@Override
+	public void log(String s) {
+
+	}
 }

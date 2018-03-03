@@ -4,37 +4,49 @@ import dem.common.net.CmdSender;
 import dem.server.ServerDem;
 import dem.server.model.Player;
 
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ServerCmdSender extends CmdSender {
 	private final ServerDem server;
 
-	public ServerCmdSender(ServerDem server) {
+    public ServerCmdSender(ServerDem server) {
 		this.server = server;
 	}
 
-	private void sendToAllPlayers(String cmdId, String ... parameters) {
-		send(buildCommand(cmdId, parameters), "TODO" /* TODO */);
-	}
-	private void sendToSpecificPlayer(String playerIdentifier /* TODO */, String cmdId, String ... parameters) {
-		send(buildCommand(cmdId, parameters), "TODO" /* TODO */);
+    private void sendToAllPlayers(String cmdId, String... parameters) {
+        String cmd = buildCommand(cmdId, parameters);
+        Set<Writer> clients = server.getAllClientsOutputs();
+        for (Writer client : clients) {
+            send(cmd, client);
+        }
+        server.log("[MsgSent|ALL] " + cmd);
+    }
+	private void sendToSpecificPlayer(Player p, String cmdId, String ... parameters) {
+		send(buildCommand(cmdId, parameters), server.getPlayerOutput(p));
 	}
 
-	public void quit(String playerIdentifier /* TODO */) {
+    public void quit(String playerIdentifier /* TODO */) {
 		sendToAllPlayers("QUIT", playerIdentifier);
 	}
 	public void cmdNew(Player p) {
 		sendToAllPlayers("NEW", p.getName(), Integer.toString(p.getColorHue()));
 	}
 	public void ping(Player p) {
-		sendToSpecificPlayer(p.getName(), "PING");
+		sendToSpecificPlayer(p, "PING");
 	}
+
+	public void pingAll() {
+	    sendToAllPlayers("PING");
+    }
+
 	public void lag(Player p, int value) {
 		sendToAllPlayers("LAG", p.getName(), Integer.toString(value));
 	}
-	public void err(String playerIdentifier /* TODO */, String description) {
-		sendToSpecificPlayer(playerIdentifier, "ERR", description);
+	public void err(Player p, String description) {
+		sendToSpecificPlayer(p, "ERR", description);
 	}
 	public void rdy(Player p){
 		sendToAllPlayers("RDY", p.getName() /* TODO identifier */, p.isReady()?"Y":"N");
@@ -58,7 +70,7 @@ public class ServerCmdSender extends CmdSender {
 	}
 	public void dis(Player p, int cellValue){
 		int[] loc = p.getCharacter().getLocation();
-		sendToSpecificPlayer(p.getName(),"DIS", Integer.toString(loc[0]), Integer.toString(loc[1]), Integer.toString(cellValue));
+		sendToSpecificPlayer(p,"DIS", Integer.toString(loc[0]), Integer.toString(loc[1]), Integer.toString(cellValue));
 	}
 	public void pts(Player p) {
 		sendToAllPlayers("PTS", p.getName() /* TODO identifier */, Integer.toString(p.getCharacter().getPts()));

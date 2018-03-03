@@ -5,7 +5,7 @@ import dem.common.net.CmdSender;
 public abstract class ClientCmdSender extends CmdSender {
 
 	private static void sendToServer(String cmdId, String ... parameters) {
-		send(buildCommand(cmdId, parameters), "TODO" /* TODO */);
+		// send(buildCommand(cmdId, parameters), TODO);
 	}
 
 	public static void error(String code, String details) {

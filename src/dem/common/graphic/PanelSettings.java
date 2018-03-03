@@ -1,6 +1,5 @@
 package dem.common.graphic;
 
-import dem.client.net.OldClientDem;
 import dem.server.model.Player;
 
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 public class PanelSettings extends JPanel {
 	public enum Rank {CLIENT, SERVER}
 
-	private OldClientDem cli;
+	//private ClientDem cli;
 	private final JButton jbNotReady;
 	private final JButton jbGo;
 	private final JButton jbReady;

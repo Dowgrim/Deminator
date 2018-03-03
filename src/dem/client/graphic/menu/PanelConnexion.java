@@ -1,7 +1,6 @@
 package dem.client.graphic.menu;
 
 
-import dem.client.net.OldClientDem;
 import dem.common.graphic.JSPPlayersList;
 
 import javax.swing.*;
@@ -14,7 +13,6 @@ import java.awt.*;
  */
 public class PanelConnexion extends JPanel {
 
-	private OldClientDem cli;
 	private final JTextField jtfIpC, jtfPortC;
 	private final JComboBox jcbIpS;
 	private final JButton jbLaunchClient, jbCancelClient;
@@ -101,7 +99,7 @@ public class PanelConnexion extends JPanel {
 
 			jbLaunchClient.setVisible(false);
 			jbCancelClient.setVisible(true);
-			cli = new OldClientDem(jtfIpC.getText(), Integer.parseInt(jtfPortC.getText()), jtfPseudo.getText(), new Color(1, 1, 1), jspl);
+			//cli = new ClientDem(jtfIpC.getText(), Integer.parseInt(jtfPortC.getText()), jtfPseudo.getText(), new Color(1, 1, 1), jspl);
 		} catch(NumberFormatException e) {
 			jlStatus.setText("Error: Client's port should be an unsigned integer.");
 		}

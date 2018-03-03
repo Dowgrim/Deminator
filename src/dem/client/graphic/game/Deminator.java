@@ -1,6 +1,5 @@
 package dem.client.graphic.game;
 
-import dem.client.net.OldClientDem;
 import dem.common.JPImage;
 
 import javax.swing.*;
@@ -15,8 +14,6 @@ public class Deminator extends JFrame {
 	private static final String GREEN = "images/Green.png";
 	private static final String EXPLO = "images/Explosion.png";
 
-	private OldClientDem cli;
-
 	private final JPanel contentPane;
 
 	private final JPanel gridPane;
@@ -24,8 +21,7 @@ public class Deminator extends JFrame {
 
 	private JPImage[][] boxs;
 
-	public Deminator(OldClientDem c, int sizeX, int sizeY) {
-		cli = c;
+	public Deminator(int sizeX, int sizeY) {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//TODO en fonction de la taille de l'ecran
 		setSize((sizeX * 50) + 150, sizeY * 50);
@@ -37,7 +33,7 @@ public class Deminator extends JFrame {
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
 		gridPane = new JPanel();
-		infosPane = new PanelInfos(cli);
+		infosPane = new PanelInfos();
 
 		contentPane.add(gridPane);
 		contentPane.add(infosPane);
@@ -54,7 +50,7 @@ public class Deminator extends JFrame {
 		boxs[0][0].addImage(BLUE);
 
 
-		addKeyListener(new PlayerListener(cli));
+		addKeyListener(new PlayerListener());
 
 		setVisible(true);
 	}

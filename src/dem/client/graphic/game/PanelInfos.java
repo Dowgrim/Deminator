@@ -1,17 +1,13 @@
 package dem.client.graphic.game;
 
-import dem.client.net.OldClientDem;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class PanelInfos extends JPanel {
 
-	private OldClientDem cli;
 	private JLabel pingInfo;
 
-	public PanelInfos(OldClientDem c) {
-		cli = c;
+	public PanelInfos() {
 		setBorder(BorderFactory.createEtchedBorder());
 
 		//TODO en fonction de la taille de l'écran

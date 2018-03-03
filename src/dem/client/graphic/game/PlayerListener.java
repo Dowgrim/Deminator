@@ -1,7 +1,5 @@
 package dem.client.graphic.game;
 
-import dem.client.net.OldClientDem;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -10,10 +8,8 @@ import java.awt.event.KeyListener;
  */
 public class PlayerListener implements KeyListener {
 
-	private OldClientDem cli;
 
-	public PlayerListener(OldClientDem c) {
-		cli = c;
+	public PlayerListener() {
 	}
 
 	@Override
