@@ -1,7 +1,7 @@
 package dem.server.graphic.menu;
 
 import dem.common.graphic.JSPPlayersList;
-import dem.server.model.Player;
+import dem.common.model.Player;
 
 import javax.swing.*;
 import java.awt.*;

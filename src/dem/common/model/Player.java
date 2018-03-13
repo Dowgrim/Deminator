@@ -1,27 +1,25 @@
-package dem.server.model;
+package dem.common.model;
 
 
 /**
  * @author Nathaël Noguès
  * @since 2018-02-27
  */
-public class Player {
-	private static final int R = 0;
-	private static final int G = 0;
-	private static final int B = 0;
-
+public class Player extends ElementOnGrid {
 	private String name;
-	private final int color; // 0 to 359 (H; S and V fixed depending on object)
-
+	private int color; // 0 - 359 (included)
 	private boolean ready = false;
-
 	private GameCharacter character;
 
 	public Player() {
 		color = (int)(Math.random() * 360);
 	}
 
-	public int getColorHue() {
+	/**
+	 * @return Player color is corresponding to the Hue (HSV color mode)
+	 * Saturation(Grey-Color) and value(Black-Color) will depend on graphics and type of the element
+	 */
+	public int getPlayerColor() {
 		return color;
 	}
 

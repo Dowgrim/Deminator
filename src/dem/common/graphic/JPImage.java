@@ -1,4 +1,4 @@
-package dem.common;
+package dem.common.graphic;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * La classe dem.common.JPImage est un panel ayant une (ou plusieurs) image(s) peinte(s)
+ * La classe dem.common.graphic.JPImage est un panel ayant une (ou plusieurs) image(s) peinte(s)
  * en fond.
  * <p>
  * Permet:
@@ -22,7 +22,7 @@ import java.util.HashMap;
  * <p>
  * Ne permet pas:
  * Forcer une dimension ou une proportion a l'image déssinée dans le panel
- * (Il faudra pour cela parametrer le layout du contenant du dem.common.JPImage)
+ * (Il faudra pour cela parametrer le layout du contenant du dem.common.graphic.JPImage)
  * <p>
  * <p>
  * <p>
@@ -33,7 +33,7 @@ import java.util.HashMap;
  * + Modifications pour permettre la transparence des images
  * <p>
  * Version 2.0.0:
- * +	Plusieurs images possibles sur une meme dem.common.JPImage (permet la superposition d'images transparentes)
+ * +	Plusieurs images possibles sur une meme dem.common.graphic.JPImage (permet la superposition d'images transparentes)
  * + Ajout de méthodes addImage, removeImage
  * + Modifications attribu cheminImage => cheminsImages et modifications associées
  * + Ajout d'un attribu static "images" permettant de ne pas avoir a recharger une meme image plusieurs fois
@@ -65,12 +65,12 @@ public class JPImage extends JPanel {
 	//	//	//	//	//	CONSTRUCTEURS	//	//	//	//	//
 
 	/**
-	 * Constructeur par défaut (le dem.common.JPImage est alors à sa création, similaire à un simple JPanel)
+	 * Constructeur par défaut (le dem.common.graphic.JPImage est alors à sa création, similaire à un simple JPanel)
 	 */
 	public JPImage() { cheminsImages = new ArrayList<>(); }
 
 	/**
-	 * Constructeur de dem.common.JPImage
+	 * Constructeur de dem.common.graphic.JPImage
 	 *
 	 * @param adrs Adresses des images (séparés par des virgules, la premiére étant celle de fond, la derniére celle par dessus toutes)
 	 */
@@ -186,7 +186,7 @@ public class JPImage extends JPanel {
 	}
 
 	/**
-	 * @return Liste contenant les chemins de toutes les images empilées sur le dem.common.JPImage courant
+	 * @return Liste contenant les chemins de toutes les images empilées sur le dem.common.graphic.JPImage courant
 	 */
 	public ArrayList<String> getChemins() { return cheminsImages; }
 

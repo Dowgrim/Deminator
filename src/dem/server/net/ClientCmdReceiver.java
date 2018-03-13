@@ -1,6 +1,6 @@
 package dem.server.net;
 
-import dem.common.net.CmdReceiver;
+import dem.server.net.action.AServerCmdReceive;
 import dem.common.net.CmdSender;
 import dem.server.ServerDem;
 
@@ -15,11 +15,10 @@ public class ClientCmdReceiver {
 	private static int lastReceiverId = 0;
 
 	private final int receiverId = lastReceiverId++;
-	private final Map<String, CmdReceiver> strToCmdClass = new HashMap<>();
+	private final Map<String, AServerCmdReceive> strToCmdClass = new HashMap<>();
 	private final PrintWriter out;
 	private final BufferedReader in;
 	private final Socket socket;
-	private final Thread listening;
 	private final ServerDem server;
 	private boolean isConnected;
 
@@ -28,8 +27,7 @@ public class ClientCmdReceiver {
 		this.socket = socket;
 		out = new PrintWriter(socket.getOutputStream(), true);
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		listening = new Thread(this::listen);
-		listening.start();
+		new Thread(this::listen).start();
 	}
 
 	private void initReceiveCmds() {
@@ -42,28 +40,26 @@ public class ClientCmdReceiver {
 
 		strToCmdClass.put("MOV", new dem.server.net.action.receive.game.CmdReceiveMov());
 
-		for(CmdReceiver cmd : strToCmdClass.values()) {
+		for(AServerCmdReceive cmd : strToCmdClass.values()) {
 			cmd.setServer(server);
 		}
 	}
 
 	private void listen() {
 		isConnected = true;
-		while(isConnected) {
-			try {
+		try {
+			while(isConnected) {
 				String received = in.readLine();
 				this.receive(received.split(CmdSender.SEPARATOR));
-			} catch(IOException e) {
-				e.printStackTrace();
-				server.disconnect(this);
-				break;
 			}
-		}
+		} catch(IOException ignored) {}
+
+		server.disconnect(this);
 	}
 
 	public void receive(String ... params) {
 		List<String> command = Arrays.asList(params);
-		CmdReceiver cmdClass = strToCmdClass.get(command.remove(0));
+		AServerCmdReceive cmdClass = strToCmdClass.get(command.remove(0));
 		cmdClass.receive(receiverId, command);
 	}
 

@@ -1,6 +1,6 @@
 package dem.client.graphic.game;
 
-import dem.common.JPImage;
+import dem.common.graphic.JPImage;
 
 import javax.swing.*;
 import java.awt.*;

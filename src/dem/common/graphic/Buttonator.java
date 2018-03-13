@@ -1,4 +1,4 @@
-package dem.common;
+package dem.common.graphic;
 
 import javax.swing.*;
 import java.awt.*;

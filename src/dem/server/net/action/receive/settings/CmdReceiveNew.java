@@ -1,8 +1,7 @@
 package dem.server.net.action.receive.settings;
 
-import dem.common.net.CmdReceiver;
-import dem.server.model.Grid;
-import dem.server.model.Player;
+import dem.server.net.action.AServerCmdReceive;
+import dem.server.model.ServerGrid;
 import dem.server.net.action.ServerCmdSender;
 
 import java.util.List;
@@ -11,9 +10,9 @@ import java.util.List;
  * NEW playerName
  * received by SERVER
  */
-public class CmdReceiveNew extends CmdReceiver {
+public class CmdReceiveNew extends AServerCmdReceive {
 	@Override
-	public void receive(ServerCmdSender cmdSender, Grid grid, Player emitter, List<String> params) {
+	public void receive(ServerCmdSender cmdSender, ServerGrid grid, String playerName, List<String> params) {
 		if(params.size() != 2) {
 			// TODO error
 			throw new RuntimeException();

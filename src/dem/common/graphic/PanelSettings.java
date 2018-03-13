@@ -1,6 +1,6 @@
 package dem.common.graphic;
 
-import dem.server.model.Player;
+import dem.common.model.Player;
 
 import javax.swing.*;
 import java.awt.*;

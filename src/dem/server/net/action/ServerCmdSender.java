@@ -2,7 +2,7 @@ package dem.server.net.action;
 
 import dem.common.net.CmdSender;
 import dem.server.ServerDem;
-import dem.server.model.Player;
+import dem.common.model.Player;
 
 import java.io.Writer;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ServerCmdSender extends CmdSender {
 		sendToAllPlayers("QUIT", playerIdentifier);
 	}
 	public void cmdNew(Player p) {
-		sendToAllPlayers("NEW", p.getName(), Integer.toString(p.getColorHue()));
+		sendToAllPlayers("NEW", p.getName(), Integer.toString(p.getPlayerColor()));
 	}
 	public void ping(Player p) {
 		sendToSpecificPlayer(p, "PING");

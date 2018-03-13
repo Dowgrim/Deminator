@@ -1,7 +1,7 @@
 package dem.server;
 
-import dem.server.model.Grid;
-import dem.server.model.Player;
+import dem.server.model.ServerGrid;
+import dem.common.model.Player;
 import dem.server.net.ClientCmdReceiver;
 import dem.server.net.action.ServerCmdSender;
 
@@ -20,7 +20,7 @@ public abstract class ServerDem {
 	private int maxClients = 0;
 	private boolean acceptingClients = false;
 	private final Thread connectLoopThread = new Thread(this::connectLoop);
-	private Grid grid = null;
+	private ServerGrid grid = null;
 
 	protected void openServer(int port) throws IOException {
 		serverSocket = new ServerSocket(port);
@@ -87,10 +87,10 @@ public abstract class ServerDem {
 	public ServerCmdSender getCmdSender() {
 		return serverCmdSender;
 	}
-	public void setGrid(Grid grid) {
+	public void setGrid(ServerGrid grid) {
 		this.grid = grid;
 	}
-	public Grid getGrid() {
+	public ServerGrid getGrid() {
 		return grid;
 	}
 

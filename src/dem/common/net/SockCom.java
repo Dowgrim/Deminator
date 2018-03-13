@@ -1,4 +1,4 @@
-package dem.common;
+package dem.common.net;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class SockCom {
 	private BufferedReader br;
 	private OutputStreamWriter osw;
 
-	private static final String SEPARATEUR = " ";
+	private static final String CMD_WORD_SEPARATOR = " ";
 
 	// Client
 	public SockCom(String host, int port) throws IOException {
@@ -53,7 +53,7 @@ public class SockCom {
 		try {
 			if((str = br.readLine()) != null) {
 				System.out.println("YOLO");
-				params = Arrays.asList(str.split(SEPARATEUR));
+				params = Arrays.asList(str.split(CMD_WORD_SEPARATOR));
 				return params;
 			}
 		} catch(IOException e) {
