@@ -2,6 +2,7 @@
 .idea/
 out/
 /bin/
+**/target/
 .vscode
 .gitignore.
 
