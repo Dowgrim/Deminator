@@ -19,7 +19,7 @@ public class ClientFrame extends JFrame {
 
 	private final PanelConnexion pc;
 
-	private final PanelSettings ps;
+	private final ClientPanelSettings ps;
 
 	private final JSPPlayersList sppl;
 
@@ -38,26 +38,23 @@ public class ClientFrame extends JFrame {
 		pCenter = new JPanel();
 		pCenter.setLayout(new BoxLayout(pCenter, BoxLayout.Y_AXIS));
 
-
-		ps = new PanelSettings(PanelSettings.Rank.CLIENT);
-
 		sppl = new JSPPlayersList();
 
 		pc = new PanelConnexion(this);
-
-		pCenter.add(pc);
+		ps = new ClientPanelSettings();
 		pCenter.add(ps);
-
-		mainPanel.add(pCenter);
-		mainPanel.add(sppl);
-
-		pcInitialisation();
 		psInitialisation();
+		pcInitialisation();
 		spplInitialisation();
 
 		setSize(600, 600);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);
+
+		pCenter.add(pc);
+
+		mainPanel.add(pCenter);
+		mainPanel.add(sppl);
 	}
 
 	private void pcInitialisation() {
@@ -78,10 +75,6 @@ public class ClientFrame extends JFrame {
 		sppl.putPlayerToList(pseudo, color);
 	}
 
-	public void makePlayerReady(boolean isReady){
-		sppl.makePlayerReady(cli.nickName, isReady);
-	}
-
 	public void receivePong(long ms) {
 		pc.showMessage("Receive PONG " + ms + " ms");
 	}
@@ -92,6 +85,7 @@ public class ClientFrame extends JFrame {
 
 	public void setClient(ClientDem client) {
 		this.cli = client;
+		ps.setCli(cli);
 	}
 
 	public static void main(String[] args) {
@@ -100,5 +94,12 @@ public class ClientFrame extends JFrame {
 
 	public void removePlayer(String playerName) {
 		sppl.removePlayerFromList(playerName);
+	}
+
+	public void setReady(String playerName, boolean isReady) {
+		sppl.setReady(playerName, isReady);
+		if(cli.nickName.equals(playerName)){
+			ps.updateButtonReady(isReady);
+		}
 	}
 }

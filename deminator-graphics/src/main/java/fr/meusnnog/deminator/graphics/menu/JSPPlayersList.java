@@ -64,9 +64,11 @@ public class JSPPlayersList extends JScrollPane {
 		this.repaint();
 	}
 
-	public void makePlayerReady(String nickName, boolean isReady) {
-
-
+	public void setReady(String playerName, boolean isReady) {
+		JPPlayer jpp = jpPlayers.get(playerName);
+		jpp.jCBIsReady.setSelected(isReady);
+		this.revalidate();
+		this.repaint();
 	}
 
 	private class JPPlayer extends JPanel {

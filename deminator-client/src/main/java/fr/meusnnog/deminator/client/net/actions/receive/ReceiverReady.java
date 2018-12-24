@@ -6,16 +6,9 @@ import fr.meusnnog.deminator.net.DemEmitter;
 
 import java.util.List;
 
-public class ReceiverReady extends ClientDemReceiver implements DemEmitter {
-	private boolean isReady;
-
+public class ReceiverReady extends ClientDemReceiver {
 	public ReceiverReady(ClientFrame cF) {
 		super(cF);
-	}
-
-	public ReceiverReady(boolean isReady) {
-		super(null);
-		this.isReady = isReady;
 	}
 
 	@Override
@@ -23,18 +16,12 @@ public class ReceiverReady extends ClientDemReceiver implements DemEmitter {
 		// RDY playerName true/false
 		String playerName = params.get(0);
 		boolean isReady = Boolean.parseBoolean(params.get(1));
-
-		// TODO
+		frame.setReady(playerName, isReady);
 
 	}
 
 	@Override
 	public String getCommandName() {
 		return "RDY";
-	}
-
-	@Override
-	public String buildCommand() {
-		return "RDY " + isReady;
 	}
 }

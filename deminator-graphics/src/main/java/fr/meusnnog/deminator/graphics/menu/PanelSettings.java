@@ -7,19 +7,12 @@ import java.awt.*;
  * @author Michael Eusebe, Nathaël Noguès
  * @since 2016-04-29
  */
-public class PanelSettings extends JPanel {
-	public enum Rank {CLIENT, SERVER}
+public abstract class PanelSettings extends JPanel {
 
-	private JButton jbNotReady;
-	private JButton jbGo;
-	private JButton jbReady;
-
-	private Rank rank;
+	protected JButton jbReady = new JButton("Ready ?!");
 
 
-	public PanelSettings(Rank r) {
-		rank = r;
-
+	public PanelSettings() {
 		JPanel jspSettings = new JPanel();
 		jspSettings.setLayout(new BoxLayout(jspSettings, BoxLayout.Y_AXIS));
 
@@ -62,40 +55,14 @@ public class PanelSettings extends JPanel {
 		jspSettings.add(jpNbMines);
 
 		JPanel jpButtons = new JPanel();
-		{
-			if(rank == Rank.CLIENT) {
-				jbReady = new JButton("Ready !");
-				{
-					jbReady.addActionListener(al -> clicGetReady(true));
-				}
-				jbNotReady = new JButton("Not Ready");
-				{
-					jbNotReady.addActionListener(al -> clicGetReady(false));
-					jbNotReady.setVisible(false);
-				}
-				jpButtons.add(jbReady);
-				jpButtons.add(jbNotReady);
-			}
-			if(rank == Rank.SERVER) {
-				jbGo = new JButton("Everyone Ready, GO !");
-				{
-					jbGo.addActionListener(al -> clicGo());
-				}
-				jpButtons.add(jbGo);
-			}
-		}
+		jpButtons.add(jbReady);
+		jbReady.addActionListener(al -> clickReady());
+
 
 		setLayout(new BorderLayout());
 		add(jspSettings, BorderLayout.CENTER);
 		add(jpButtons, BorderLayout.SOUTH);
 	}
 
-	private void clicGo() {
-		// TODO
-	}
-
-	private void clicGetReady(boolean isReady) {
-		// TODO
-	}
-
+	public abstract void clickReady();
 }

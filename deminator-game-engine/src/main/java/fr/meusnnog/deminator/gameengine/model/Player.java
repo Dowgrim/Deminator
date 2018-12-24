@@ -86,4 +86,8 @@ public class Player {
 	public Color getColor() {
 		return new Color(Color.HSBtoRGB(color / 360, 1, 1));
 	}
+
+	public boolean toggleReady() {
+		return ready = !ready;
+	}
 }

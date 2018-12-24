@@ -32,7 +32,7 @@ public class ServerFrame extends JFrame {
 		pCenter = new JPanel();
 		pCenter.setLayout(new BoxLayout(pCenter, BoxLayout.Y_AXIS));
 
-		ps = new PanelSettings(PanelSettings.Rank.SERVER);
+		ps = new ServerPanelSettings();
 
 		jsppl = new JSPPlayersList();
 
@@ -70,10 +70,6 @@ public class ServerFrame extends JFrame {
 
 	public void addPlayer(String nick, Color color){
 		jsppl.putPlayerToList(nick, color);
-	}
-
-	public void makePlayerReady(String nick, boolean isReady){
-		jsppl.makePlayerReady(nick, isReady);
 	}
 
 	public static void main(String[] args) {
