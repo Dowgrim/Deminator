@@ -1,8 +1,8 @@
 package fr.meusnnog.deminator.client.menu;
 
 import fr.meusnnog.deminator.client.net.ClientDem;
-import fr.meusnnog.deminator.client.net.actions.sendAndRecieve.CommandNew;
-import fr.meusnnog.deminator.client.net.actions.sendAndRecieve.CommandPing;
+import fr.meusnnog.deminator.client.net.actions.send.EmitterNew;
+import fr.meusnnog.deminator.client.net.actions.send.EmitterPing;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -32,6 +32,8 @@ public class PanelConnexion extends JPanel {
 	private final JButton jbUpColor, jbDownColor;
 
 	private final ClientFrame clientFrame;
+	private String playerName = "John Doe";
+	private int playerColor = (int)(Math.random()*360);
 
 	public PanelConnexion(ClientFrame cF) {
 		this.clientFrame = cF;
@@ -67,7 +69,6 @@ public class PanelConnexion extends JPanel {
 					g.drawLine(0, 0, this.getWidth(), this.getHeight());
 					g.drawLine(this.getWidth(), 0, 0, this.getHeight());
 					jtfColor.setText("0");
-					return;
 				}
 			}
 		};
@@ -259,7 +260,9 @@ public class PanelConnexion extends JPanel {
 	}
 
 	private void clickNewPlayer() {
-		cli.sendCommand(new CommandNew(jtfNick.getText(), Integer.parseInt(jtfColor.getText())));
+		this.playerName = jtfNick.getText();
+		this.playerColor = Integer.parseInt(jtfColor.getText());
+		cli.sendCommand(new EmitterNew(this.playerName, this.playerColor));
 	}
 
 	private void closeClient() {
@@ -294,7 +297,7 @@ public class PanelConnexion extends JPanel {
 
 	private void clickPingServer() {
 		jlStatus.setText("Ping server!");
-		cli.sendCommand(new CommandPing());
+		cli.sendCommand(new EmitterPing());
 	}
 
 	public void showMessage(String message) {

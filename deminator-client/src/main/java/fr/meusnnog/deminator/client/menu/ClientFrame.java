@@ -1,7 +1,7 @@
 package fr.meusnnog.deminator.client.menu;
 
 import fr.meusnnog.deminator.client.net.ClientDem;
-import fr.meusnnog.deminator.client.net.actions.sendAndRecieve.CommandPong;
+import fr.meusnnog.deminator.client.net.actions.send.EmitterPong;
 import fr.meusnnog.deminator.graphics.menu.JSPPlayersList;
 import fr.meusnnog.deminator.graphics.menu.PanelSettings;
 
@@ -87,7 +87,7 @@ public class ClientFrame extends JFrame {
 	}
 
 	public void receivePing(String ms) {
-		cli.sendCommand(new CommandPong(ms));
+		cli.sendCommand(new EmitterPong(ms));
 	}
 
 	public void setClient(ClientDem client) {
@@ -96,5 +96,9 @@ public class ClientFrame extends JFrame {
 
 	public static void main(String[] args) {
 		new ClientFrame();
+	}
+
+	public void removePlayer(String playerName) {
+		sppl.removePlayerFromList(playerName);
 	}
 }

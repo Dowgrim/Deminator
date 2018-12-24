@@ -80,4 +80,7 @@ public class ServerFrame extends JFrame {
 		new ServerFrame();
 	}
 
+	public void removePlayer(String nick) {
+		jsppl.removePlayerFromList(nick);
+	}
 }

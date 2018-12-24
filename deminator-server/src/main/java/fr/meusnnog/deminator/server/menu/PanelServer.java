@@ -3,7 +3,8 @@ package fr.meusnnog.deminator.server.menu;
 import fr.meusnnog.deminator.graphics.util.Util;
 import fr.meusnnog.deminator.net.DemEmitter;
 import fr.meusnnog.deminator.server.ServerDem;
-import fr.meusnnog.deminator.server.actions.sendAndRecieve.CommandPing;
+import fr.meusnnog.deminator.server.actions.receive.ReceiverPing;
+import fr.meusnnog.deminator.server.actions.send.EmitterPing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,7 +104,7 @@ public class PanelServer extends JPanel {
 	}
 
 	private void clickPingAll() {
-		DemEmitter cmd = new CommandPing();
+		DemEmitter cmd = new EmitterPing();
 		server.sendBroadcast(cmd.buildCommand());
 	}
 

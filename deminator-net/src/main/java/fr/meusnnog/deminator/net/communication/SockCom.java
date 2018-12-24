@@ -46,7 +46,6 @@ public class SockCom {
 			osw.write(msg + "\n");
 			osw.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
