@@ -22,7 +22,8 @@ io.on('connection', (socket) => {
   gameController.handleConnection(socket);
 });
 
-const PORT = process.env.PORT || 4224;
-httpServer.listen(PORT, () => {
-  console.log(`[Server Running] Listening on port ${PORT}`);
+const PORT = Number(process.env.PORT) || 4224;
+const HOST = process.env.PORT ? '0.0.0.0' : 'localhost'; // Use 0.0.0.0 for Render / cloud deployment, localhost for local
+httpServer.listen(PORT, HOST, () => {
+  console.log(`[Server Running] Listening on http://${HOST}:${PORT}`);
 });

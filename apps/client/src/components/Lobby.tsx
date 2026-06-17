@@ -8,6 +8,7 @@ interface LobbyProps {
   setRoomId: (id: string) => void;
   handleJoin: (e: FormEvent) => void;
   createRandomRoom: () => void;
+  error?: string | null;
 }
 
 export default function Lobby({
@@ -17,6 +18,7 @@ export default function Lobby({
   setRoomId,
   handleJoin,
   createRandomRoom,
+  error,
 }: LobbyProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 p-6 text-slate-100">
@@ -30,6 +32,12 @@ export default function Lobby({
           </h1>
           <p className="text-slate-400 text-sm mt-1">Démineur Multijoueur en Temps Réel</p>
         </div>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 text-red-500 text-sm rounded-xl text-center">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleJoin} className="space-y-5">
           <div>

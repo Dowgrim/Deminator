@@ -49,9 +49,7 @@ export class GameController {
 
   private handleJoinRoom(socket: Socket, { roomId, playerName }: { roomId: string; playerName: string }) {
     const cleanRoomId = roomId.trim().toUpperCase() || 'DEFAULT';
-    
-    // Join Socket.io room
-    socket.join(cleanRoomId);
+    const cleanPlayerName = playerName.trim();
     
     // Get or create GameRoom model
     let room = this.rooms.get(cleanRoomId);
@@ -59,10 +57,22 @@ export class GameController {
       room = new GameRoom(cleanRoomId);
       this.rooms.set(cleanRoomId, room);
       console.log(`[Room Created] Room ID: ${cleanRoomId}`);
+    } else {
+      // Check if player name already exists in the room
+      const nameExists = Array.from(room.players.values()).some(
+        p => p.name.trim().toLowerCase() === cleanPlayerName.toLowerCase()
+      );
+      if (nameExists) {
+        socket.emit('joinError', 'Ce pseudo est déjà utilisé dans ce salon.');
+        return;
+      }
     }
 
+    // Join Socket.io room
+    socket.join(cleanRoomId);
+
     // Add player to the room
-    const player = room.addPlayer(socket.id, playerName);
+    const player = room.addPlayer(socket.id, cleanPlayerName);
     this.socketToRoom.set(socket.id, cleanRoomId);
 
     console.log(`[Player Joined] Player "${player.name}" (${socket.id}) -> Room: ${cleanRoomId}`);

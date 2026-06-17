@@ -18,7 +18,7 @@ export default function Chat({
   chatEndRef,
 }: ChatProps) {
   return (
-    <aside className="w-full md:w-80 bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 flex flex-col h-72 md:h-auto">
+    <aside className="w-full md:w-80 bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 flex flex-col h-full">
       <div className="p-4 border-b border-slate-800 flex items-center gap-2 text-slate-400">
         <MessageSquare className="w-4 h-4" />
         <h2 className="font-semibold text-sm">Chat d'Escouade</h2>

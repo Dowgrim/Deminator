@@ -1,182 +1,9 @@
-import React, { useState, useEffect, useRef, memo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { Users, Play, Crown, Skull } from 'lucide-react';
 import { GameState } from '../types/GameState.js';
 import { getGameModeConfig } from '../modes/gameModes.js';
-
-interface CellProps {
-  row: number;
-  col: number;
-  isRevealed: boolean;
-  isMine: boolean;
-  isFlagged: boolean;
-  neighborMines?: number;
-  revealerColor?: string;
-  flaggerColor?: string;
-  revealerName?: string;
-  flaggerName?: string;
-  cellSize: number;
-  cellTotal: number;
-  disabled: boolean;
-  allowFlag: boolean;
-  onClick: () => void;
-  onContextMenu: (e: React.MouseEvent) => void;
-  isZoomedOut: boolean;
-}
-
-const MemoizedCell = memo(function Cell({
-  row,
-  col,
-  isRevealed,
-  isMine,
-  isFlagged,
-  neighborMines,
-  revealerColor,
-  flaggerColor,
-  revealerName,
-  flaggerName,
-  cellSize,
-  cellTotal,
-  disabled,
-  allowFlag,
-  onClick,
-  onContextMenu,
-  isZoomedOut,
-}: CellProps) {
-  if (isZoomedOut) {
-    let bgClass = "absolute rounded-sm pointer-events-none ";
-    if (isRevealed) {
-      if (isMine) {
-        bgClass += "bg-red-800";
-      } else {
-        bgClass += "bg-slate-950";
-      }
-    } else {
-      if (isFlagged) {
-        bgClass += "bg-orange-600";
-      } else {
-        bgClass += "bg-slate-800";
-      }
-    }
-
-    const borderStyle: React.CSSProperties = {};
-    if (isRevealed && revealerColor) {
-      borderStyle.boxShadow = `inset 0 0 0 1px ${revealerColor}40`;
-    } else if (isFlagged && flaggerColor) {
-      borderStyle.borderColor = flaggerColor;
-      borderStyle.borderWidth = '1px';
-    }
-
-    return (
-      <div
-        className={bgClass}
-        style={{
-          position: 'absolute',
-          left: `${col * cellTotal}px`,
-          top: `${row * cellTotal}px`,
-          width: `${cellSize}px`,
-          height: `${cellSize}px`,
-          ...borderStyle,
-        }}
-      />
-    );
-  }
-
-  let buttonClass = "grid-cell rounded-lg flex items-center justify-center select-none text-sm font-bold relative focus:outline-none transition-colors duration-100 ";
-  let content: React.ReactNode = null;
-
-  if (isRevealed) {
-    if (isMine) {
-      buttonClass += "bg-red-950/70 border border-red-500/30 text-red-500";
-      content = (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500 shrink-0">
-          <circle cx="12" cy="12" r="10" />
-          <path d="m12 9 3 3m-3 0-3-3m3 3v6" />
-        </svg>
-      );
-    } else {
-      buttonClass += "bg-slate-950 border border-slate-800/50 text-slate-300";
-      if (neighborMines && neighborMines > 0) {
-        let numColor = 'text-slate-400';
-        switch (neighborMines) {
-          case 1: numColor = 'text-blue-400 font-bold'; break;
-          case 2: numColor = 'text-emerald-400 font-bold'; break;
-          case 3: numColor = 'text-rose-400 font-bold'; break;
-          case 4: numColor = 'text-violet-400 font-bold'; break;
-          case 5: numColor = 'text-amber-400 font-bold'; break;
-          case 6: numColor = 'text-cyan-400 font-bold'; break;
-          case 7: numColor = 'text-pink-400 font-bold'; break;
-          case 8: numColor = 'text-indigo-400 font-bold'; break;
-        }
-        content = <span style={{ fontSize: `${cellSize * 0.45}px` }} className={numColor}>{neighborMines}</span>;
-      }
-    }
-  } else {
-    buttonClass += "bg-slate-800 hover:bg-slate-700/80 active:scale-95 cursor-pointer border border-slate-700/60 shadow-[inset_0_2px_4px_rgba(255,255,255,0.05)]";
-    
-    if (isFlagged) {
-      content = (
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-500 fill-orange-500 shrink-0">
-          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-          <line x1="4" y1="22" x2="4" y2="15" />
-        </svg>
-      );
-    }
-  }
-
-  const borderStyle: React.CSSProperties = {};
-  if (isRevealed && revealerColor) {
-    borderStyle.boxShadow = `inset 0 0 0 2px ${revealerColor}40`;
-  } else if (isFlagged && flaggerColor) {
-    borderStyle.borderColor = flaggerColor;
-  }
-
-  const title = revealerName 
-    ? `Découvert par ${revealerName}` 
-    : flaggerName 
-      ? `Signalé par ${flaggerName}` 
-      : '';
-
-  return (
-    <button
-      onClick={onClick}
-      onContextMenu={(e) => {
-        if (allowFlag) {
-          onContextMenu(e);
-        } else {
-          e.preventDefault();
-        }
-      }}
-      disabled={disabled}
-      className={buttonClass}
-      style={{
-        position: 'absolute',
-        left: `${col * cellTotal}px`,
-        top: `${row * cellTotal}px`,
-        width: `${cellSize}px`,
-        height: `${cellSize}px`,
-        ...borderStyle,
-      }}
-      title={title}
-    >
-      {content}
-    </button>
-  );
-}, (prev, next) => {
-  return prev.row === next.row &&
-         prev.col === next.col &&
-         prev.isRevealed === next.isRevealed &&
-         prev.isMine === next.isMine &&
-         prev.isFlagged === next.isFlagged &&
-         prev.neighborMines === next.neighborMines &&
-         prev.revealerColor === next.revealerColor &&
-         prev.flaggerColor === next.flaggerColor &&
-         prev.disabled === next.disabled &&
-         prev.allowFlag === next.allowFlag &&
-         prev.cellSize === next.cellSize &&
-         prev.cellTotal === next.cellTotal &&
-         prev.isZoomedOut === next.isZoomedOut;
-});
+import Cell from './Cell.js';
 
 interface BoardProps {
   gameState: GameState;
@@ -207,6 +34,13 @@ export default function Board({
   
   const dragStart = useRef({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Touch references for mobile pan and pinch-zoom
+  const touchStartPos = useRef({ x: 0, y: 0 });
+  const hasDraggedRef = useRef(false);
+  const initialPinchDistance = useRef<number | null>(null);
+  const initialPinchZoom = useRef<number>(1);
+  const initialPinchMidpointLocal = useRef<{ x: number; y: number } | null>(null);
   
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
@@ -298,6 +132,114 @@ export default function Board({
       container.removeEventListener('wheel', handleWheelEvent);
     };
   }, [zoom, panX, panY, rows, cols]);
+
+  // Handle Touch Pan and 2-Finger Pinch Zoom on mobile/touch devices
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        setIsDragging(true);
+        dragStart.current = { x: touch.clientX - panX, y: touch.clientY - panY };
+        touchStartPos.current = { x: touch.clientX, y: touch.clientY };
+        hasDraggedRef.current = false;
+        initialPinchDistance.current = null;
+        initialPinchMidpointLocal.current = null;
+      } else if (e.touches.length === 2) {
+        setIsDragging(false);
+        hasDraggedRef.current = true; // prevent accidental clicks/taps
+
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        initialPinchDistance.current = dist;
+        initialPinchZoom.current = zoom;
+
+        const midX = (t1.clientX + t2.clientX) / 2;
+        const midY = (t1.clientY + t2.clientY) / 2;
+        const rect = container.getBoundingClientRect();
+        const containerMidX = midX - rect.left;
+        const containerMidY = midY - rect.top;
+
+        initialPinchMidpointLocal.current = {
+          x: (containerMidX - panX) / zoom,
+          y: (containerMidY - panY) / zoom,
+        };
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1 && !initialPinchDistance.current) {
+        const touch = e.touches[0];
+        const dx = touch.clientX - touchStartPos.current.x;
+        const dy = touch.clientY - touchStartPos.current.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > 6) {
+          hasDraggedRef.current = true;
+        }
+
+        setPanX(touch.clientX - dragStart.current.x);
+        setPanY(touch.clientY - dragStart.current.y);
+
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      } else if (e.touches.length === 2 && initialPinchDistance.current && initialPinchMidpointLocal.current) {
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+
+        const scale = dist / initialPinchDistance.current;
+        let nextZoom = initialPinchZoom.current * scale;
+        nextZoom = Math.max(0.15, Math.min(4, nextZoom));
+
+        const midX = (t1.clientX + t2.clientX) / 2;
+        const midY = (t1.clientY + t2.clientY) / 2;
+        const rect = container.getBoundingClientRect();
+        const containerMidX = midX - rect.left;
+        const containerMidY = midY - rect.top;
+
+        setZoom(nextZoom);
+        setPanX(containerMidX - initialPinchMidpointLocal.current.x * nextZoom);
+        setPanY(containerMidY - initialPinchMidpointLocal.current.y * nextZoom);
+
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (e.touches.length === 0) {
+        setIsDragging(false);
+        initialPinchDistance.current = null;
+        initialPinchMidpointLocal.current = null;
+        // Keep hasDraggedRef.current true briefly so subsequent click triggers are ignored
+        setTimeout(() => {
+          hasDraggedRef.current = false;
+        }, 80);
+      } else if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        dragStart.current = { x: touch.clientX - panX, y: touch.clientY - panY };
+        touchStartPos.current = { x: touch.clientX, y: touch.clientY };
+        initialPinchDistance.current = null;
+        initialPinchMidpointLocal.current = null;
+      }
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [panX, panY, zoom]);
 
   // Mouse drag panning handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -432,7 +374,7 @@ export default function Board({
               const cellFlagger = cell.flaggedBy ? gameState.players[cell.flaggedBy] : null;
 
               return (
-                <MemoizedCell
+                <Cell
                   key={`${r}-${c}`}
                   row={r}
                   col={c}
@@ -448,8 +390,17 @@ export default function Board({
                   cellTotal={cellTotal}
                   disabled={currentModeConfig.isDisabled(gameState, myId, me)}
                   allowFlag={currentModeConfig.allowFlag}
-                  onClick={() => handleReveal(r, c)}
-                  onContextMenu={(e) => handleFlag(e, r, c)}
+                  onClick={() => {
+                    if (hasDraggedRef.current) return;
+                    handleReveal(r, c);
+                  }}
+                  onContextMenu={(e) => {
+                    if (hasDraggedRef.current) {
+                      e.preventDefault();
+                      return;
+                    }
+                    handleFlag(e, r, c);
+                  }}
                   isZoomedOut={isZoomedOut}
                 />
               );

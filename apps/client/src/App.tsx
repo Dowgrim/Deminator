@@ -11,9 +11,9 @@ import Board from './components/Board.js';
 import Chat from './components/Chat.js';
 
 // Connect to the backend server
-const SOCKET_URL = window.location.hostname === 'localhost' 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || (window.location.hostname === 'localhost' 
   ? 'http://localhost:4224' 
-  : `${window.location.protocol}//${window.location.hostname}:4224`;
+  : `${window.location.protocol}//${window.location.hostname}:4224`);
 
 export default function App() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -33,8 +33,63 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'board' | 'players' | 'chat'>('board');
   const [showLeftSidebar, setShowLeftSidebar] = useState(true);
   const [showRightSidebar, setShowRightSidebar] = useState(true);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [error, setError] = useState<string | null>(null);
   
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const prevChatLengthRef = useRef(0);
+
+  const isChatVisible = isMobile ? activeTab === 'chat' : showRightSidebar;
+
+  const scrollToBottom = (behavior: 'smooth' | 'auto' = 'smooth') => {
+    chatEndRef.current?.scrollIntoView({ behavior });
+  };
+
+  // Track resizing to detect mobile / desktop layout
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Scroll to bottom of chat or increment unread count when new messages arrive
+  useEffect(() => {
+    if (!gameState?.chat) return;
+
+    const currentLength = gameState.chat.length;
+    const prevLength = prevChatLengthRef.current;
+
+    if (currentLength > prevLength) {
+      if (!isChatVisible) {
+        setUnreadCount((prev) => prev + (currentLength - prevLength));
+      } else {
+        scrollToBottom('smooth');
+      }
+    }
+
+    prevChatLengthRef.current = currentLength;
+  }, [gameState?.chat, isChatVisible]);
+
+  // Clear unread count and scroll to bottom when chat becomes visible ("on arrive dessus")
+  useEffect(() => {
+    if (isChatVisible) {
+      setUnreadCount(0);
+      const timer = setTimeout(() => {
+        scrollToBottom('auto');
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isChatVisible]);
+
+  // Clear errors when the player name or room ID changes
+  useEffect(() => {
+    setError(null);
+  }, [playerName, roomId]);
 
   // Initialize socket connection
   useEffect(() => {
@@ -50,17 +105,17 @@ export default function App() {
     newSocket.on('roomState', (state: GameState) => {
       setGameState(state);
       setIsJoined(true);
+      setError(null);
+    });
+
+    newSocket.on('joinError', (message: string) => {
+      setError(message);
     });
 
     return () => {
       newSocket.disconnect();
     };
   }, []);
-
-  // Scroll to bottom of chat when new message arrives
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [gameState?.chat]);
 
   const handleJoin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,6 +192,7 @@ export default function App() {
         setRoomId={setRoomId}
         handleJoin={handleJoin}
         createRandomRoom={createRandomRoom}
+        error={error}
       />
     );
   }
@@ -208,7 +264,7 @@ export default function App() {
           <div className="hidden md:flex absolute top-4 right-4 z-30">
             <button
               onClick={() => setShowRightSidebar(!showRightSidebar)}
-              className="p-2 bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-xl shadow-lg transition-all flex items-center justify-center gap-1"
+              className="relative p-2 bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-xl shadow-lg transition-all flex items-center justify-center gap-1"
               title={showRightSidebar ? "Masquer le chat" : "Afficher le chat"}
             >
               {showRightSidebar ? (
@@ -220,6 +276,11 @@ export default function App() {
                 <>
                   <span className="text-xs font-semibold pl-1">Afficher Chat</span>
                   <ChevronLeft className="w-4 h-4 text-emerald-500" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full border border-slate-950 shadow-md">
+                      {unreadCount}
+                    </span>
+                  )}
                 </>
               )}
             </button>
@@ -272,7 +333,14 @@ export default function App() {
             activeTab === 'chat' ? 'text-red-500 bg-slate-950/40 font-bold' : 'hover:text-slate-200'
           }`}
         >
-          <MessageSquare className="w-5 h-5" />
+          <div className="relative">
+            <MessageSquare className="w-5 h-5" />
+            {unreadCount > 0 && activeTab !== 'chat' && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full border border-slate-950 shadow-md">
+                {unreadCount}
+              </span>
+            )}
+          </div>
           Chat
         </button>
       </div>
