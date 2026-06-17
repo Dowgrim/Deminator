@@ -249,10 +249,16 @@ export class GameRoom {
 
   public toggleFlag(playerId: string, row: number, col: number): boolean {
     const handler = GameModeRegistry.getHandler(this.gameMode);
-    return handler.toggleFlag(this, playerId, row, col);
+    const result = handler.toggleFlag(this, playerId, row, col);
+    if (result) {
+      this.checkGameEndState();
+    }
+    return result;
   }
 
   public checkGameEndState() {
+    if (!this.firstClickDone) return;
+
     // Check if all players are dead
     const alivePlayers = Array.from(this.players.values()).filter(p => p.isAlive);
     if (this.players.size > 0 && alivePlayers.length === 0) {
@@ -272,6 +278,24 @@ export class GameRoom {
         }
       }
       if (!won) break;
+    }
+
+    // Check if won (all mines are flagged or revealed)
+    if (!won) {
+      let allMinesFlaggedOrRevealed = true;
+      for (let r = 0; r < this.config.rows; r++) {
+        for (let c = 0; c < this.config.cols; c++) {
+          const cell = this.serverBoard[r][c];
+          if (cell.isMine && !cell.isRevealed && !cell.isFlagged) {
+            allMinesFlaggedOrRevealed = false;
+            break;
+          }
+        }
+        if (!allMinesFlaggedOrRevealed) break;
+      }
+      if (allMinesFlaggedOrRevealed) {
+        won = true;
+      }
     }
 
     if (won) {
