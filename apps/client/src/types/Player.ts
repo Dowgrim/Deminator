@@ -4,4 +4,5 @@ export interface Player {
   score: number;
   color: string;
   isAlive: boolean;
+  isTurnDone?: boolean;
 }

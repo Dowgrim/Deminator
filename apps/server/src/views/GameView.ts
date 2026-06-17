@@ -8,10 +8,7 @@ export class GameView {
    */
   public static broadcastRoomState(io: Server, roomId: string, room: GameRoom) {
     room.players.forEach((player, playerId) => {
-      const socket = io.sockets.sockets.get(playerId);
-      if (socket) {
-        socket.emit('roomState', room.getClientState(playerId));
-      }
+      io.to(playerId).emit('roomState', room.getClientState(playerId));
     });
   }
 }

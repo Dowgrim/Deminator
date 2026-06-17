@@ -9,6 +9,9 @@ export class SimultaneousModeHandler implements GameModeHandler {
     room.currentTurn = null;
     room.simultaneousPendingReveals.clear();
     room.simultaneousDonePlayers.clear();
+    room.players.forEach(p => {
+      p.isTurnDone = false;
+    });
   }
 
   public revealCell(room: GameRoom, playerId: string, row: number, col: number): boolean {
@@ -46,6 +49,7 @@ export class SimultaneousModeHandler implements GameModeHandler {
       pending.push({ row, col });
       room.simultaneousPendingReveals.set(playerId, pending);
       room.simultaneousDonePlayers.add(playerId);
+      player.isTurnDone = true;
     }
 
     // Check if all alive players are done
@@ -92,6 +96,9 @@ export class SimultaneousModeHandler implements GameModeHandler {
     // Clear turn states
     room.simultaneousPendingReveals.clear();
     room.simultaneousDonePlayers.clear();
+    room.players.forEach(p => {
+      p.isTurnDone = false;
+    });
 
     // Broadcast system message
     room.addChatMessage('system', 'Le tour est terminé ! Les choix de tous les joueurs s\'appliquent à la grille.');
@@ -133,6 +140,10 @@ export class SimultaneousModeHandler implements GameModeHandler {
   public onPlayerDisconnect(room: GameRoom, playerId: string): void {
     room.simultaneousDonePlayers.delete(playerId);
     room.simultaneousPendingReveals.delete(playerId);
+    const player = room.players.get(playerId);
+    if (player) {
+      player.isTurnDone = false;
+    }
 
     if (room.status === 'playing') {
       this.checkAndResolveTurn(room);

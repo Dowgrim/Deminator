@@ -55,18 +55,13 @@ export const GAME_MODES: Record<GameModeType, GameModeConfig> = {
     label: 'Chasse Simultanée',
     selectLabel: 'Mode Chasse Simultanée',
     allowFlag: false,
-    isDisabled: (gameState, myId) => {
+    isDisabled: (gameState, _myId, me) => {
       if (gameState.status !== 'playing') return true;
-      // If player revealed a safe cell, their turn is done and they are disabled
-      const isMeDone = gameState.board.some(row =>
-        row.some(cell => cell.isRevealed && cell.revealedBy === myId && !cell.isMine)
-      );
-      return isMeDone;
+      return me?.isTurnDone || false;
     },
     renderBanner: (gameState, myId) => {
-      const isMeDone = gameState.board.some(row =>
-        row.some(cell => cell.isRevealed && cell.revealedBy === myId && !cell.isMine)
-      );
+      const me = gameState.players[myId || ''];
+      const isMeDone = me?.isTurnDone || false;
       return (
         <div className="mb-6 px-6 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl flex items-center gap-3 animate-fade-in text-center max-w-md shadow-lg">
           <span className={`w-2.5 h-2.5 rounded-full ${isMeDone ? 'bg-amber-500 animate-pulse' : 'bg-red-500 animate-bounce'} shrink-0`} />
