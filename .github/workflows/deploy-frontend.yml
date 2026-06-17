@@ -48,7 +48,7 @@ jobs:
         env:
           # If they want to bake in a default WebSocket URL, they can define it here.
           # Otherwise, it will fallback to the dynamic hostname resolution.
-          VITE_SOCKET_URL: ""
+          VITE_SOCKET_URL: "https://deminator.onrender.com"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
