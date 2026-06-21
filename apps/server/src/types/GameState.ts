@@ -10,8 +10,9 @@ export interface GameState {
   minesRemaining: number;
   chat: ChatMessage[];
   totalMines: number;
-  gameMode: 'classic' | 'turnByTurn' | 'simultaneous';
+  gameMode: 'classic' | 'turnByTurn' | 'simultaneous' | 'simultaneousAuto';
   currentTurn: string | null;
   hostId: string | null;
   startTime?: number | null;
+  turnTimerEnd?: number | null;
 }

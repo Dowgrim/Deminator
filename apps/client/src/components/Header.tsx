@@ -14,6 +14,8 @@ interface HeaderProps {
   setCustomMines: (mines: number) => void;
   gameMode: GameModeType;
   setGameMode: (mode: GameModeType) => void;
+  turnTimer: number;
+  setTurnTimer: (timer: number) => void;
   handleStartGame: () => void;
   copyRoomId: () => void;
   copied: boolean;
@@ -32,6 +34,8 @@ export default function Header({
   setCustomMines,
   gameMode,
   setGameMode,
+  turnTimer,
+  setTurnTimer,
   handleStartGame,
   copyRoomId,
   copied,
@@ -81,67 +85,78 @@ export default function Header({
 
         {isHost ? (
           <div className="flex items-center gap-2 flex-wrap">
-            {gameState.status !== 'playing' && (
-              <>
-                <select
-                  value={difficulty}
-                  onChange={(e) => setDifficulty(e.target.value as any)}
-                  className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
-                >
-                  <option value="easy">Facile (10 Mines)</option>
-                  <option value="medium">Moyen (25 Mines)</option>
-                  <option value="hard">Difficile (50 Mines)</option>
-                  <option value="expert">Expert (30x30, 150 Mines)</option>
-                  <option value="giant">Géant (100x100, 1500 Mines)</option>
-                  <option value="colossal">Colossal (500x500, 35000 Mines)</option>
-                  <option value="supreme">Suprême (1000x1000, 150000 Mines)</option>
-                  <option value="custom">Personnalisé...</option>
-                </select>
+            <select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value as any)}
+              className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
+            >
+              <option value="easy">Facile (10 Mines)</option>
+              <option value="medium">Moyen (25 Mines)</option>
+              <option value="hard">Difficile (50 Mines)</option>
+              <option value="expert">Expert (30x30, 150 Mines)</option>
+              <option value="giant">Géant (100x100, 1500 Mines)</option>
+              <option value="colossal">Colossal (500x500, 35000 Mines)</option>
+              <option value="supreme">Suprême (1000x1000, 150000 Mines)</option>
+              <option value="custom">Personnalisé...</option>
+            </select>
 
-                {difficulty === 'custom' && (
-                  <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-lg border border-slate-800 text-xs">
-                    <label className="text-slate-400">L:</label>
-                    <input 
-                      type="number" 
-                      min={1} 
-                      max={1000} 
-                      value={customRows} 
-                      onChange={(e) => setCustomRows(Math.max(1, Math.min(1000, parseInt(e.target.value) || 1)))}
-                      className="w-12 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-center"
-                    />
-                    <label className="text-slate-400">C:</label>
-                    <input 
-                      type="number" 
-                      min={1} 
-                      max={1000} 
-                      value={customCols} 
-                      onChange={(e) => setCustomCols(Math.max(1, Math.min(1000, parseInt(e.target.value) || 1)))}
-                      className="w-12 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-center"
-                    />
-                    <label className="text-slate-400">M:</label>
-                    <input 
-                      type="number" 
-                      min={1} 
-                      max={Math.max(1, customRows * customCols - 9)} 
-                      value={customMines} 
-                      onChange={(e) => setCustomMines(Math.max(1, Math.min(customRows * customCols - 9, parseInt(e.target.value) || 1)))}
-                      className="w-14 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-center"
-                    />
-                  </div>
-                )}
+            {difficulty === 'custom' && (
+              <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-lg border border-slate-800 text-xs">
+                <label className="text-slate-400">L:</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={1000}
+                  value={customRows}
+                  onChange={(e) => setCustomRows(Math.max(1, Math.min(1000, parseInt(e.target.value) || 1)))}
+                  className="w-12 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-center"
+                />
+                <label className="text-slate-400">C:</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={1000}
+                  value={customCols}
+                  onChange={(e) => setCustomCols(Math.max(1, Math.min(1000, parseInt(e.target.value) || 1)))}
+                  className="w-12 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-center"
+                />
+                <label className="text-slate-400">M:</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={Math.max(1, customRows * customCols - 9)}
+                  value={customMines}
+                  onChange={(e) => setCustomMines(Math.max(1, Math.min(customRows * customCols - 9, parseInt(e.target.value) || 1)))}
+                  className="w-14 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-center"
+                />
+              </div>
+            )}
 
-                <select
-                  value={gameMode}
-                  onChange={(e) => setGameMode(e.target.value as any)}
-                  className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
-                >
-                  {Object.values(GAME_MODES).map((mode) => (
-                    <option key={mode.key} value={mode.key}>
-                      {mode.selectLabel}
-                    </option>
-                  ))}
-                </select>
-              </>
+            <select
+              value={gameMode}
+              onChange={(e) => setGameMode(e.target.value as any)}
+              className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
+            >
+              {Object.values(GAME_MODES).map((mode) => (
+                <option key={mode.key} value={mode.key}>
+                  {mode.selectLabel}
+                </option>
+              ))}
+            </select>
+
+            {(gameMode === 'turnByTurn' || gameMode === 'simultaneous' || gameMode === 'simultaneousAuto') && (
+              <select
+                value={turnTimer}
+                onChange={(e) => setTurnTimer(Number(e.target.value))}
+                className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
+                title="Timer par tour"
+              >
+                <option value={0}>Pas de timer</option>
+                <option value={15}>Timer : 15s</option>
+                <option value={30}>Timer : 30s</option>
+                <option value={60}>Timer : 1 min</option>
+                <option value={120}>Timer : 2 min</option>
+              </select>
             )}
 
             <button

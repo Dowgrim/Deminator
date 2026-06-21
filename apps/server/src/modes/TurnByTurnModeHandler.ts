@@ -6,7 +6,7 @@ export class TurnByTurnModeHandler implements GameModeHandler {
   public name = 'turnByTurn';
 
   public onStartGame(room: GameRoom): void {
-    // Already set in startGame of GameRoom
+    this.startTimerForCurrentPlayer(room);
   }
 
   public revealCell(room: GameRoom, playerId: string, row: number, col: number): boolean {
@@ -18,6 +18,8 @@ export class TurnByTurnModeHandler implements GameModeHandler {
 
     const cell = room.serverBoard[row][col];
     if (cell.isRevealed || cell.isFlagged) return false;
+
+    room.clearTurnTimer();
 
     // On first click, generate board to ensure clicked spot is clean and has 0 neighbors
     if (!room.firstClickDone) {
@@ -31,9 +33,11 @@ export class TurnByTurnModeHandler implements GameModeHandler {
       cell.isRevealed = true;
       cell.revealedBy = playerId;
       player.score += 15;
+      player.minesFound += 1;
       room.minesRemaining--;
-      
+
       room.checkGameEndState();
+      this.startTimerForCurrentPlayer(room);
       return true;
     }
 
@@ -42,6 +46,7 @@ export class TurnByTurnModeHandler implements GameModeHandler {
 
     room.advanceTurn();
     room.checkGameEndState();
+    this.startTimerForCurrentPlayer(room);
     return true;
   }
 
@@ -54,6 +59,8 @@ export class TurnByTurnModeHandler implements GameModeHandler {
 
     const cell = room.serverBoard[row][col];
     if (cell.isRevealed) return false;
+
+    room.clearTurnTimer();
 
     if (cell.isFlagged) {
       if (cell.isMine) {
@@ -78,10 +85,11 @@ export class TurnByTurnModeHandler implements GameModeHandler {
       }
     }
 
+    this.startTimerForCurrentPlayer(room);
     return true;
   }
 
-  public getClientBoard(room: GameRoom, playerId?: string): ClientCell[][] {
+  public getClientBoard(room: GameRoom, _playerId?: string): ClientCell[][] {
     return room.serverBoard.map(row =>
       row.map(cell => {
         const clientCell: ClientCell = {
@@ -108,10 +116,21 @@ export class TurnByTurnModeHandler implements GameModeHandler {
 
   public onPlayerDisconnect(room: GameRoom, playerId: string): void {
     if (room.currentTurn === playerId) {
+      room.clearTurnTimer();
       room.advanceTurn();
+      this.startTimerForCurrentPlayer(room);
     }
     if (room.status === 'playing') {
       room.checkGameEndState();
     }
+  }
+
+  private startTimerForCurrentPlayer(room: GameRoom): void {
+    if (room.status !== 'playing') return;
+    room.startTurnTimer(() => {
+      if (room.status !== 'playing') return;
+      room.advanceTurn();
+      room.checkGameEndState();
+    });
   }
 }

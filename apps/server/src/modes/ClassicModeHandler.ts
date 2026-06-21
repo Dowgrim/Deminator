@@ -28,7 +28,7 @@ export class ClassicModeHandler implements GameModeHandler {
       cell.isRevealed = true;
       cell.revealedBy = playerId;
       player.isAlive = false;
-      player.score = Math.max(0, player.score - 15); // Lose points for hitting a mine
+      player.score = Math.max(0, player.score - 15);
       
       room.checkGameEndState();
       return true;
@@ -50,12 +50,14 @@ export class ClassicModeHandler implements GameModeHandler {
     if (cell.isRevealed) return false;
 
     if (cell.isFlagged) {
+      const originalFlagger = room.players.get(cell.flaggedBy || '');
       if (cell.isMine) {
-        const originalFlagger = room.players.get(cell.flaggedBy || '');
-        if (originalFlagger) originalFlagger.score = Math.max(0, originalFlagger.score - 10);
+        if (originalFlagger) {
+          originalFlagger.score = Math.max(0, originalFlagger.score - 10);
+          originalFlagger.minesFound = Math.max(0, originalFlagger.minesFound - 1);
+        }
         room.minesRemaining++;
       } else {
-        const originalFlagger = room.players.get(cell.flaggedBy || '');
         if (originalFlagger) originalFlagger.score += 2;
       }
       cell.isFlagged = false;
@@ -66,6 +68,7 @@ export class ClassicModeHandler implements GameModeHandler {
 
       if (cell.isMine) {
         player.score += 10;
+        player.minesFound += 1;
         room.minesRemaining--;
       } else {
         player.score = Math.max(0, player.score - 2);
@@ -75,7 +78,7 @@ export class ClassicModeHandler implements GameModeHandler {
     return true;
   }
 
-  public getClientBoard(room: GameRoom, playerId?: string): ClientCell[][] {
+  public getClientBoard(room: GameRoom, _playerId?: string): ClientCell[][] {
     return room.serverBoard.map(row =>
       row.map(cell => {
         const clientCell: ClientCell = {
@@ -100,7 +103,7 @@ export class ClassicModeHandler implements GameModeHandler {
     );
   }
 
-  public onPlayerDisconnect(room: GameRoom, playerId: string): void {
+  public onPlayerDisconnect(room: GameRoom, _playerId: string): void {
     if (room.status === 'playing') {
       room.checkGameEndState();
     }

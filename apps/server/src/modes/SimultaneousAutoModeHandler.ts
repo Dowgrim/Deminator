@@ -2,8 +2,13 @@ import { GameRoom } from '../models/GameRoom.js';
 import { ClientCell } from '../types/ClientCell.js';
 import { GameModeHandler } from './GameModeHandler.js';
 
-export class SimultaneousModeHandler implements GameModeHandler {
-  public name = 'simultaneous';
+/**
+ * "Chasse Évolutive" — like Chasse Simultanée but after each turn resolution,
+ * any cell adjacent to a "finished" cell (all its neighboring mines are already
+ * revealed) gets auto-revealed. This cascades until no more propagation is possible.
+ */
+export class SimultaneousAutoModeHandler implements GameModeHandler {
+  public name = 'simultaneousAuto';
 
   public onStartGame(room: GameRoom): void {
     room.currentTurn = null;
@@ -19,48 +24,36 @@ export class SimultaneousModeHandler implements GameModeHandler {
     const player = room.players.get(playerId);
     if (!player || !player.isAlive) return false;
 
-    // If already done with this turn, cannot click anymore
     if (room.simultaneousDonePlayers.has(playerId)) return false;
 
     const cell = room.serverBoard[row][col];
-    // Cannot click cells already revealed on the main board or flagged
     if (cell.isRevealed || cell.isFlagged) return false;
 
-    // Check if cell is already in player's pending reveals
     const pending = room.simultaneousPendingReveals.get(playerId) || [];
-    const isAlreadyPending = pending.some(c => c.row === row && c.col === col);
-    if (isAlreadyPending) return false;
+    if (pending.some(c => c.row === row && c.col === col)) return false;
 
-    // Generate mines on first click in the room
     if (!room.firstClickDone) {
       room.generateMines(row, col);
       room.firstClickDone = true;
     }
 
     if (cell.isMine) {
-      // It's a mine! Show locally immediately and reward points
       pending.push({ row, col });
       room.simultaneousPendingReveals.set(playerId, pending);
       player.score += 15;
       player.minesFound += 1;
-
-      // Let's check if there are other cells to play. Turn is NOT done, they can click again.
     } else {
-      // Safe cell! Turn is completed for this player
       pending.push({ row, col });
       room.simultaneousPendingReveals.set(playerId, pending);
       room.simultaneousDonePlayers.add(playerId);
       player.isTurnDone = true;
     }
 
-    // Check if all alive players are done
     this.checkAndResolveTurn(room);
-
     return true;
   }
 
   public toggleFlag(_room: GameRoom, _playerId: string, _row: number, _col: number): boolean {
-    // Flagging is disabled in simultaneous turn-hunting mode
     return false;
   }
 
@@ -72,7 +65,6 @@ export class SimultaneousModeHandler implements GameModeHandler {
       room.clearTurnTimer();
       this.resolveTurn(room);
     } else if (doneCount > 0 && !room.isTimerActive) {
-      // First player just finished — start the countdown for the rest
       this.startTurnTimerForRoom(room);
     }
   }
@@ -80,7 +72,6 @@ export class SimultaneousModeHandler implements GameModeHandler {
   private startTurnTimerForRoom(room: GameRoom): void {
     room.startTurnTimer(() => {
       if (room.status !== 'playing') return;
-      // Force-complete all alive players who haven't finished yet
       const alivePlayers = Array.from(room.players.values()).filter(p => p.isAlive);
       alivePlayers.forEach(p => {
         if (!room.simultaneousDonePlayers.has(p.id)) {
@@ -93,7 +84,7 @@ export class SimultaneousModeHandler implements GameModeHandler {
   }
 
   private resolveTurn(room: GameRoom) {
-    // First pass: collect all players who clicked each mine this turn (before any reveal changes state)
+    // First pass: collect all players who clicked each mine this turn
     const mineRevealersMap = new Map<string, string[]>();
     room.simultaneousPendingReveals.forEach((pendingCoords, playerId) => {
       pendingCoords.forEach(({ row, col }) => {
@@ -113,7 +104,7 @@ export class SimultaneousModeHandler implements GameModeHandler {
 
       pendingCoords.forEach(({ row, col }) => {
         const cell = room.serverBoard[row][col];
-        if (cell.isRevealed) return; // Already revealed by someone else's resolve earlier in this loop
+        if (cell.isRevealed) return;
 
         if (cell.isMine) {
           cell.isRevealed = true;
@@ -121,11 +112,13 @@ export class SimultaneousModeHandler implements GameModeHandler {
           cell.mineRevealers = mineRevealersMap.get(`${row},${col}`) ?? [playerId];
           room.minesRemaining--;
         } else {
-          // Trigger cascade reveal
           room.revealCascade(row, col, playerId);
         }
       });
     });
+
+    // Auto-propagate: reveal cells adjacent to "finished" cells
+    this.propagateFinishedCells(room);
 
     // Clear turn states
     room.simultaneousPendingReveals.clear();
@@ -134,11 +127,62 @@ export class SimultaneousModeHandler implements GameModeHandler {
       p.isTurnDone = false;
     });
 
-    // Broadcast system message
-    room.addChatMessage('system', 'Le tour est terminé ! Les choix de tous les joueurs s\'appliquent à la grille.');
-
-    // Check game end
+    room.addChatMessage('system', 'Le tour est terminé ! Les cases adjacentes aux cases finies ont été révélées automatiquement.');
     room.checkGameEndState();
+  }
+
+  /**
+   * Iteratively reveals all safe cells adjacent to "finished" cells.
+   * A cell is "finished" when the count of its revealed adjacent mines
+   * equals its neighborMines value — meaning all remaining neighbors are safe.
+   */
+  private propagateFinishedCells(room: GameRoom): void {
+    const rows = room.config.rows;
+    const cols = room.config.cols;
+
+    let changed = true;
+    while (changed) {
+      changed = false;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const cell = room.serverBoard[r][c];
+          if (!cell.isRevealed || cell.isMine || cell.neighborMines === 0) continue;
+
+          // Count adjacent revealed mines
+          let revealedMines = 0;
+          const safeUnrevealed: [number, number][] = [];
+
+          for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+              if (dr === 0 && dc === 0) continue;
+              const nr = r + dr;
+              const nc = c + dc;
+              if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+              const neighbor = room.serverBoard[nr][nc];
+              if (neighbor.isMine && neighbor.isRevealed) {
+                revealedMines++;
+              } else if (!neighbor.isRevealed && !neighbor.isFlagged && !neighbor.isMine) {
+                safeUnrevealed.push([nr, nc]);
+              }
+            }
+          }
+
+          // Cell is "finished": all its mines are revealed → auto-reveal safe neighbors
+          if (revealedMines === cell.neighborMines && safeUnrevealed.length > 0) {
+            for (const [nr, nc] of safeUnrevealed) {
+              if (!room.serverBoard[nr][nc].isRevealed) {
+                // Use the original revealer's ID so the color attribution is consistent,
+                // or 'system' if the cell was auto-revealed in a previous propagation.
+                const revealerId = cell.revealedBy || 'system';
+                room.revealCascade(nr, nc, revealerId);
+                changed = true;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   public getClientBoard(room: GameRoom, playerId?: string): ClientCell[][] {
@@ -146,7 +190,6 @@ export class SimultaneousModeHandler implements GameModeHandler {
 
     return room.serverBoard.map(row =>
       row.map(cell => {
-        // Is this cell pending revealed by this player?
         const isPending = playerPending.some(c => c.row === cell.row && c.col === cell.col);
 
         const clientCell: ClientCell = {
@@ -181,7 +224,6 @@ export class SimultaneousModeHandler implements GameModeHandler {
     }
 
     if (room.status === 'playing') {
-      // If no players are done anymore, cancel the timer
       const alivePlayers = Array.from(room.players.values()).filter(p => p.isAlive);
       const doneCount = alivePlayers.filter(p => room.simultaneousDonePlayers.has(p.id)).length;
       if (doneCount === 0) {

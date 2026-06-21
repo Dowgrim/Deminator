@@ -145,6 +145,8 @@ const Cell = memo(function Cell({
       }}
       disabled={disabled}
       className={buttonClass}
+      data-row={row}
+      data-col={col}
       style={{
         position: 'absolute',
         left: `${col * cellTotal}px`,

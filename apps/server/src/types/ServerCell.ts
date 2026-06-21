@@ -7,4 +7,5 @@ export interface ServerCell {
   isFlagged: boolean;
   flaggedBy: string | null;
   revealedBy: string | null;
+  mineRevealers?: string[]; // all players who clicked this mine (simultaneous modes)
 }

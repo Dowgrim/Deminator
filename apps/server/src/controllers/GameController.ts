@@ -55,6 +55,9 @@ export class GameController {
     let room = this.rooms.get(cleanRoomId);
     if (!room) {
       room = new GameRoom(cleanRoomId);
+      room.broadcastCallback = () => {
+        GameView.broadcastRoomState(this.io, cleanRoomId, room!);
+      };
       this.rooms.set(cleanRoomId, room);
       console.log(`[Room Created] Room ID: ${cleanRoomId}`);
     } else {
@@ -71,14 +74,16 @@ export class GameController {
     // Join Socket.io room
     socket.join(cleanRoomId);
 
-    // Add player to the room
+    const isReconnect = room.hasSnapshot(cleanPlayerName);
+
+    // Add player to the room (restores snapshot if available)
     const player = room.addPlayer(socket.id, cleanPlayerName);
     this.socketToRoom.set(socket.id, cleanRoomId);
 
-    console.log(`[Player Joined] Player "${player.name}" (${socket.id}) -> Room: ${cleanRoomId}`);
+    console.log(`[Player ${isReconnect ? 'Reconnected' : 'Joined'}] Player "${player.name}" (${socket.id}) -> Room: ${cleanRoomId}`);
 
     // System message in chat
-    room.addChatMessage('system', `${player.name} a rejoint la partie.`);
+    room.addChatMessage('system', isReconnect ? `${player.name} est de retour !` : `${player.name} a rejoint la partie.`);
 
     // Broadcast updated state to all in the room via View
     GameView.broadcastRoomState(this.io, cleanRoomId, room);
@@ -143,7 +148,8 @@ export class GameController {
         console.log(`[Player Left] Player "${name}" (${socket.id}) left Room: ${roomId}`);
 
         if (room.players.size === 0) {
-          // If no more players, delete room to save memory
+          // If no more players, clear timers and delete room to save memory
+          room.clearTurnTimer();
           this.rooms.delete(roomId);
           console.log(`[Room Deleted] Room ${roomId} is empty.`);
         } else {

@@ -7,4 +7,5 @@ export interface ClientCell {
   flaggedBy: string | null;
   revealedBy: string | null;
   isMine?: boolean;
+  mineRevealers?: string[];
 }

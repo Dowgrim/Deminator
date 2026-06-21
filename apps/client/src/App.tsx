@@ -28,7 +28,8 @@ export default function App() {
   const [customRows, setCustomRows] = useState(20);
   const [customCols, setCustomCols] = useState(20);
   const [customMines, setCustomMines] = useState(40);
-  const [gameMode, setGameMode] = useState<'classic' | 'turnByTurn' | 'simultaneous'>('classic');
+  const [gameMode, setGameMode] = useState<'classic' | 'turnByTurn' | 'simultaneous' | 'simultaneousAuto'>('classic');
+  const [turnTimer, setTurnTimer] = useState(0); // seconds, 0 = no timer
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'board' | 'players' | 'chat'>('board');
   const [showLeftSidebar, setShowLeftSidebar] = useState(true);
@@ -147,21 +148,22 @@ export default function App() {
   const handleStartGame = () => {
     if (!socket || !gameState) return;
     
-    let config: any = { rows: 12, cols: 15, mines: 25, gameMode }; // Medium
+    const timer = turnTimer;
+    let config: any = { rows: 12, cols: 15, mines: 25, gameMode, turnTimer: timer }; // Medium
     if (difficulty === 'easy') {
-      config = { rows: 8, cols: 10, mines: 10, gameMode };
+      config = { rows: 8, cols: 10, mines: 10, gameMode, turnTimer: timer };
     } else if (difficulty === 'hard') {
-      config = { rows: 16, cols: 20, mines: 50, gameMode };
+      config = { rows: 16, cols: 20, mines: 50, gameMode, turnTimer: timer };
     } else if (difficulty === 'expert') {
-      config = { rows: 30, cols: 30, mines: 150, gameMode };
+      config = { rows: 30, cols: 30, mines: 150, gameMode, turnTimer: timer };
     } else if (difficulty === 'giant') {
-      config = { rows: 100, cols: 100, mines: 1500, gameMode };
+      config = { rows: 100, cols: 100, mines: 1500, gameMode, turnTimer: timer };
     } else if (difficulty === 'colossal') {
-      config = { rows: 500, cols: 500, mines: 35000, gameMode };
+      config = { rows: 500, cols: 500, mines: 35000, gameMode, turnTimer: timer };
     } else if (difficulty === 'supreme') {
-      config = { rows: 1000, cols: 1000, mines: 150000, gameMode };
+      config = { rows: 1000, cols: 1000, mines: 150000, gameMode, turnTimer: timer };
     } else if (difficulty === 'custom') {
-      config = { rows: customRows, cols: customCols, mines: customMines, gameMode };
+      config = { rows: customRows, cols: customCols, mines: customMines, gameMode, turnTimer: timer };
     }
 
     socket.emit('startGame', { roomId: gameState.roomId, config });
@@ -223,6 +225,8 @@ export default function App() {
         setCustomMines={setCustomMines}
         gameMode={gameMode}
         setGameMode={setGameMode}
+        turnTimer={turnTimer}
+        setTurnTimer={setTurnTimer}
         handleStartGame={handleStartGame}
         copyRoomId={copyRoomId}
         copied={copied}

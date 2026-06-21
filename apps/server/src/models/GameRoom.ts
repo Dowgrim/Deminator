@@ -15,15 +15,24 @@ export class GameRoom {
   public minesRemaining: number = 0;
   public chat: ChatMessage[] = [];
   public firstClickDone: boolean = false;
-  public gameMode: 'classic' | 'turnByTurn' | 'simultaneous' = 'classic';
+  public gameMode: 'classic' | 'turnByTurn' | 'simultaneous' | 'simultaneousAuto' = 'classic';
   public currentTurn: string | null = null;
   public playerOrder: string[] = [];
   public hostId: string | null = null;
   public startTime: number | null = null;
 
+  // Snapshots for reconnecting players (keyed by lowercase name)
+  private playerSnapshots: Map<string, { name: string; score: number; color: string; isAlive: boolean; orderIndex: number; cellsRevealed: number; minesFound: number }> = new Map();
+
   // Simultaneous game mode specific states
   public simultaneousPendingReveals: Map<string, { row: number; col: number }[]> = new Map();
   public simultaneousDonePlayers: Set<string> = new Set();
+
+  // Turn timer
+  public turnTimer: number = 0; // seconds, 0 = disabled
+  public turnTimerEnd: number | null = null;
+  private turnTimerHandle: ReturnType<typeof setTimeout> | null = null;
+  public broadcastCallback: (() => void) | null = null;
 
   private playerColors = [
     '#3B82F6', // Blue
@@ -34,6 +43,14 @@ export class GameRoom {
     '#EC4899', // Pink
     '#06B6D4', // Cyan
     '#14B8A6', // Teal
+    '#F97316', // Orange
+    '#84CC16', // Lime
+    '#A855F7', // Violet
+    '#E879F9', // Fuchsia
+    '#FB7185', // Rose
+    '#34D399', // Emerald
+    '#60A5FA', // Light Blue
+    '#FBBF24', // Amber
   ];
 
   constructor(roomId: string) {
@@ -63,15 +80,49 @@ export class GameRoom {
     this.firstClickDone = false;
   }
 
+  public hasSnapshot(name: string): boolean {
+    return this.playerSnapshots.has(name.trim().toLowerCase());
+  }
+
   public addPlayer(id: string, name: string): Player {
+    const cleanName = name.trim();
+    const snapshot = this.playerSnapshots.get(cleanName.toLowerCase());
+
+    if (snapshot) {
+      // Restore disconnected player under their new socket ID
+      this.playerSnapshots.delete(cleanName.toLowerCase());
+      const player: Player = {
+        id,
+        name: snapshot.name,
+        score: snapshot.score,
+        color: snapshot.color,
+        isAlive: snapshot.isAlive,
+        isTurnDone: false,
+        cellsRevealed: snapshot.cellsRevealed,
+        minesFound: snapshot.minesFound,
+      };
+      this.players.set(id, player);
+      if (!this.hostId) this.hostId = id;
+      if (this.status === 'playing') {
+        // Reinsert at original position (clamped to current length)
+        const insertAt = Math.min(snapshot.orderIndex, this.playerOrder.length);
+        this.playerOrder.splice(insertAt, 0, id);
+      }
+      return player;
+    }
+
+    const usedColors = new Set(Array.from(this.players.values()).map(p => p.color));
+    const color = this.playerColors.find(c => !usedColors.has(c))
+      ?? this.playerColors[this.players.size % this.playerColors.length];
     const existingCount = this.players.size;
-    const color = this.playerColors[existingCount % this.playerColors.length];
     const player: Player = {
       id,
-      name: name || `Joueur ${existingCount + 1}`,
+      name: cleanName || `Joueur ${existingCount + 1}`,
       score: 0,
       color,
       isAlive: true,
+      cellsRevealed: 0,
+      minesFound: 0,
     };
     this.players.set(id, player);
     if (!this.hostId) {
@@ -84,6 +135,20 @@ export class GameRoom {
   }
 
   public removePlayer(id: string) {
+    const player = this.players.get(id);
+    if (player) {
+      const orderIndex = this.playerOrder.indexOf(id);
+      this.playerSnapshots.set(player.name.toLowerCase(), {
+        name: player.name,
+        score: player.score,
+        color: player.color,
+        isAlive: player.isAlive,
+        orderIndex: orderIndex >= 0 ? orderIndex : this.playerOrder.length,
+        cellsRevealed: player.cellsRevealed,
+        minesFound: player.minesFound,
+      });
+    }
+
     this.players.delete(id);
     const index = this.playerOrder.indexOf(id);
     if (index !== -1) {
@@ -114,10 +179,12 @@ export class GameRoom {
         rows,
         cols,
         mines,
-        gameMode: config.gameMode
+        gameMode: config.gameMode,
+        turnTimer: config.turnTimer,
       };
     }
     this.gameMode = (this.config.gameMode as any) || 'classic';
+    this.turnTimer = Math.max(0, Number(this.config.turnTimer) || 0);
     this.resetBoard();
     this.status = 'playing';
     this.startTime = Date.now();
@@ -126,14 +193,46 @@ export class GameRoom {
     for (const player of this.players.values()) {
       player.isAlive = true;
       player.score = 0;
+      player.cellsRevealed = 0;
+      player.minesFound = 0;
     }
 
     this.playerOrder = Array.from(this.players.keys());
     this.currentTurn = this.playerOrder[0] || null;
 
+    // Clear snapshots — new game means a fresh start for everyone
+    this.playerSnapshots.clear();
+
+    // Clear any previous timer
+    this.clearTurnTimer();
+
     // Delegate game start logic to mode handler
     const handler = GameModeRegistry.getHandler(this.gameMode);
     handler.onStartGame(this);
+  }
+
+  public startTurnTimer(onExpiry: () => void): void {
+    this.clearTurnTimer();
+    if (this.turnTimer <= 0) return;
+    this.turnTimerEnd = Date.now() + this.turnTimer * 1000;
+    this.turnTimerHandle = setTimeout(() => {
+      this.turnTimerEnd = null;
+      this.turnTimerHandle = null;
+      onExpiry();
+      if (this.broadcastCallback) this.broadcastCallback();
+    }, this.turnTimer * 1000);
+  }
+
+  public clearTurnTimer(): void {
+    if (this.turnTimerHandle !== null) {
+      clearTimeout(this.turnTimerHandle);
+      this.turnTimerHandle = null;
+    }
+    this.turnTimerEnd = null;
+  }
+
+  public get isTimerActive(): boolean {
+    return this.turnTimerHandle !== null;
   }
 
   public advanceTurn() {
@@ -223,7 +322,8 @@ export class GameRoom {
       cell.isRevealed = true;
       cell.revealedBy = playerId;
       if (player) {
-        player.score += 1; // 1 point per safe cell revealed
+        player.score += 1;
+        player.cellsRevealed += 1;
       }
 
       if (cell.neighborMines === 0) {
@@ -352,6 +452,7 @@ export class GameRoom {
       currentTurn: this.currentTurn,
       hostId: this.hostId,
       startTime: this.startTime,
+      turnTimerEnd: this.turnTimerEnd,
     };
   }
 }

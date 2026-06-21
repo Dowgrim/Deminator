@@ -5,4 +5,6 @@ export interface Player {
   color: string;
   isAlive: boolean;
   isTurnDone?: boolean;
+  cellsRevealed: number;
+  minesFound: number;
 }

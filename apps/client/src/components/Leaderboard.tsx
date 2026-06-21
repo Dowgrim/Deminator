@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Crown, Skull, Timer } from 'lucide-react';
+import { Users, Crown, Skull, Timer, CheckCircle2, Crosshair } from 'lucide-react';
 import { GameState } from '../types/GameState.js';
 
 interface LeaderboardProps {
@@ -11,6 +11,9 @@ export default function Leaderboard({ gameState, myId }: LeaderboardProps) {
   const me = gameState.players[myId || ''];
   const playersList = Object.values(gameState.players);
   const totalPlayers = playersList.length;
+  const isSim = (gameState.gameMode === 'simultaneous' || gameState.gameMode === 'simultaneousAuto') && gameState.status === 'playing';
+  const doneCount = isSim ? playersList.filter(p => p.isAlive && p.isTurnDone).length : 0;
+  const aliveCount = isSim ? playersList.filter(p => p.isAlive).length : 0;
 
   const [elapsedTime, setElapsedTime] = useState(0);
 
@@ -52,11 +55,18 @@ export default function Leaderboard({ gameState, myId }: LeaderboardProps) {
         </div>
       )}
 
-      <div className="flex items-center gap-2 text-slate-400 pb-2 border-b border-slate-800">
-        <Users className="w-4 h-4" />
-        <h2 className="font-semibold text-sm">
-          {gameState.gameMode === 'turnByTurn' ? 'Joueurs' : 'Survivants'} ({totalPlayers})
-        </h2>
+      <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div className="flex items-center gap-2 text-slate-400">
+          <Users className="w-4 h-4" />
+          <h2 className="font-semibold text-sm">
+            {gameState.gameMode === 'turnByTurn' ? 'Joueurs' : 'Survivants'} ({totalPlayers})
+          </h2>
+        </div>
+        {isSim && (
+          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">
+            {doneCount}/{aliveCount} prêts
+          </span>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto space-y-2.5 max-h-48 md:max-h-none">
@@ -65,13 +75,16 @@ export default function Leaderboard({ gameState, myId }: LeaderboardProps) {
           .map((p, idx) => {
             const isMe = p.id === myId;
             const isCurrentTurn = gameState.gameMode === 'turnByTurn' && gameState.currentTurn === p.id;
+            const isDone = isSim && p.isAlive && p.isTurnDone;
+            const isHunting = isSim && p.isAlive && !p.isTurnDone;
             return (
               <div
                 key={p.id}
                 style={{ borderLeftColor: p.color }}
                 className={`flex flex-col gap-1.5 p-2.5 rounded-lg border-l-4 bg-slate-950/60 border border-slate-800/50 ${
                   isMe ? 'bg-slate-800/30 border-slate-700' : ''
-                } ${isCurrentTurn ? 'ring-2 ring-emerald-500/50 bg-emerald-500/5 border-emerald-500/20' : ''}`}
+                } ${isCurrentTurn ? 'ring-2 ring-emerald-500/50 bg-emerald-500/5 border-emerald-500/20' : ''
+                } ${isDone ? 'opacity-60' : ''}`}
               >
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2 min-w-0">
@@ -85,7 +98,7 @@ export default function Leaderboard({ gameState, myId }: LeaderboardProps) {
                     <span className="text-xs bg-slate-800 px-2 py-0.5 rounded font-mono font-bold text-slate-300">
                       {p.score} pts
                     </span>
-                    {gameState.gameMode !== 'turnByTurn' && (
+                    {gameState.gameMode !== 'turnByTurn' && !isSim && (
                       p.isAlive ? (
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Vivant" />
                       ) : (
@@ -94,6 +107,8 @@ export default function Leaderboard({ gameState, myId }: LeaderboardProps) {
                         </span>
                       )
                     )}
+                    {isDone && <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />}
+                    {isHunting && <Crosshair className="w-4 h-4 text-red-400 shrink-0 animate-pulse" />}
                   </div>
                 </div>
 
@@ -101,6 +116,18 @@ export default function Leaderboard({ gameState, myId }: LeaderboardProps) {
                   <div className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-1.5 mt-0.5 animate-pulse">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                     C'est son tour !
+                  </div>
+                )}
+                {isDone && (
+                  <div className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Tour validé
+                  </div>
+                )}
+                {isHunting && (
+                  <div className="text-[10px] font-bold text-red-400 uppercase tracking-widest flex items-center gap-1.5 mt-0.5 animate-pulse">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                    En chasse...
                   </div>
                 )}
               </div>
